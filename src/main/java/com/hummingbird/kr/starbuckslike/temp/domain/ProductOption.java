@@ -33,16 +33,16 @@ public class ProductOption {
     @Column(name = "price" , nullable = false)
     private Integer price = 0;
 
-    @Column(name = "status", nullable = false, length = 15)
-    private SalesStatus status; // 판매 상태 : AVAILABLE, DISCONTINUED , HIDDEN
-
     @Column(name = "qty" , nullable = false)
     private Integer quantity; // 수량
 
     @Column(name = "is_input_option" , nullable = false)
     @ColumnDefault("false")
-    private Boolean isInputOption; // 사용자 입력 옵션 (각인 등) 여부
+    private Boolean isInputOption = false; // 사용자 입력 옵션 (각인 등) 여부
 
     @Column(name = "discount_rate")
     private Double discountRate= 0.00; // 할인율
+
+    @Column(name = "status", nullable = false, length = 20)
+    private SalesStatus status; // 판매 상태 : AVAILABLE, DISCONTINUED , HIDDEN
 }

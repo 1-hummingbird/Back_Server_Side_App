@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.temp.domain;
 
+import com.hummingbird.kr.starbuckslike.temp.domain.base.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -14,7 +15,7 @@ import org.hibernate.annotations.ColumnDefault;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product")
-public class Product {
+public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "product_id")
@@ -40,8 +41,9 @@ public class Product {
     private String fullDescription; // 전체 상품설명 (html)
 
     @Column(name = "status", nullable = false, length = 20)
-    //@Enumerated(EnumType.STRING)
+    @Enumerated(EnumType.STRING)
     private SalesStatus status; // 판매 상태 : AVAILABLE, DISCONTINUED , HIDDEN
+
 
     @Column(name = "max_order", nullable = false)
     private Integer maxOrder; // 최대 주문 가능 수량
@@ -49,7 +51,7 @@ public class Product {
     @Column(name = "max_period", nullable = false)
     private Integer maxPeriod; // 최대 주문 가능 수량 정책 일
 
-    @ManyToOne(fetch = FetchType.LAZY)
+    @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category; // 상품의 카테고리
 }

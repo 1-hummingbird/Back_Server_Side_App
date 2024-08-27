@@ -38,6 +38,7 @@ dependencies {
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 	//Querydsl end
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'// 쿼리 파라미터 로그
 
 	//	jwt
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.5'
@@ -48,6 +49,7 @@ dependencies {
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
 	testImplementation 'org.springframework.security:spring-security-test'
 	testRuntimeOnly 'org.junit.platform:junit-platform-launcher'
+	// 테스트 코드에도 lombok 적용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor'org.projectlombok:lombok'
 }
