@@ -23,8 +23,8 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void verifyAuthChallenge(String email, String authChallenge) {
-
+    public boolean verifyAuthChallenge(Authjob authjob, String authChallenge) {
+        return auth.AuthCheck(authjob, authChallenge);
     }
 
     @Override
