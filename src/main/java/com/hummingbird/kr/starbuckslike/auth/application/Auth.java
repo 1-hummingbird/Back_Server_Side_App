@@ -14,15 +14,23 @@ class Authenticating {
 }
 // todo : 이게  빈으로 가던지 컨텍스트 내부로 던져야 할 거 같아요
 public class Auth {
-    public static AuthJob AuthStart(String userEmail, String serviceProviderEmail, String serviceProviderPassword) {
+    private String serviceProviderEmail = "";
+    private String serviceProviderPassword = "";
+    public AuthJob AuthStart(String userEmail) {
         String authChallenge = Authenticating.generateAuthCode();
         AuthJob AuthJob = new AuthJob(userEmail, authChallenge, LocalDateTime.now().plusMinutes(5));
         authChallenge = "your authentication code is: " + authChallenge;
         EmailSender.sendEmail(userEmail, "Authentication Code", authChallenge, serviceProviderEmail, serviceProviderPassword);
         return AuthJob;
     }
-    public static boolean AuthCheck(AuthJob AuthJob, String authCode) {
+    public boolean AuthCheck(AuthJob AuthJob, String authCode) {
         return LocalDateTime.now().isBefore(AuthJob.getExpireTime()) && AuthJob.getAuthcode().equals(authCode);
+    }
+    public void setProviderEmail(String email) {
+        this.serviceProviderEmail = email;
+    }
+    public void setProviderPassword(String password) {
+        this.serviceProviderPassword = password;
     }
 }
 

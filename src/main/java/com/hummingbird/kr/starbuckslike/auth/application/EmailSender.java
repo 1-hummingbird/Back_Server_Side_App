@@ -1,4 +1,4 @@
-package com.hummingbird.kr.starbuckslike.auth.service;
+package com.hummingbird.kr.starbuckslike.auth.application;
 
 import javax.mail.Message;
 import javax.mail.MessagingException;

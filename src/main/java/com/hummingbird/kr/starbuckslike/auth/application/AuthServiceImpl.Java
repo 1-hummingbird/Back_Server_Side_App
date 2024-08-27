@@ -1,20 +1,20 @@
 package com.hummingbird.kr.starbuckslike.auth.service;
 
-import java.util.Random;
+import com.hummingbird.kr.starbuckslike.auth.application.AuthJob;
+import com.hummingbird.kr.starbuckslike.auth.application.EmailSender;
+import com.hummingbird.kr.starbuckslike.auth.application.Auth;
 
-public static String generateAuthCode() {
-    // Generate a random 7-digit authentication code
-    Random random = new Random();
-    int randomNumber;
-    randomNumber = 10000000 + random.nextInt(90000000);
-    return "S" + String.valueOf(randomNumber);
-}
+private final Auth auth;
 
-public class MemberAuthService implements AuthService {
+// todo : 환경 설정에서 가져오도록 변경
+auth.setProviderEmail("serviceProviderEmail");
+auth.setProviderPassword("serviceProviderPassword");
+
+public class AuthServiceImpl implements AuthService {
 
     @Override
-    public String sendAuthChallenge(String email) {
-        return null;
+    public AuthJob sendAuthChallenge(String email) {
+        return auth.AuthStart(email);
     }
 
     @Override
