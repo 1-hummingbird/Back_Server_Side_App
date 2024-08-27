@@ -725,3 +725,4 @@ FodyWeavers.xsd
 
 # ignore yml
 *.yml
+/.gradle
