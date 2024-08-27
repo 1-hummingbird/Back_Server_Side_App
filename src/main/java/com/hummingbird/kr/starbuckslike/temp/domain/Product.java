@@ -44,7 +44,6 @@ public class Product extends BaseEntity {
     @Enumerated(EnumType.STRING)
     private SalesStatus status; // 판매 상태 : AVAILABLE, DISCONTINUED , HIDDEN
 
-
     @Column(name = "max_order", nullable = false)
     private Integer maxOrder; // 최대 주문 가능 수량
 
