@@ -726,3 +726,4 @@ FodyWeavers.xsd
 # ignore yml
 *.yml
 /.gradle
+.vscode/settings.json
