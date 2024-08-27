@@ -2,14 +2,17 @@ package com.hummingbird.kr.starbuckslike.temp.config;
 
 
 import com.hummingbird.kr.starbuckslike.temp.domain.Category;
+import com.hummingbird.kr.starbuckslike.temp.domain.Exhibition;
 import com.hummingbird.kr.starbuckslike.temp.domain.Product;
 import com.hummingbird.kr.starbuckslike.temp.domain.SalesStatus;
 import com.hummingbird.kr.starbuckslike.temp.repository.CategoryRepository;
+import com.hummingbird.kr.starbuckslike.temp.repository.ExhibitionRepository;
 import com.hummingbird.kr.starbuckslike.temp.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +25,11 @@ public class LoadTestData {
 
     // CommandLineRunner : 애플리케이션 구동 후 코드 실행하는 인터페이스
     @Bean
-    CommandLineRunner initDatabase(CategoryRepository categoryRepository, ProductRepository productRepository) {
+    CommandLineRunner initDatabase(
+            CategoryRepository categoryRepository,
+            ProductRepository productRepository,
+            ExhibitionRepository exhibitionRepository
+                                   ) {
         return args -> {
             /**
              * 테스트용 임시 카테고리 데이터 추가
@@ -124,6 +131,28 @@ public class LoadTestData {
                     .category(highStainlessTumbler)
                     .build()
             );
+            /**
+             * 가획전 테스트 데이터
+             */
+            exhibitionRepository.save(
+                    Exhibition.builder()
+                            .name("여름 기획전")
+                            .fullDescription("<p>여름 기획전 상세</p>")
+                            .startDate(LocalDate.of(2024,8,1))
+                            .endDate(LocalDate.of(2024,8,30))
+                            .isBanner(false)
+                            .build()
+            );
+            exhibitionRepository.save(
+                    Exhibition.builder()
+                            .name("스탠리 기획전")
+                            .fullDescription("<p>스탠리 기획전 상세</p>")
+                            .startDate(LocalDate.of(2024,7,1))
+                            .endDate(LocalDate.of(2024,12,25))
+                            .isBanner(false)
+                            .build()
+            );
+
         };
     }
 }
