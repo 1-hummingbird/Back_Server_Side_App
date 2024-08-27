@@ -1,7 +1,6 @@
 package com.hummingbird.kr.starbuckslike.temp.repository.search;
 
 import com.hummingbird.kr.starbuckslike.temp.domain.Category;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 

@@ -13,6 +13,12 @@ import java.util.List;
  */
 public interface CategoryRepository extends JpaRepository<Category, Long> {
 
+    /**
+     * 아래 네이티브 재귀 쿼리로 임시로 구현.
+     * 좀 더 고민하면 좋은 코드가 나올듯 카테고리 데이터는 잘 바뀌지도 않고 데이터 변경 가능성도
+     * 적어 몽땅 애플리케이션 단에 올려놓고 캐싱하면 괜찮을 듯
+     */
+
     // 전체 카테고리
     @Query(value = "WITH RECURSIVE CategoryTree AS (" +
                         " SELECT category_id, category_name, parent, depth , path "   +

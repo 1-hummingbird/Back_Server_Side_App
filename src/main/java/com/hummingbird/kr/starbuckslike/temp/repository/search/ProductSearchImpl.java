@@ -1,8 +1,6 @@
 package com.hummingbird.kr.starbuckslike.temp.repository.search;
 
 import com.hummingbird.kr.starbuckslike.temp.domain.Product;
-import com.hummingbird.kr.starbuckslike.temp.domain.QCategory;
-import com.hummingbird.kr.starbuckslike.temp.domain.QProduct;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
@@ -28,7 +26,8 @@ public class ProductSearchImpl implements ProductSearch{
         return queryFactory
                 .selectFrom(product)
                 .join(product.category, category)
-                .where(category.path.startsWith(path))
+                .where(category.path.startsWith(path)) // like path %
                 .fetch();
+
     }
 }
