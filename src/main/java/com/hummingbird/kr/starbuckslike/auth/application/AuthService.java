@@ -1,15 +1,17 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
+import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
+
 import java.time.LocalDate;
 
 public interface AuthService {
 
 
-    AuthJob sendAuthChallenge(String email);
+    EmailAuthJob sendAuthChallenge(String email);
 
     String sendAuthSMS(String phoneNumber);
 
-    boolean verifyAuthChallenge(AuthJob authjob, String authChallenge);
+    boolean verifyAuthChallenge(EmailAuthJob authjob, String authChallenge);
 
     void verifyAuthSMS(String phoneNumber, String authSMS);
 

@@ -1,13 +1,13 @@
-package com.hummingbird.kr.starbuckslike.auth.application;
+package com.hummingbird.kr.starbuckslike.auth.domain;
 
 import java.time.LocalDateTime;
 
-public class AuthJob {
+public class EmailAuthJob {
     private String email;
     private String authcode;
     private LocalDateTime expireTime;
 
-    public AuthJob(String email, String authcode, LocalDateTime expireTime) {
+    public EmailAuthJob(String email, String authcode, LocalDateTime expireTime) {
         this.email = email;
         this.authcode = authcode;
         this.expireTime = expireTime;

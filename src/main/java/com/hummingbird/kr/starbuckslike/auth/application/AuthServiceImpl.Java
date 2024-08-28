@@ -1,5 +1,7 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
+import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
+
 import java.time.LocalDate;
 
 public class AuthServiceImpl implements AuthService {
@@ -10,7 +12,7 @@ public class AuthServiceImpl implements AuthService {
     private final Auth auth = new Auth(serviceMail, servicePW);
 
     @Override
-    public AuthJob sendAuthChallenge(String email) {
+    public EmailAuthJob sendAuthChallenge(String email) {
         return auth.AuthStart(email);
     }
 
@@ -20,7 +22,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean verifyAuthChallenge(AuthJob authjob, String authChallenge) {
+    public boolean verifyAuthChallenge(EmailAuthJob authjob, String authChallenge) {
         return auth.AuthCheck(authjob, authChallenge);
     }
 
