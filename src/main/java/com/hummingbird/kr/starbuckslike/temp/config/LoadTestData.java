@@ -1,15 +1,16 @@
 package com.hummingbird.kr.starbuckslike.temp.config;
 
 
-import com.hummingbird.kr.starbuckslike.temp.domain.Category;
-import com.hummingbird.kr.starbuckslike.temp.domain.Product;
-import com.hummingbird.kr.starbuckslike.temp.domain.SalesStatus;
+import com.hummingbird.kr.starbuckslike.temp.domain.*;
 import com.hummingbird.kr.starbuckslike.temp.repository.CategoryRepository;
+import com.hummingbird.kr.starbuckslike.temp.repository.ExhibitionProductRepository;
+import com.hummingbird.kr.starbuckslike.temp.repository.ExhibitionRepository;
 import com.hummingbird.kr.starbuckslike.temp.repository.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 
 /**
@@ -22,7 +23,12 @@ public class LoadTestData {
 
     // CommandLineRunner : 애플리케이션 구동 후 코드 실행하는 인터페이스
     @Bean
-    CommandLineRunner initDatabase(CategoryRepository categoryRepository, ProductRepository productRepository) {
+    CommandLineRunner initDatabase(
+            CategoryRepository categoryRepository,
+            ProductRepository productRepository,
+            ExhibitionRepository exhibitionRepository,
+            ExhibitionProductRepository exhibitionProductRepository
+                                   ) {
         return args -> {
             /**
              * 테스트용 임시 카테고리 데이터 추가
@@ -80,10 +86,11 @@ public class LoadTestData {
             lowGlassCup.setPath(glassCup.getPath() + "/" + lowGlassCup.getId());
             lowGlassCup = categoryRepository.save(lowGlassCup);
 
+
             /**
              * 테스트용 임시 상품 데이터 추가
              */
-            productRepository.save(Product.builder()
+            Product product1 = productRepository.save(Product.builder()
                     .name("스탠리 텀블러")
                     .price(30000)
                     .isDiscounted(false)
@@ -97,7 +104,7 @@ public class LoadTestData {
                     .build()
             );
 
-            productRepository.save(Product.builder()
+            Product product2 = productRepository.save(Product.builder()
                     .name("스탠리 스테인리스 텀블러")
                     .price(40000)
                     .isDiscounted(true)
@@ -111,7 +118,7 @@ public class LoadTestData {
                     .build()
             );
 
-            productRepository.save(Product.builder()
+            Product product3 =productRepository.save(Product.builder()
                     .name("스탠리 고급 스테인리스 텀블러")
                     .price(50000)
                     .isDiscounted(true)
@@ -124,6 +131,55 @@ public class LoadTestData {
                     .category(highStainlessTumbler)
                     .build()
             );
+            /**
+             * 가획전 테스트 데이터
+             */
+            Exhibition summerExhibition = exhibitionRepository.save(
+                    Exhibition.builder()
+                            .name("여름 기획전")
+                            .fullDescription("<p>여름 기획전 상세</p>")
+                            .startDate(LocalDate.of(2024, 8, 1))
+                            .endDate(LocalDate.of(2024, 8, 30))
+                            .isDeleted(false)
+                            .isBanner(false)
+                            .build()
+            );
+            Exhibition stanExhibition = exhibitionRepository.save(
+                    Exhibition.builder()
+                            .name("스탠리 기획전")
+                            .fullDescription("<p>스탠리 기획전 상세</p>")
+                            .startDate(LocalDate.of(2024,7,1))
+                            .endDate(LocalDate.of(2024,12,25))
+                            .isDeleted(false)
+                            .isBanner(false)
+                            .build()
+            );
+            // 기획전 , 상품 중간 테이블 데이터
+            exhibitionProductRepository.save(
+                    ExhibitionProduct.builder()
+                            .exhibition(summerExhibition) // 여름 기획전
+                            .product(product1) // 스탠리 텀블러 상품 연결
+                            .build()
+            );
+            exhibitionProductRepository.save(
+                    ExhibitionProduct.builder()
+                            .exhibition(stanExhibition) // 스탠리 기획전
+                            .product(product2) // 스탠리 스테인리스 텀블러 상품 연결
+                            .build()
+            );
+            exhibitionProductRepository.save(
+                    ExhibitionProduct.builder()
+                            .exhibition(summerExhibition) // 여름 기획전
+                            .product(product3) // 스탠리 고급 스테인리스 텀블러 상품 연결
+                            .build()
+            );
+            exhibitionProductRepository.save( // 중간 테이블 중복 데이터 생성
+                    ExhibitionProduct.builder()
+                            .exhibition(summerExhibition) // 여름 기획전
+                            .product(product1) // 스탠리 고급 스테인리스 텀블러 상품 연결
+                            .build()
+            );
+
         };
     }
 }

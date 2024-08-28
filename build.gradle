@@ -41,6 +41,8 @@ dependencies {
 	//Querydsl end
 	
 	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'// 쿼리 파라미터 로그
+	// model mapper
+	implementation 'org.modelmapper:modelmapper:2.4.4'
 
 	//	jwt
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.5'

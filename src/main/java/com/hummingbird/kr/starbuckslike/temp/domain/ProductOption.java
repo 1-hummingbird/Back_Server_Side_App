@@ -11,7 +11,6 @@ import static jakarta.persistence.FetchType.LAZY;
  */
 @Entity
 @Getter
-@Setter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
