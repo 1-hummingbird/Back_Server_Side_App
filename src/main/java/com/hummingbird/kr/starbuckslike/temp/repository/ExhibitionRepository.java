@@ -14,7 +14,10 @@ import java.util.Optional;
  */
 public interface ExhibitionRepository extends JpaRepository<Exhibition,Long> {
 
-    // 모든 기획전 이름들을 조회. 기획전 시작~끝 날짜가 유효해야 함
+    /**
+     * 모든 기획전 이름을 조회.
+     * 현재 날짜가 기획전 시작~끝 날짜에 유효해야 함
+     */
     @Query("select e.name" +
             " from Exhibition e" +
             " where CURRENT_DATE between e.startDate and e.endDate" +
