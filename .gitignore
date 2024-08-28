@@ -734,3 +734,4 @@ FodyWeavers.xsd
 /.gradle/8.8
 *.bin
 .gradle/8.8/executionHistory/executionHistory.bin
+.gradle
