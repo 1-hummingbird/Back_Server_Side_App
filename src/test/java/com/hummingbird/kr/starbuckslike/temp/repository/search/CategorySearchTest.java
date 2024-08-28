@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.temp.repository.search;
 
 import com.hummingbird.kr.starbuckslike.temp.domain.Category;
+import com.hummingbird.kr.starbuckslike.temp.dto.CategoryListDto;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -10,18 +11,18 @@ import java.util.List;
 
 @SpringBootTest
 @Log4j2
-class CategorySearchImplTest {
+class CategorySearchTest {
     @Autowired
     private CategorySearch categorySearch;
 
     @Test
     void testFindCategoryByDepth(){
         Integer depth = 1;
-        List<Category> categoryByDepth = categorySearch.findCategoryByDepth(depth);
+        List<CategoryListDto> result = categorySearch.findCategoryByDepth(depth);
 
-        categoryByDepth.forEach(category -> {
+        result.forEach(category -> {
             log.info(
-                    "Depth: " + category.getDepth() +
+                    "Category id: " + category.getId() +
                             ", Name: " + category.getName() +
                             ", Path: " + category.getPath()
             );

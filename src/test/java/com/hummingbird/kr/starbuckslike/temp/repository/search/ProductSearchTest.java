@@ -8,18 +8,16 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
-
 @SpringBootTest
 @Log4j2
-class ExhibitionSearchTest {
+class ProductSearchTest {
 
     @Autowired
-    private ExhibitionSearch exhibitionSearch;
+    private ProductSearch productSearch;
     @Test
     void testFindProductListById(){
 
-        List<ProductListDto> productListById = exhibitionSearch.findProductListById(1L);
+        List<ProductListDto> productListById = productSearch.findProductListById(1L);
         for (ProductListDto dto : productListById) {
             log.info(dto);
         }
