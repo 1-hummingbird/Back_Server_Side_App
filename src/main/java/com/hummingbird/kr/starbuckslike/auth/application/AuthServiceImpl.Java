@@ -5,14 +5,22 @@ import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
 
+import com.hummingbird.kr.starbuckslike.member.dto.MemberDTO;
+import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
+import javax.swing.text.html.Option;
 import java.time.LocalDate;
+import java.util.Optional;
 
 @Service
 public class AuthServiceImpl implements AuthService {
+
+    @Autowired
+    private MemberRepository memberRepository;
 
     // todo : get service Mail and PW from env file
     private final String serviceMail = "";
@@ -67,8 +75,15 @@ public class AuthServiceImpl implements AuthService {
     public LoginResponseDTO login(LoginRequestDTO loginreqDTO) {
         String loginid = loginreqDTO.getLoginID();
         String password = loginreqDTO.getPassword();
-        //String inDBpassword = Member.getPassword();
-        //boolean passed = passwordEncoder.matches(password, inDBpassword);
+
+        Optional<Member> memberOpt = memberRepository.findByid(loginid);
+        if (!memberOpt.isPresent()) {
+            // Handle member not found case
+            throw new RuntimeException("Member not found");
+        }
+        Member member = memberOpt.get();
+        String inDBpassword = member.getPassword();
+        boolean passed = passwordEncoder.matches(password, inDBpassword);
         return new LoginResponseDTO();
     }
 
@@ -96,7 +111,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void restetPassword(String loginID, String email) {
-
+    public void updatePassword(String uuid, String newPassword) {
+        memberRepository.updatePasswordByUuid(uuid, newPassword);
     }
 }
