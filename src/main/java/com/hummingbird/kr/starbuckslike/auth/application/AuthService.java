@@ -38,4 +38,6 @@ public interface AuthService {
     void OAuthRegister(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth);
 
     void updatePassword(String uuid, String newPassword);
+
+    String getSecret();
 }

@@ -14,6 +14,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import javax.swing.text.html.Option;
 import java.time.LocalDate;
+import java.util.Base64;
 import java.util.Optional;
 
 @Service
@@ -87,9 +88,12 @@ public class AuthServiceImpl implements AuthService {
         return new LoginResponseDTO();
     }
 
-    public void sendSecret(){
+    @Override
+    public String getSecret(){
         try {
             SecretKey secretKey = Cryptor.generateKey();
+            String SendingKey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
+            return SendingKey;
         } catch (Exception e) {
             throw new RuntimeException(e);
         }

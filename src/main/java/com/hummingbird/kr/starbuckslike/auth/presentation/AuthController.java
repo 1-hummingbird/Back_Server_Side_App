@@ -6,10 +6,7 @@ import com.hummingbird.kr.starbuckslike.auth.vo.LoginRequestVO;
 import io.swagger.v3.oas.annotations.Operation;
 
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 
 @RestController
@@ -27,6 +24,11 @@ public class AuthController {
         authService.login((loginreqVO.toDTO()));
         HttpStatus responseStatus = HttpStatus.OK;
         //return new CommonResponseEntity<>(HttpStatus.OK, CommonResponseMessage.SUCCESS.getMessage(), null);
+    }
+    @GetMapping("/secret")
+    public String getSecretKey() {
+        try {return authService.getSecret();}
+        catch (Exception e) {throw new RuntimeException(e);}
     }
 
     //@Operation(summary = "Member Register API", description = "Member Register API", tags = {"Auth"})
