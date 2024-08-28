@@ -1,15 +1,28 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
 import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
+import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
+import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
+import com.hummingbird.kr.starbuckslike.member.domain.Member;
 
+import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
+
+import javax.crypto.SecretKey;
 import java.time.LocalDate;
 
+@Service
 public class AuthServiceImpl implements AuthService {
 
     // todo : get service Mail and PW from env file
     private final String serviceMail = "";
     private final String servicePW = "";
     private final Auth auth = new Auth(serviceMail, servicePW);
+    private final PasswordEncoder passwordEncoder;
+
+    public AuthServiceImpl(PasswordEncoder passwordEncoder) {
+        this.passwordEncoder = passwordEncoder;
+    }
 
     @Override
     public EmailAuthJob sendAuthChallenge(String email) {
@@ -51,8 +64,20 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void login(String loginID, String password) {
+    public LoginResponseDTO login(LoginRequestDTO loginreqDTO) {
+        String loginid = loginreqDTO.getLoginID();
+        String password = loginreqDTO.getPassword();
+        //String inDBpassword = Member.getPassword();
+        //boolean passed = passwordEncoder.matches(password, inDBpassword);
+        return new LoginResponseDTO();
+    }
 
+    public void sendSecret(){
+        try {
+            SecretKey secretKey = Cryptor.generateKey();
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
     }
 
     @Override
