@@ -3,6 +3,7 @@ package com.hummingbird.kr.starbuckslike.auth.presentation;
 import com.hummingbird.kr.starbuckslike.auth.application.AuthService;
 
 import com.hummingbird.kr.starbuckslike.auth.vo.LoginRequestVO;
+import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 
 import org.springframework.http.HttpStatus;
@@ -20,10 +21,11 @@ public class AuthController {
 
     @Operation(summary = "Member Login API", description = "Member Login API", tags = {"Auth"})
     @PostMapping("/login")
-    public void login(@RequestBody LoginRequestVO loginreqVO) {
-        authService.login((loginreqVO.toDTO()));
-        HttpStatus responseStatus = HttpStatus.OK;
-        //return new CommonResponseEntity<>(HttpStatus.OK, CommonResponseMessage.SUCCESS.getMessage(), null);
+    public CommonResponseEntity<Void> login(@RequestBody LoginRequestVO loginreqVO) {
+        try {
+            authService.login((loginreqVO.toDTO()));
+            return new CommonResponseEntity<>(HttpStatus.OK, "login success", null);
+        } catch (Exception e) {return new CommonResponseEntity<>(HttpStatus.BAD_REQUEST, "login fail", null);}
     }
     @GetMapping("/secret")
     public String getSecretKey() {
