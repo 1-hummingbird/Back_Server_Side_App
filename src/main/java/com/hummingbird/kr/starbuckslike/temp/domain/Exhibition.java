@@ -36,6 +36,10 @@ public class Exhibition extends BaseEntity {
     @Column(name = "end_date")
     private LocalDate endDate; // 기획전 종료 날짜
 
+    @Column(name = "is_deleted", nullable = false)
+    @ColumnDefault("false")
+    private Boolean isDeleted = false ; // 기획전 삭제 여부
+
     @Column(name = "is_Banner" , nullable = false)
     private Boolean isBanner = false; // banner 이미지 존재 여부
 

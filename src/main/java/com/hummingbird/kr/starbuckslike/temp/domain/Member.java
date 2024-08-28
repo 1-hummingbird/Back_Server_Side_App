@@ -1,12 +1,16 @@
 package com.hummingbird.kr.starbuckslike.temp.domain;
 
 import com.hummingbird.kr.starbuckslike.temp.domain.base.BaseEntity;
-import jakarta.persistence.Column;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
+import jakarta.persistence.*;
+import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 
+@Entity
+@Getter
+@Builder
+@AllArgsConstructor
+@NoArgsConstructor(access = AccessLevel.PROTECTED)
+@Table(name = "member")
 public class Member extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -37,7 +41,6 @@ public class Member extends BaseEntity {
     @Column(name = "is_deleted")
     @ColumnDefault("false")
     private Boolean isDeleted = false; // 회원 탈퇴 여부
-
 
 
 }

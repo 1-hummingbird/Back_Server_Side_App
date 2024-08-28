@@ -10,47 +10,51 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QExhibition is a Querydsl query type for Exhibition
+ * QMember is a Querydsl query type for Member
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QExhibition extends EntityPathBase<Exhibition> {
+public class QMember extends EntityPathBase<Member> {
 
-    private static final long serialVersionUID = -1497354422L;
+    private static final long serialVersionUID = 1924766101L;
 
-    public static final QExhibition exhibition = new QExhibition("exhibition");
+    public static final QMember member = new QMember("member1");
 
     public final com.hummingbird.kr.starbuckslike.temp.domain.base.QBaseEntity _super = new com.hummingbird.kr.starbuckslike.temp.domain.base.QBaseEntity(this);
+
+    public final StringPath birth = createString("birth");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final DatePath<java.time.LocalDate> endDate = createDate("endDate", java.time.LocalDate.class);
-
-    public final StringPath fullDescription = createString("fullDescription");
+    public final StringPath email = createString("email");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final BooleanPath isBanner = createBoolean("isBanner");
-
     public final BooleanPath isDeleted = createBoolean("isDeleted");
+
+    public final StringPath loginId = createString("loginId");
 
     public final StringPath name = createString("name");
 
-    public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
+    public final StringPath nickName = createString("nickName");
+
+    public final StringPath password = createString("password");
+
+    public final StringPath phone = createString("phone");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public QExhibition(String variable) {
-        super(Exhibition.class, forVariable(variable));
+    public QMember(String variable) {
+        super(Member.class, forVariable(variable));
     }
 
-    public QExhibition(Path<? extends Exhibition> path) {
+    public QMember(Path<? extends Member> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QExhibition(PathMetadata metadata) {
-        super(Exhibition.class, metadata);
+    public QMember(PathMetadata metadata) {
+        super(Member.class, metadata);
     }
 
 }
