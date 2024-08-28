@@ -727,3 +727,10 @@ FodyWeavers.xsd
 *.yml
 /.gradle
 .vscode/settings.json
+/.idea
+/.gradle
+*.probe
+*.bin
+/.gradle/8.8
+*.bin
+.gradle/8.8/executionHistory/executionHistory.bin

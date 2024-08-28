@@ -1,16 +1,13 @@
-package com.hummingbird.kr.starbuckslike.auth.service;
+package com.hummingbird.kr.starbuckslike.auth.application;
 
-import com.hummingbird.kr.starbuckslike.auth.application.AuthJob;
-import com.hummingbird.kr.starbuckslike.auth.application.EmailSender;
-import com.hummingbird.kr.starbuckslike.auth.application.Auth;
-
-private final Auth auth;
-
-// todo : 환경 설정에서 가져오도록 변경
-auth.setProviderEmail("serviceProviderEmail");
-auth.setProviderPassword("serviceProviderPassword");
+import java.time.LocalDate;
 
 public class AuthServiceImpl implements AuthService {
+
+    // todo : get service Mail and PW from env file
+    private final String serviceMail = "";
+    private final String servicePW = "";
+    private final Auth auth = new Auth(serviceMail, servicePW);
 
     @Override
     public AuthJob sendAuthChallenge(String email) {
@@ -23,7 +20,7 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public boolean verifyAuthChallenge(Authjob authjob, String authChallenge) {
+    public boolean verifyAuthChallenge(AuthJob authjob, String authChallenge) {
         return auth.AuthCheck(authjob, authChallenge);
     }
 
@@ -32,7 +29,6 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
-    @Override
     public void registerMember(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth) {
 
     }

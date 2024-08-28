@@ -26,11 +26,17 @@ public class Auth {
     public boolean AuthCheck(AuthJob AuthJob, String authCode) {
         return LocalDateTime.now().isBefore(AuthJob.getExpireTime()) && AuthJob.getAuthcode().equals(authCode);
     }
+
     public void setProviderEmail(String email) {
         this.serviceProviderEmail = email;
     }
     public void setProviderPassword(String password) {
         this.serviceProviderPassword = password;
+    }
+
+    public Auth(String ServiceMail, String ServicePW){
+        this.serviceProviderEmail = ServiceMail;
+        this.serviceProviderPassword = ServicePW;
     }
 }
 
