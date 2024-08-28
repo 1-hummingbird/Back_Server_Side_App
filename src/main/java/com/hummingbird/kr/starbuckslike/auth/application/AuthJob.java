@@ -1,4 +1,4 @@
-package com.kys9808.EmailAuth;
+package com.hummingbird.kr.starbuckslike.auth.application;
 
 import java.time.LocalDateTime;
 
