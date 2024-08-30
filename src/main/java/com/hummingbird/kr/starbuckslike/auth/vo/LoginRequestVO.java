@@ -1,6 +1,6 @@
 package com.hummingbird.kr.starbuckslike.auth.vo;
 
-import com.hummingbird.kr.starbuckslike.auth.application.Cryptor;
+import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;

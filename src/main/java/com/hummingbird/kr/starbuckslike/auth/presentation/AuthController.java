@@ -1,18 +1,21 @@
 package com.hummingbird.kr.starbuckslike.auth.presentation;
 
 import com.hummingbird.kr.starbuckslike.auth.application.AuthService;
+import com.hummingbird.kr.starbuckslike.auth.vo.RegisterRequestVO;
 import com.hummingbird.kr.starbuckslike.auth.vo.LoginRequestVO;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
 @RestController
 @RequestMapping("/api/v1/auth")
+@Lazy
 public class AuthController {
     private final AuthService authService;
 
@@ -35,11 +38,17 @@ public class AuthController {
         catch (Exception e) {throw new RuntimeException(e);}
     }
 
-    //@Operation(summary = "Member Register API", description = "Member Register API", tags = {"Auth"})
-    //@PostMapping("/register")
-    //public void register(@RequestBody SignUpRequestVo signUpRequestVo) {
+    @Operation(summary = "Member Register API", description = "Member Register API", tags = {"Auth"})
+    @PostMapping("/register")
+    public CommonResponseEntity<LoginResponseDTO> register(@RequestBody RegisterRequestVO registerRequestVO) {
 
-        //return new CommonResponseEntity<>(HttpStatus.OK, CommonResponseMessage.SUCCESS.getMessage(), null);
-    //}
+        return new CommonResponseEntity<LoginResponseDTO>(HttpStatus.OK, "register complete", null);
+    }
+    @Operation(summary = "PW update API", description = "PW update API", tags = {"Auth"})
+    @PostMapping("/register")
+    public CommonResponseEntity<LoginResponseDTO> register(@RequestBody RegisterRequestVO registerRequestVO) {
+
+        return new CommonResponseEntity<LoginResponseDTO>(HttpStatus.OK, "register complete", null);
+    }
 
 }
