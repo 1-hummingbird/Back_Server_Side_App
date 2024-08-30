@@ -1,9 +1,12 @@
 package com.hummingbird.kr.starbuckslike.auth.presentation;
 
 import com.hummingbird.kr.starbuckslike.auth.application.AuthService;
+import com.hummingbird.kr.starbuckslike.auth.dto.RegisterResponseDTO;
+import com.hummingbird.kr.starbuckslike.auth.dto.ResetPWResponseDTO;
 import com.hummingbird.kr.starbuckslike.auth.vo.RegisterRequestVO;
 import com.hummingbird.kr.starbuckslike.auth.vo.LoginRequestVO;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
+import com.hummingbird.kr.starbuckslike.auth.vo.ResetPWRequestVO;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import io.swagger.v3.oas.annotations.Operation;
 
@@ -40,15 +43,15 @@ public class AuthController {
 
     @Operation(summary = "Member Register API", description = "Member Register API", tags = {"Auth"})
     @PostMapping("/register")
-    public CommonResponseEntity<LoginResponseDTO> register(@RequestBody RegisterRequestVO registerRequestVO) {
+    public CommonResponseEntity<RegisterResponseDTO> register(@RequestBody RegisterRequestVO registerRequestVO) {
 
-        return new CommonResponseEntity<LoginResponseDTO>(HttpStatus.OK, "register complete", null);
+        return new CommonResponseEntity<RegisterResponseDTO>(HttpStatus.OK, "register complete", null);
     }
     @Operation(summary = "PW update API", description = "PW update API", tags = {"Auth"})
-    @PostMapping("/register")
-    public CommonResponseEntity<LoginResponseDTO> register(@RequestBody RegisterRequestVO registerRequestVO) {
+    @PostMapping("/resetPW")
+    public CommonResponseEntity<ResetPWResponseDTO> resetPW(@RequestBody ResetPWRequestVO resetPWRequestVO) {
 
-        return new CommonResponseEntity<LoginResponseDTO>(HttpStatus.OK, "register complete", null);
+        return new CommonResponseEntity<ResetPWResponseDTO>(HttpStatus.OK, "PW update complete", null);
     }
 
 }
