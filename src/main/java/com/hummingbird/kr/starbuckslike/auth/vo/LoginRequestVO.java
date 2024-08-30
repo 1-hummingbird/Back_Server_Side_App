@@ -4,7 +4,6 @@ import com.hummingbird.kr.starbuckslike.auth.application.Cryptor;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.crypto.SecretKey;

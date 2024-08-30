@@ -1,6 +1,5 @@
 package com.hummingbird.kr.starbuckslike.auth.vo;
 
-import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
 import lombok.*;
 

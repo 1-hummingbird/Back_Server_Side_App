@@ -13,6 +13,7 @@ public class ApplicationConfig {
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder(23);
+        return new BCryptPasswordEncoder(13);
     }
+
 }
