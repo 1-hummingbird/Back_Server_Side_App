@@ -1,4 +1,4 @@
-package com.hummingbird.kr.starbuckslike.auth.application;
+package com.hummingbird.kr.starbuckslike.auth.util;
 
 import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
 
@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 import java.util.Random;
 
 // todo : 이게  빈으로 가던지 컨텍스트 내부로 던져야 할 거 같아요
-public class Auth {
+public class EmailAuth {
     private String serviceProviderEmail = "";
     private String serviceProviderPassword = "";
     public EmailAuthJob AuthStart(String userEmail) {
@@ -27,7 +27,7 @@ public class Auth {
         this.serviceProviderPassword = password;
     }
 
-    public Auth(String ServiceMail, String ServicePW){
+    public EmailAuth(String ServiceMail, String ServicePW){
         this.serviceProviderEmail = ServiceMail;
         this.serviceProviderPassword = ServicePW;
     }
