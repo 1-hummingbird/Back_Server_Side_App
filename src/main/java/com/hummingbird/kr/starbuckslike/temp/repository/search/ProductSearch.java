@@ -2,6 +2,9 @@ package com.hummingbird.kr.starbuckslike.temp.repository.search;
 
 import com.hummingbird.kr.starbuckslike.temp.domain.Product;
 import com.hummingbird.kr.starbuckslike.temp.dto.ProductListDto;
+import com.hummingbird.kr.starbuckslike.temp.repository.condition.ProductCondition;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 
 import java.util.List;
 
@@ -15,4 +18,8 @@ public interface ProductSearch {
     // 기획전에 해당하는 상품 리스트 조회
     List<ProductListDto> findProductListById(Long exhibitionId);
 
+
+
+    // 상품 리스트 조회, 필터링 조건[카테고리,가격]
+    Page<ProductListDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable);
 }

@@ -131,6 +131,36 @@ public class LoadTestData {
                     .category(highStainlessTumbler)
                     .build()
             );
+            Product product4 =productRepository.save(Product.builder()
+                    .name("펭귄 컵")
+                    .price(10000)
+                    .isDiscounted(true)
+                    .discountRate(15.0)
+                    .shortDescription("펭귄 컵 입니다")
+                    .fullDescription("<p>펭귄 컵 상품 상세</p>")
+                    .status(SalesStatus.AVAILABLE)
+                    .maxOrder(2)
+                    .maxPeriod(15)
+                    .category(cup)
+                    .build()
+            );
+            Product product5 =productRepository.save(Product.builder()
+                    .name("펭귄 유리 컵")
+                    .price(10000)
+                    .isDiscounted(true)
+                    .discountRate(15.0)
+                    .shortDescription("펭귄 유리 컵 입니다")
+                    .fullDescription("<p>펭귄 유리 컵 상품 상세</p>")
+                    .status(SalesStatus.AVAILABLE)
+                    .maxOrder(2)
+                    .maxPeriod(15)
+                    .category(glassCup)
+                    .build()
+            );
+
+
+
+
             /**
              * 가획전 테스트 데이터
              */
