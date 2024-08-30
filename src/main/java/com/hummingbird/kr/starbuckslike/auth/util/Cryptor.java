@@ -1,4 +1,4 @@
-package com.hummingbird.kr.starbuckslike.auth.application;
+package com.hummingbird.kr.starbuckslike.auth.util;
 
 import javax.crypto.Cipher;
 import javax.crypto.KeyGenerator;

@@ -3,16 +3,16 @@ package com.hummingbird.kr.starbuckslike.auth.application;
 import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
+import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
+import com.hummingbird.kr.starbuckslike.auth.util.EmailAuth;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
-
-import com.hummingbird.kr.starbuckslike.member.dto.MemberDTO;
 import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import javax.swing.text.html.Option;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Optional;
@@ -26,16 +26,13 @@ public class AuthServiceImpl implements AuthService {
     // todo : get service Mail and PW from env file
     private final String serviceMail = "";
     private final String servicePW = "";
-    private final Auth auth = new Auth(serviceMail, servicePW);
-    private final PasswordEncoder passwordEncoder;
+    private final EmailAuth emailAuth = new EmailAuth(serviceMail, servicePW);
 
-    public AuthServiceImpl(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(13);
 
     @Override
     public EmailAuthJob sendAuthChallenge(String email) {
-        return auth.AuthStart(email);
+        return emailAuth.AuthStart(email);
     }
 
     @Override
@@ -45,7 +42,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean verifyAuthChallenge(EmailAuthJob authjob, String authChallenge) {
-        return auth.AuthCheck(authjob, authChallenge);
+        return emailAuth.AuthCheck(authjob, authChallenge);
     }
 
     @Override
@@ -77,14 +74,8 @@ public class AuthServiceImpl implements AuthService {
         String loginid = loginreqDTO.getLoginID();
         String password = loginreqDTO.getPassword();
 
-        Optional<Member> memberOpt = memberRepository.findByid(loginid);
-        if (!memberOpt.isPresent()) {
-            // Handle member not found case
-            throw new RuntimeException("Member not found");
-        }
-        Member member = memberOpt.get();
-        String inDBpassword = member.getPassword();
-        boolean passed = passwordEncoder.matches(password, inDBpassword);
+        Optional<String> DBpassword = memberRepository.findByid(loginid);
+        try {boolean passed = passwordEncoder.matches(password, DBpassword.get());} catch (Exception e) {throw new RuntimeException(e);}
         return new LoginResponseDTO();
     }
 
@@ -116,6 +107,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void updatePassword(String uuid, String newPassword) {
+        newPassword = passwordEncoder.encode(newPassword);
         memberRepository.updatePasswordByUuid(uuid, newPassword);
     }
 }

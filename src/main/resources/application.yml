@@ -2,7 +2,7 @@ server:
   port: 8081
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3307/starbucks-db
+    url: jdbc:mysql://localhost:3306/starbucks-db
     username: root
     password: 1234
     driver-class-name: com.mysql.cj.jdbc.Driver
@@ -18,3 +18,4 @@ spring:
 
 logging.level:
   org.hibernate.SQL: debug
+  org.springframework: debug
