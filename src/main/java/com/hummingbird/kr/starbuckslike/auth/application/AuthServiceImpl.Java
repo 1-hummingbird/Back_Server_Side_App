@@ -74,9 +74,8 @@ public class AuthServiceImpl implements AuthService {
         String loginid = loginreqDTO.getLoginID();
         String password = loginreqDTO.getPassword();
 
-        Optional<Member> DBpasswordData = memberRepository.findByid(loginid);
-        try {String DBpassword = DBpasswordData.get().getPassword();
-        boolean passed = passwordEncoder.matches(password, DBpassword);} catch (Exception e) {throw new RuntimeException(e);}
+        Optional<String> DBpassword = memberRepository.findByid(loginid);
+        try {boolean passed = passwordEncoder.matches(password, DBpassword.get());} catch (Exception e) {throw new RuntimeException(e);}
         return new LoginResponseDTO();
     }
 
