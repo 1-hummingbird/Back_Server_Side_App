@@ -30,14 +30,6 @@ public class ExhibitionSearchImpl implements  ExhibitionSearch{
     }
 
 
-    /*
-        @Query("select e.name" +
-                " from Exhibition e" +
-                " where CURRENT_DATE between e.startDate and e.endDate" +
-                " order by e asc"
-        )
-        List<String> findAllExhibitionNames(); => 아래의 findAllExhibitionNames() 로 변경
-     */
     @Override
     public List<ExhibitionListDto> findAllExhibitionNames() {
         return queryFactory
@@ -49,15 +41,6 @@ public class ExhibitionSearchImpl implements  ExhibitionSearch{
                 .fetch();
     }
 
-    /*
-         // 기획전의 상세 내용 조회.
-        @Query("select e.fullDescription" +
-                " from Exhibition e" +
-                " where e.id = :id" +
-                " and e.isDeleted = false"
-        )
-        String findExhibitionDetail(@Param("id") Long id); => 아래의 findExhibitionDetail(Long id) 로 변경
-     */
     @Override
     public ExhibitionDetailDto findExhibitionDetail(Long id) {
         //return null;
