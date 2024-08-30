@@ -8,12 +8,13 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.transaction.annotation.Transactional;
 
-import javax.swing.text.html.Option;
 import java.util.Optional;
 
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByMemberUID(String uuid);
-    Optional<Member> findByid(String loginId);
+
+    @Query("select m.password from Member m where m.loginID = :loginId")
+    Optional<String> findByid(@Param("loginId")String loginId);
 
     @Modifying
     @Transactional

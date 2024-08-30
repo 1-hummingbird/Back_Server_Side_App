@@ -3,35 +3,31 @@ package com.hummingbird.kr.starbuckslike.auth.application;
 import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
-import com.hummingbird.kr.starbuckslike.member.domain.Member;
+import com.hummingbird.kr.starbuckslike.auth.application.Auth;
 
-import com.hummingbird.kr.starbuckslike.member.dto.MemberDTO;
 import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.crypto.SecretKey;
-import javax.swing.text.html.Option;
+import javax.crypto.spec.SecretKeySpec;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Optional;
 
+@RequiredArgsConstructor
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
     // todo : get service Mail and PW from env file
     private final String serviceMail = "";
     private final String servicePW = "";
     private final Auth auth = new Auth(serviceMail, servicePW);
-    private final PasswordEncoder passwordEncoder;
 
-    public AuthServiceImpl(PasswordEncoder passwordEncoder) {
-        this.passwordEncoder = passwordEncoder;
-    }
+    private final PasswordEncoder passwordEncoder;
 
     @Override
     public EmailAuthJob sendAuthChallenge(String email) {
@@ -77,14 +73,9 @@ public class AuthServiceImpl implements AuthService {
         String loginid = loginreqDTO.getLoginID();
         String password = loginreqDTO.getPassword();
 
-        Optional<Member> memberOpt = memberRepository.findByid(loginid);
-        if (!memberOpt.isPresent()) {
-            // Handle member not found case
-            throw new RuntimeException("Member not found");
-        }
-        Member member = memberOpt.get();
-        String inDBpassword = member.getPassword();
-        boolean passed = passwordEncoder.matches(password, inDBpassword);
+        Optional<String> DBpasswordData = memberRepository.findByid(loginid);
+        try {String DBpassword = DBpasswordData.get();
+        boolean passed = passwordEncoder.matches(password, DBpassword);} catch (Exception e) {throw new RuntimeException(e);}
         return new LoginResponseDTO();
     }
 

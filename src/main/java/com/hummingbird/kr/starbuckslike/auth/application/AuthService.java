@@ -3,7 +3,6 @@ package com.hummingbird.kr.starbuckslike.auth.application;
 import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
-import com.hummingbird.kr.starbuckslike.auth.vo.LoginResponseVO;
 
 import java.time.LocalDate;
 
