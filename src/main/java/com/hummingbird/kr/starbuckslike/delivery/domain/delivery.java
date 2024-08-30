@@ -21,8 +21,13 @@ public class delivery {
     @Column(name = "address")
     private String address; //배송지 기본주소 기입
 
-    @Column(name = "phoneddddg11")
+    @Column(name = "phone")
     private int phone; //배송지연락처
+
+
+    @Column(name = "phone2")
+    private int phone2; //배송지연락처
+
 
     private String userid; // 유저아이디
 
