@@ -1,13 +1,20 @@
 package com.hummingbird.kr.starbuckslike.temp.repository.search;
 
-import com.hummingbird.kr.starbuckslike.temp.dto.ProductListDto;
-import com.hummingbird.kr.starbuckslike.temp.dto.QProductListDto;
+import com.hummingbird.kr.starbuckslike.temp.domain.QExhibition;
+import com.hummingbird.kr.starbuckslike.temp.dto.*;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.DatePath;
+import com.querydsl.core.types.dsl.DateTimePath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import org.springframework.data.jpa.repository.Query;
+import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 
+import java.time.LocalDate;
 import java.util.List;
 
+import static com.hummingbird.kr.starbuckslike.temp.domain.QExhibition.exhibition;
 import static com.hummingbird.kr.starbuckslike.temp.domain.QExhibitionProduct.exhibitionProduct;
 import static com.hummingbird.kr.starbuckslike.temp.domain.QProduct.product;
 
@@ -22,17 +29,40 @@ public class ExhibitionSearchImpl implements  ExhibitionSearch{
         this.queryFactory = new JPAQueryFactory(em);
     }
 
+
     @Override
-    public List<ProductListDto> findProductListById(Long exhibitionId) {
+    public List<ExhibitionListDto> findAllExhibitionNames() {
         return queryFactory
-                .selectDistinct(new QProductListDto(product.id, product.name, product.price))
-                .from(product)
-                //.join(product, exhibitionProduct.product) // 상품id 와 기획전상품의 상품 id 조인
-                .join(exhibitionProduct)
-                .on(product.id.eq(exhibitionProduct.product.id)) // 상품id 와 기획전상품의 상품 id 조인
-                .where(exhibitionProduct.exhibition.id.eq(exhibitionId)) // exhibitionId에 해당하는 상품만 조회
+                .select(new QExhibitionListDto(exhibition.id, exhibition.name)) // 전시회 이름 선택
+                .from(exhibition)
+                // 현재 날짜가 시작일과 종료일 사이에 있는지 확인
+                .where(isCurrentDateBetween(exhibition.startDate, exhibition.endDate))
+                .orderBy(exhibition.id.asc()) // 이름을 기준으로 오름차순 정렬
                 .fetch();
+    }
+
+    @Override
+    public ExhibitionDetailDto findExhibitionDetail(Long id) {
+        //return null;
+        return queryFactory
+                .select(new QExhibitionDetailDto(exhibition.fullDescription))
+                .from(exhibition)
+                .where(
+                        exhibition.id.eq(id)
+                        .and(exhibition.isDeleted.isFalse()) // isDeleted가 false인지 확인
+                )
+                .fetchOne();
+    }
 
 
+    /**
+     * 기획전의 모든 검색조건
+     */
+
+    // 현재 날짜가 주어진 시작일과 종료일 사이에 있는지 확인하는 조건
+    private BooleanExpression isCurrentDateBetween(DatePath<LocalDate> startDate, DatePath<LocalDate> endDate) {
+        LocalDate currentDate = LocalDate.now();
+        LocalDate futureDate = currentDate.plusDays(90);  // 30일 뒤의 날짜
+        return startDate.loe(currentDate).and(endDate.goe(currentDate));
     }
 }

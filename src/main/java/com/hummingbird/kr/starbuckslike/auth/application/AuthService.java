@@ -1,15 +1,19 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
+import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
+import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
+import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
+
 import java.time.LocalDate;
 
 public interface AuthService {
 
 
-    AuthJob sendAuthChallenge(String email);
+    EmailAuthJob sendAuthChallenge(String email);
 
     String sendAuthSMS(String phoneNumber);
 
-    boolean verifyAuthChallenge(AuthJob authjob, String authChallenge);
+    boolean verifyAuthChallenge(EmailAuthJob authjob, String authChallenge);
 
     void verifyAuthSMS(String phoneNumber, String authSMS);
 
@@ -23,7 +27,7 @@ public interface AuthService {
     void checkphone(String phone);
 
 
-    void login(String loginID, String password);
+    LoginResponseDTO login(LoginRequestDTO loginreqDTO);
 
     void logout();
     
@@ -32,6 +36,7 @@ public interface AuthService {
 
     void OAuthRegister(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth);
 
+    void updatePassword(String uuid, String newPassword);
 
-    void restetPassword(String loginID, String email);
+    String getSecret();
 }
