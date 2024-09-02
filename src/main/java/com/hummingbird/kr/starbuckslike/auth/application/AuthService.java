@@ -1,10 +1,7 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
 import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
-import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
-import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
-import com.hummingbird.kr.starbuckslike.auth.dto.ResetPWRequestDTO;
-import com.hummingbird.kr.starbuckslike.auth.dto.ResetPWResponseDTO;
+import com.hummingbird.kr.starbuckslike.auth.dto.*;
 
 import java.time.LocalDate;
 
@@ -20,7 +17,7 @@ public interface AuthService {
     void verifyAuthSMS(String phoneNumber, String authSMS);
 
 
-    void registerMember(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth);
+    RegisterResponseDTO registerMember(RegisterRequestDTO registerRequestDTO);
 
     void checkEmail(String email);
 
