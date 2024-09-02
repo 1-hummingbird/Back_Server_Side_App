@@ -27,6 +27,9 @@ public class Exhibition extends BaseEntity {
     @Column(name = "exhibition_name" , length = 100 , nullable = false)
     private String name;
 
+    @Column(name = "exhibition_title", nullable = false, length = 100)
+    private String title; // 기획전 한줄 타이틀
+
     @Column(name = "full_description", columnDefinition = "LONGTEXT")
     private String fullDescription; // 기획전 설명 (html)
 
