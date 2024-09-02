@@ -20,7 +20,7 @@ public class ProductController {
 
     // 상품 리스트 조회 [가격,카테고리]
     @GetMapping("/api/v1/products")
-    public Page<ProductListDto> searchMemberV3(ProductCondition condition, Pageable pageable) {
+    public Page<ProductListDto> searchMemberV1(ProductCondition condition, Pageable pageable) {
         return productSearch.searchProductListPageV1(condition, pageable);
     }
 

@@ -19,12 +19,24 @@ class CategorySearchTest {
     void testFindCategoryByDepth(){
         Integer depth = 1;
         List<CategoryListDto> result = categorySearch.findCategoryByDepth(depth);
-
         result.forEach(category -> {
             log.info(
                     "Category id: " + category.getId() +
                             ", Name: " + category.getName() +
                             ", Path: " + category.getPath()
+            );
+        });
+    }
+
+    @Test
+    void testFindAllRootCategory(){
+        List<CategoryListDto> result = categorySearch.findAllRootCategory();
+        result.forEach(category -> {
+            log.info(
+                    "Category id: " + category.getId() +
+                            ", Name: " + category.getName() +
+                            ", Path: " + category.getPath() +
+                            ", image: " + category.getImage()
             );
         });
     }
