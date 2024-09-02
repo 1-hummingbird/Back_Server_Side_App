@@ -21,28 +21,6 @@ public class DeliveryDto {
 
     //   private String basic_flag;
 
-    //기본생성자
-    public DeliveryDto(){
-
-    }
-
-
-
-    // 왜 이렇게 코드를 짰는지 이해를 못하고있음.
-    //
-    public DeliveryDto(Long id,
-                       String alias,
-                       String name,
-                       String address,
-                       int phone,
-                       String userid) {
-        this.id = id;
-        this.alias = alias;
-        this.name = name;
-        this.address = address;
-        this.phone = phone;
-        this.userid = userid;
-    }
 
     public Long getId() {
         return id;
