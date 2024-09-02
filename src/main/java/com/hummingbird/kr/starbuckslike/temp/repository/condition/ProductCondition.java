@@ -12,5 +12,6 @@ public class ProductCondition {
     //이벤트
     private Long exhibitionId; // 기획전 Id
 
-    // todo : 정렬 (최신순, 할인율, 베스트)
+    private OrderCondition orderCondition;  // 정렬 조건
+
 }

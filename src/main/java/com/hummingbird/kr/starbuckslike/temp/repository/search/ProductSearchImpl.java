@@ -3,11 +3,13 @@ package com.hummingbird.kr.starbuckslike.temp.repository.search;
 import com.hummingbird.kr.starbuckslike.temp.domain.Product;
 import com.hummingbird.kr.starbuckslike.temp.dto.ProductListDto;
 import com.hummingbird.kr.starbuckslike.temp.dto.QProductListDto;
+import com.hummingbird.kr.starbuckslike.temp.repository.condition.OrderCondition;
 import com.hummingbird.kr.starbuckslike.temp.repository.condition.PriceType;
 import com.hummingbird.kr.starbuckslike.temp.repository.condition.ProductCondition;
+import com.querydsl.core.types.Order;
+import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
-import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -16,8 +18,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
-import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 
 import static com.hummingbird.kr.starbuckslike.temp.domain.QCategory.category;
@@ -64,7 +66,6 @@ public class ProductSearchImpl implements ProductSearch{
 
     @Override
     public Page<ProductListDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable) {
-
         List<ProductListDto> fetch = queryFactory
                 .select(
                         new QProductListDto(product.id, product.name, product.price,
@@ -80,6 +81,9 @@ public class ProductSearchImpl implements ProductSearch{
                         priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
                         categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
                         isExhibitionCondition(productCondition.getExhibitionId()) // 기획전 상품 필터링
+                )
+                .orderBy(
+                        getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -98,6 +102,8 @@ public class ProductSearchImpl implements ProductSearch{
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
     }
+
+
 
     /**
      * 상품 조회의 모든 검색조건
@@ -121,9 +127,34 @@ public class ProductSearchImpl implements ProductSearch{
                 null : category.path.startsWith(path);
     }
 
-    // todo : 기획전으로 검색
+    // 기획전으로 검색
     private BooleanExpression isExhibitionCondition(Long exhibitionId) {
         return (exhibitionId == null) ? null : exhibitionProduct.exhibition.id.eq(exhibitionId);
+    }
+
+    // 정렬 조건
+    private OrderSpecifier<?>[] getOrderSpecifier(OrderCondition orderCondition) {
+        List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
+
+        if (orderCondition==null) { // 기본 정렬 (최신순)
+            orderSpecifiers.add(new OrderSpecifier<>(Order.DESC, product.createdAt));
+        }
+        else {
+            switch (orderCondition) {
+                case NEWEST -> // 최신순 (내림차순)
+                        orderSpecifiers.add(new OrderSpecifier<>(Order.DESC, product.createdAt));
+                case DISCOUNT -> // 할인율 순 (내림차순)
+                        orderSpecifiers.add(new OrderSpecifier<>(Order.DESC, product.discountRate));
+                case HIGHEST_PRICE -> // 높은 가격순
+                        orderSpecifiers.add(new OrderSpecifier<>(Order.DESC, product.price));
+                case LOWEST_PRICE -> // 낮은 가격순
+                        orderSpecifiers.add(new OrderSpecifier<>(Order.ASC, product.price));
+                // todo : 추천순
+
+                // todo : 이상한 값 들어오면 예외처리
+            }
+        }
+        return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);
     }
 
 }

@@ -34,54 +34,62 @@ public class LoadTestData {
              * 테스트용 임시 카테고리 데이터 추가
              */
             // depth 0단계 루트 카테고리 생성
-            Category tumbler = new Category(null, "텀블러", null, 0, null);
+            Category tumbler = new Category(null, "텀블러", null, 0, "" ,null);
             tumbler = categoryRepository.save(tumbler);  // ID가 생성됨
             tumbler.setPath(String.valueOf(tumbler.getId()));  // ID를 사용하여 path 설정
             tumbler = categoryRepository.save(tumbler);  // path 업데이트
 
-            Category cup = new Category(null, "컵", null, 0, null);
+            Category cup = new Category(null, "컵", null, 0, "",null);
             cup = categoryRepository.save(cup);
             cup.setPath(String.valueOf(cup.getId()));
             cup = categoryRepository.save(cup);
 
             // depth 1단계 하위 카테고리 생성
-            Category stainlessTumbler = new Category(null, "스테인리스 텀블러", tumbler, 1, null);
+            Category stainlessTumbler = new Category(null, "스테인리스 텀블러", tumbler,
+                    1, "",null);
             stainlessTumbler = categoryRepository.save(stainlessTumbler);
             stainlessTumbler.setPath(tumbler.getPath() + "/" + stainlessTumbler.getId());
             stainlessTumbler = categoryRepository.save(stainlessTumbler);
 
-            Category steelTumbler = new Category(null, "철 텀블러", tumbler, 1, null);
+            Category steelTumbler = new Category(null, "철 텀블러", tumbler,
+                    1, "",null);
             steelTumbler = categoryRepository.save(steelTumbler);
             steelTumbler.setPath(tumbler.getPath() + "/" + steelTumbler.getId());
             steelTumbler = categoryRepository.save(steelTumbler);
 
-            Category glassCup = new Category(null, "유리 컵", cup, 1, null);
+            Category glassCup = new Category(null, "유리 컵", cup,
+                    1, "",null);
             glassCup = categoryRepository.save(glassCup);
             glassCup.setPath(cup.getPath() + "/" + glassCup.getId());
             glassCup = categoryRepository.save(glassCup);
 
-            Category stainlessCup = new Category(null, "스테인리스 컵", cup, 1, null);
+            Category stainlessCup = new Category(null, "스테인리스 컵", cup,
+                    1, "",null);
             stainlessCup = categoryRepository.save(stainlessCup);
             stainlessCup.setPath(cup.getPath() + "/" + stainlessCup.getId());
             stainlessCup = categoryRepository.save(stainlessCup);
 
             // depth 2단계 하위 카테고리 생성
-            Category highStainlessTumbler = new Category(null, "고급 스테인리스 텀블러", stainlessTumbler, 2, null);
+            Category highStainlessTumbler = new Category(null, "고급 스테인리스 텀블러", stainlessTumbler,
+                    2, "",null);
             highStainlessTumbler = categoryRepository.save(highStainlessTumbler);
             highStainlessTumbler.setPath(stainlessTumbler.getPath() + "/" + highStainlessTumbler.getId());
             highStainlessTumbler = categoryRepository.save(highStainlessTumbler);
 
-            Category lowStainlessTumbler = new Category(null, "하급 스테인리스 컵", stainlessTumbler, 2, null);
+            Category lowStainlessTumbler = new Category(null, "하급 스테인리스 컵", stainlessTumbler,
+                    2, "",null);
             lowStainlessTumbler = categoryRepository.save(lowStainlessTumbler);
             lowStainlessTumbler.setPath(stainlessTumbler.getPath() + "/" + lowStainlessTumbler.getId());
             lowStainlessTumbler = categoryRepository.save(lowStainlessTumbler);
 
-            Category highGlassCup = new Category(null, "고급 유리 컵", glassCup, 2, null);
+            Category highGlassCup = new Category(null, "고급 유리 컵", glassCup,
+                    2, "",null);
             highGlassCup = categoryRepository.save(highGlassCup);
             highGlassCup.setPath(glassCup.getPath() + "/" + highGlassCup.getId());
             highGlassCup = categoryRepository.save(highGlassCup);
 
-            Category lowGlassCup = new Category(null, "하급 유리 컵", glassCup, 2, null);
+            Category lowGlassCup = new Category(null, "하급 유리 컵", glassCup,
+                    2, "",null);
             lowGlassCup = categoryRepository.save(lowGlassCup);
             lowGlassCup.setPath(glassCup.getPath() + "/" + lowGlassCup.getId());
             lowGlassCup = categoryRepository.save(lowGlassCup);
@@ -167,21 +175,21 @@ public class LoadTestData {
             Exhibition summerExhibition = exhibitionRepository.save(
                     Exhibition.builder()
                             .name("여름 기획전")
+                            .title("여름 기획전 타이틀")
                             .fullDescription("<p>여름 기획전 상세</p>")
                             .startDate(LocalDate.of(2024, 8, 1))
                             .endDate(LocalDate.of(2024, 8, 30))
                             .isDeleted(false)
-                            .isBanner(false)
                             .build()
             );
             Exhibition stanExhibition = exhibitionRepository.save(
                     Exhibition.builder()
                             .name("스탠리 기획전")
+                            .title("스탠리 기획전 타이틀")
                             .fullDescription("<p>스탠리 기획전 상세</p>")
                             .startDate(LocalDate.of(2024,7,1))
                             .endDate(LocalDate.of(2024,12,25))
                             .isDeleted(false)
-                            .isBanner(false)
                             .build()
             );
             // 기획전 , 상품 중간 테이블 데이터
