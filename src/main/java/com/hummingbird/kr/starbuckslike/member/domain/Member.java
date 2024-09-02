@@ -3,10 +3,12 @@ package com.hummingbird.kr.starbuckslike.member.domain;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
+@Setter
 @Getter
 @Slf4j
 @Entity
@@ -64,7 +66,7 @@ public class Member extends BaseEntity {
         this.isDeleted = isDeleted;
     }
 
-    protected Member() {
+    public Member() {
     }
 
 }

@@ -1,12 +1,10 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
 import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
-import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
-import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
-import com.hummingbird.kr.starbuckslike.auth.dto.ResetPWRequestDTO;
-import com.hummingbird.kr.starbuckslike.auth.dto.ResetPWResponseDTO;
+import com.hummingbird.kr.starbuckslike.auth.dto.*;
 import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
 import com.hummingbird.kr.starbuckslike.auth.util.EmailAuth;
+import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -17,14 +15,19 @@ import javax.crypto.SecretKey;
 import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Optional;
+import java.util.UUID;
 
 @Service
 public class AuthServiceImpl implements AuthService {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    private final MemberRepository memberRepository;
 
-    // todo : get service Mail and PW from env file
+    @Autowired
+    public AuthServiceImpl(MemberRepository memberRepository){
+        this.memberRepository = memberRepository;
+    };
+
+    //TODO: 이메일 인증을 위한 정보, Gmail 관련 Server App이  OAuth2.0으로 Google에 로그인해야 함
     private final String serviceMail = "";
     private final String servicePW = "";
     private final EmailAuth emailAuth = new EmailAuth(serviceMail, servicePW);
@@ -51,8 +54,20 @@ public class AuthServiceImpl implements AuthService {
 
     }
 
-    public void registerMember(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth) {
+    public RegisterResponseDTO registerMember(RegisterRequestDTO registerRequestDTO) {
 
+        Member m = new Member();
+        m.setBirthdate(registerRequestDTO.getBirthdate());
+        m.setName(registerRequestDTO.getName());
+        m.setNickname(registerRequestDTO.getNickname());
+        m.setPhone(registerRequestDTO.getPhone());
+        m.setEmail(registerRequestDTO.getEmail());
+        m.setLoginID(registerRequestDTO.getLoginID());
+        m.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
+        m.setMemberUID(UUID.randomUUID().toString());
+        memberRepository.save(m);
+        
+        return new RegisterResponseDTO();
     }
 
     @Override

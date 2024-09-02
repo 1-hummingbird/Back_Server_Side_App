@@ -13,7 +13,8 @@ import java.util.Optional;
 
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
-    Optional<Member> findByMemberUID(String uuid);
+
+    Optional<Member> findByMemberUID(String memberUid);
 
     @Query("select m.password from Member m where m.loginID = :loginId")
     Optional<String> findByid(@Param("loginId")String loginId);
