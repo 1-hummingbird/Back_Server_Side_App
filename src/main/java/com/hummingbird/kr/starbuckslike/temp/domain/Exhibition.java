@@ -43,8 +43,9 @@ public class Exhibition extends BaseEntity {
     @ColumnDefault("false")
     private Boolean isDeleted = false ; // 기획전 삭제 여부
 
-    @Column(name = "is_Banner" , nullable = false)
-    private Boolean isBanner = false; // banner 이미지 존재 여부
+    // 기획전 이미지를 메인 베너로 쓰려고 했지만 베너 도메인 생성하자고 계획 수정되어 주석처리
+//    @Column(name = "is_Banner" , nullable = false)
+//    private Boolean isBanner = false; // banner 이미지 존재 여부
 
 
 }
