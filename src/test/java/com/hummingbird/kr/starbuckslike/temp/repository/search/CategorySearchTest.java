@@ -1,7 +1,7 @@
 package com.hummingbird.kr.starbuckslike.temp.repository.search;
 
-import com.hummingbird.kr.starbuckslike.temp.domain.Category;
-import com.hummingbird.kr.starbuckslike.temp.dto.CategoryListDto;
+import com.hummingbird.kr.starbuckslike.category.dto.CategoryListDto;
+import com.hummingbird.kr.starbuckslike.category.infrastructure.search.CategorySearch;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

@@ -1,6 +1,6 @@
 package com.hummingbird.kr.starbuckslike.member.domain;
 
-import com.hummingbird.kr.starbuckslike.temp.domain.base.BaseEntity;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.extern.slf4j.Slf4j;
