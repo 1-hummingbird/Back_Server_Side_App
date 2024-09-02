@@ -1,6 +1,8 @@
 package com.hummingbird.kr.starbuckslike.config;
 
 
+import com.hummingbird.kr.starbuckslike.banner.domain.Banner;
+import com.hummingbird.kr.starbuckslike.banner.infrastructure.BannerRepository;
 import com.hummingbird.kr.starbuckslike.category.domain.Category;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.CategoryRepository;
 import com.hummingbird.kr.starbuckslike.exhibition.domain.Exhibition;
@@ -30,19 +32,22 @@ public class LoadTestData {
             CategoryRepository categoryRepository,
             ProductRepository productRepository,
             ExhibitionRepository exhibitionRepository,
-            ExhibitionProductRepository exhibitionProductRepository
+            ExhibitionProductRepository exhibitionProductRepository,
+            BannerRepository bannerRepository
                                    ) {
         return args -> {
             /**
              * 테스트용 임시 카테고리 데이터 추가
              */
             // depth 0단계 루트 카테고리 생성
-            Category tumbler = new Category(null, "텀블러", null, 0, "" ,null);
+            Category tumbler = new Category(null, "텀블러", null, 0, "" ,
+                    "https://image.istarbucks.co.kr/upload/store/skuimg/2022/02/[9300000003591]_20220222165515488.jpg");
             tumbler = categoryRepository.save(tumbler);  // ID가 생성됨
             tumbler.setPath(String.valueOf(tumbler.getId()));  // ID를 사용하여 path 설정
             tumbler = categoryRepository.save(tumbler);  // path 업데이트
 
-            Category cup = new Category(null, "컵", null, 0, "",null);
+            Category cup = new Category(null, "컵", null, 0, "",
+                    "https://image.istarbucks.co.kr/upload/store/skuimg/2024/06/[9300000005354]_20240617142521983.jpg");
             cup = categoryRepository.save(cup);
             cup.setPath(String.valueOf(cup.getId()));
             cup = categoryRepository.save(cup);
@@ -169,9 +174,6 @@ public class LoadTestData {
                     .build()
             );
 
-
-
-
             /**
              * 가획전 테스트 데이터
              */
@@ -220,7 +222,32 @@ public class LoadTestData {
                             .product(product1) // 스탠리 고급 스테인리스 텀블러 상품 연결
                             .build()
             );
+            /**
+             * 회원 테스트 데이터
+             */
 
+
+            /**
+             * 배너 테스트 데이터
+             */
+            bannerRepository.save(
+                    Banner.builder()
+                            .image("??/??/bannerImg3.jpg")
+                            .seq(3)
+                            .build()
+            );
+            bannerRepository.save(
+                    Banner.builder()
+                            .image("??/??/bannerImg2.jpg")
+                            .seq(2)
+                            .build()
+            );
+            bannerRepository.save(
+                    Banner.builder()
+                            .image("??/??/bannerImg1.jpg")
+                            .seq(1)
+                            .build()
+            );
         };
     }
 }

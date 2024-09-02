@@ -13,8 +13,8 @@ public class QProductListDto extends ConstructorExpression<ProductListDto> {
 
     private static final long serialVersionUID = -351548437L;
 
-    public QProductListDto(com.querydsl.core.types.Expression<Long> id, com.querydsl.core.types.Expression<String> name, com.querydsl.core.types.Expression<Integer> price, com.querydsl.core.types.Expression<Boolean> isNew) {
-        super(ProductListDto.class, new Class<?>[]{long.class, String.class, int.class, boolean.class}, id, name, price, isNew);
+    public QProductListDto(com.querydsl.core.types.Expression<Long> id, com.querydsl.core.types.Expression<String> name, com.querydsl.core.types.Expression<Integer> price, com.querydsl.core.types.Expression<Boolean> isNew, com.querydsl.core.types.Expression<Boolean> isDiscounted, com.querydsl.core.types.Expression<Double> discountRate) {
+        super(ProductListDto.class, new Class<?>[]{long.class, String.class, int.class, boolean.class, boolean.class, double.class}, id, name, price, isNew, isDiscounted, discountRate);
     }
 
 }

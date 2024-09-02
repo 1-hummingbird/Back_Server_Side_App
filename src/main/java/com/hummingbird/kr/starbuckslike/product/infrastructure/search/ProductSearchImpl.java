@@ -54,7 +54,8 @@ public class ProductSearchImpl implements ProductSearch {
                         new QProductListDto(product.id, product.name, product.price,
                                 new CaseBuilder() // sql case문
                                         .when(isNewCondition).then(true)
-                                        .otherwise(false)
+                                        .otherwise(false),
+                                product.isDiscounted, product.discountRate
                         )
                 )
                 .from(product)
@@ -72,7 +73,9 @@ public class ProductSearchImpl implements ProductSearch {
                         new QProductListDto(product.id, product.name, product.price,
                                 new CaseBuilder() // sql case문
                                         .when(isNewCondition).then(true)
-                                        .otherwise(false)
+                                        .otherwise(false),
+                                product.isDiscounted, product.discountRate
+
                         )
                 )
                 .from(product)
@@ -81,7 +84,8 @@ public class ProductSearchImpl implements ProductSearch {
                 .where(
                         priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
                         categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
-                        isExhibitionCondition(productCondition.getExhibitionId()) // 기획전 상품 필터링
+                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
+                        isExhibitionCondition(productCondition.getExhibitionIds()) // 여러 기획전 상품 필터링
                 )
                 .orderBy(
                         getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
@@ -98,7 +102,8 @@ public class ProductSearchImpl implements ProductSearch {
                 .where(
                         priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
                         categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
-                        isExhibitionCondition(productCondition.getExhibitionId()) // 기획전 상품 필터링
+                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
+                        isExhibitionCondition(productCondition.getExhibitionIds()) // 여러 기획전 상품 필터링
                 );
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
@@ -128,9 +133,16 @@ public class ProductSearchImpl implements ProductSearch {
                 null : category.path.startsWith(path);
     }
 
-    // 기획전으로 검색
-    private BooleanExpression isExhibitionCondition(Long exhibitionId) {
-        return (exhibitionId == null) ? null : exhibitionProduct.exhibition.id.eq(exhibitionId);
+    // 자식 카테고리 검색 (여러개 선택 가능)
+    private BooleanExpression isChildCategoryCondition(List<Long> childCategoryIds) {
+        return (childCategoryIds == null || childCategoryIds.isEmpty()) ? null :
+                category.id.in(childCategoryIds);
+    }
+
+    // 기획전으로 검색 (여러개 선택 가능)
+    private BooleanExpression isExhibitionCondition(List<Long> exhibitionIds) {
+        return (exhibitionIds == null || exhibitionIds.isEmpty()) ? null :
+                exhibitionProduct.exhibition.id.in(exhibitionIds);
     }
 
     // 정렬 조건
