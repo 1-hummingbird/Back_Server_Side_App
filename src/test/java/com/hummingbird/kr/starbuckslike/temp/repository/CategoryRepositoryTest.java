@@ -1,7 +1,8 @@
 package com.hummingbird.kr.starbuckslike.temp.repository;
 
-import com.hummingbird.kr.starbuckslike.temp.domain.Category;
-import com.hummingbird.kr.starbuckslike.temp.domain.Product;
+import com.hummingbird.kr.starbuckslike.category.domain.Category;
+import com.hummingbird.kr.starbuckslike.category.infrastructure.CategoryRepository;
+import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,7 +10,6 @@ import org.springframework.boot.test.context.SpringBootTest;
 
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.*;
 
 @SpringBootTest
 @Log4j2
