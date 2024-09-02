@@ -50,8 +50,8 @@ public class AuthController {
     @Operation(summary = "PW update API", description = "PW update API", tags = {"Auth"})
     @PostMapping("/resetPW")
     public CommonResponseEntity<ResetPWResponseDTO> resetPW(@RequestBody ResetPWRequestVO resetPWRequestVO) {
-
-        return new CommonResponseEntity<ResetPWResponseDTO>(HttpStatus.OK, "PW update complete", null);
+        ResetPWResponseDTO responseDTO = authService.updatePassword(resetPWRequestVO.toDTO());
+        return new CommonResponseEntity<ResetPWResponseDTO>(HttpStatus.OK, "PW update complete", responseDTO);
     }
 
 }

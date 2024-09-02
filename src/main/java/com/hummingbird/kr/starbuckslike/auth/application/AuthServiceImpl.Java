@@ -3,9 +3,10 @@ package com.hummingbird.kr.starbuckslike.auth.application;
 import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
+import com.hummingbird.kr.starbuckslike.auth.dto.ResetPWRequestDTO;
+import com.hummingbird.kr.starbuckslike.auth.dto.ResetPWResponseDTO;
 import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
 import com.hummingbird.kr.starbuckslike.auth.util.EmailAuth;
-import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
@@ -106,8 +107,9 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public void updatePassword(String uuid, String newPassword) {
-        newPassword = passwordEncoder.encode(newPassword);
-        memberRepository.updatePasswordByUuid(uuid, newPassword);
+    public ResetPWResponseDTO updatePassword(ResetPWRequestDTO resetPWreqDTO) {
+        String newPassword = passwordEncoder.encode(resetPWreqDTO.getNewPW());
+        memberRepository.updatePasswordByUuid(resetPWreqDTO.getMemberUID(), newPassword);
+        return new ResetPWResponseDTO();
     }
 }

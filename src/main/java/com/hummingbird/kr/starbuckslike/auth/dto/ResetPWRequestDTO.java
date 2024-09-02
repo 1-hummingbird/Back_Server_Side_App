@@ -5,5 +5,8 @@ import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public class ResetPWResponseDTO {
+public class ResetPWRequestDTO {
+    private String memberUID;
+    private String newPW;
+
 }
