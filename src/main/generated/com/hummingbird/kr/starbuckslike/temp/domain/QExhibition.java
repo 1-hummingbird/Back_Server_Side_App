@@ -30,13 +30,13 @@ public class QExhibition extends EntityPathBase<Exhibition> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final BooleanPath isBanner = createBoolean("isBanner");
-
     public final BooleanPath isDeleted = createBoolean("isDeleted");
 
     public final StringPath name = createString("name");
 
     public final DatePath<java.time.LocalDate> startDate = createDate("startDate", java.time.LocalDate.class);
+
+    public final StringPath title = createString("title");
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
