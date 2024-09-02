@@ -1,5 +1,7 @@
 package com.hummingbird.kr.starbuckslike.auth.util;
 
+import lombok.NoArgsConstructor;
+
 import javax.mail.Message;
 import javax.mail.MessagingException;
 import javax.mail.Session;
@@ -8,6 +10,7 @@ import javax.mail.internet.InternetAddress;
 import javax.mail.internet.MimeMessage;
 import java.util.Properties;
 
+@NoArgsConstructor
 public class EmailSender {
 
     public static void sendEmail(String to, String subject, String content, String email, String password) {
@@ -17,6 +20,7 @@ public class EmailSender {
         properties.put("mail.smtp.starttls.enable", "true");
         properties.put("mail.smtp.host", "smtp.gmail.com");
         properties.put("mail.smtp.port", "587");
+        properties.put("mail.smtp.ssl.protocols", "TLSv1.2"                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             );
 
         // Create a session with an authenticator
         Session session = Session.getInstance(properties, new javax.mail.Authenticator() {
