@@ -11,15 +11,19 @@ import java.util.List;
 public interface ProductSearch {
 
 
-    // 카테고리 path로 상품 리스트 검색
+    // 카테고리 path로 상품 검색
     List<Product> findProductsByPath(String path);
 
-    // todo : 상품 데이터가 많을 경우 Page로 return 할지 고민
     // 기획전에 해당하는 상품 리스트 조회
     List<ProductListDto> findProductListById(Long exhibitionId);
 
 
-
-    // 상품 리스트 조회, 필터링 조건[카테고리,가격]
+    /**
+     * 상품 리스트 조회
+     * 필터링 조건[카테고리,가격,기획전] , 정렬 조건(최신순, 높은 가격, 낮은 가격)
+     * offset based
+     */
     Page<ProductListDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable);
+
+
 }

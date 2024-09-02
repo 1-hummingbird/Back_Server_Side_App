@@ -83,7 +83,7 @@ public class ProductSearchImpl implements ProductSearch{
                         isExhibitionCondition(productCondition.getExhibitionId()) // 기획전 상품 필터링
                 )
                 .orderBy(
-                        getOrderSpecifier(productCondition.getOrderCondition())
+                        getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
                 )
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -102,6 +102,8 @@ public class ProductSearchImpl implements ProductSearch{
 
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
     }
+
+
 
     /**
      * 상품 조회의 모든 검색조건
@@ -125,7 +127,7 @@ public class ProductSearchImpl implements ProductSearch{
                 null : category.path.startsWith(path);
     }
 
-    // todo : 기획전으로 검색
+    // 기획전으로 검색
     private BooleanExpression isExhibitionCondition(Long exhibitionId) {
         return (exhibitionId == null) ? null : exhibitionProduct.exhibition.id.eq(exhibitionId);
     }
