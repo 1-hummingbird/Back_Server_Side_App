@@ -2,6 +2,7 @@ package com.hummingbird.kr.starbuckslike.category.infrastructure.search;
 
 import com.hummingbird.kr.starbuckslike.category.dto.CategoryListDto;
 import com.hummingbird.kr.starbuckslike.category.dto.QCategoryListDto;
+import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
@@ -27,10 +28,28 @@ public class CategorySearchImpl implements CategorySearch {
     @Override
     public List<CategoryListDto> findCategoryByDepth(Integer depth) {
         return queryFactory
-                .select(new QCategoryListDto(category.id, category.name, category.path))
+                .select(new QCategoryListDto(category.id, category.name, category.path, category.image))
                 .from(category)
                 .where(category.depth.eq(depth))
                 .orderBy(category.id.asc())
                 .fetch();
+    }
+
+    @Override
+    public List<CategoryListDto> findAllRootCategory() {
+        return queryFactory
+                .select(new QCategoryListDto(category.id, category.name, category.path, category.image))
+                .from(category)
+                .where(
+                        rootCondition() // 최상위 부모 카테고리만 검색
+                )
+                .orderBy(category.id.asc())
+                .fetch();
+    }
+    /**
+     * 카테고리 조회의 모든 검색조건
+     */
+    private final BooleanExpression rootCondition() {
+        return category.depth.eq(0).and(category.parent.isNull());
     }
 }

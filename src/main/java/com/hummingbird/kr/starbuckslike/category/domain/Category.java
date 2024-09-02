@@ -33,7 +33,6 @@ public class Category {
     @Setter
     private String path; // 카테고리 경로
 
-    @Column(name = "category_image",nullable = true)
-    @Setter
+    @Column(name = "category_image", nullable = true)
     private String image; // 카테고리 이미지 경로
 }

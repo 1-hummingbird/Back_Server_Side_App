@@ -25,13 +25,20 @@ public class ProductListDto {
 
     private Boolean isNew; // 신규 등록 상품 여부
 
+    private Boolean isDiscounted; // 할인 여부
+
+    private Double discountRate; // 할인율
+
 
 
     @QueryProjection
-    public ProductListDto(Long id, String name, Integer price, Boolean isNew) {
+    public ProductListDto(Long id, String name, Integer price, Boolean isNew,
+                          Boolean isDiscounted, Double discountRate) {
         this.id = id;
         this.name = name;
         this.price = price;
         this.isNew = isNew;
+        this.isDiscounted = isDiscounted;
+        this.discountRate = discountRate;
     }
 }

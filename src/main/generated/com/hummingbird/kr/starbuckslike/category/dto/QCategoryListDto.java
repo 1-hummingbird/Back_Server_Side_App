@@ -13,8 +13,8 @@ public class QCategoryListDto extends ConstructorExpression<CategoryListDto> {
 
     private static final long serialVersionUID = 1515491247L;
 
-    public QCategoryListDto(com.querydsl.core.types.Expression<Long> id, com.querydsl.core.types.Expression<String> name, com.querydsl.core.types.Expression<String> path) {
-        super(CategoryListDto.class, new Class<?>[]{long.class, String.class, String.class}, id, name, path);
+    public QCategoryListDto(com.querydsl.core.types.Expression<Long> id, com.querydsl.core.types.Expression<String> name, com.querydsl.core.types.Expression<String> path, com.querydsl.core.types.Expression<String> image) {
+        super(CategoryListDto.class, new Class<?>[]{long.class, String.class, String.class, String.class}, id, name, path, image);
     }
 
 }

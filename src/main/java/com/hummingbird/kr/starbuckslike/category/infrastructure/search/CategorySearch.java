@@ -5,7 +5,9 @@ import com.hummingbird.kr.starbuckslike.category.dto.CategoryListDto;
 import java.util.List;
 
 public interface CategorySearch {
-    //  깊이==depth 안 카테고리들만 검색.  (최상위 카테고리는 0)
+    //  깊이로 카테고리 검색
     List<CategoryListDto> findCategoryByDepth(Integer depth);
 
+    // 최상위 부모 카테고리만 출력
+    List<CategoryListDto> findAllRootCategory();
 }
