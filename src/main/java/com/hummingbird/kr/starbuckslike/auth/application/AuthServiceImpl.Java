@@ -4,9 +4,11 @@ import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
 import com.hummingbird.kr.starbuckslike.auth.dto.*;
 import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
 import com.hummingbird.kr.starbuckslike.auth.util.EmailAuth;
+import com.hummingbird.kr.starbuckslike.auth.util.JwtUtil;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Bean;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -23,8 +25,9 @@ public class AuthServiceImpl implements AuthService {
     private final MemberRepository memberRepository;
 
     @Autowired
-    public AuthServiceImpl(MemberRepository memberRepository){
+    public AuthServiceImpl(MemberRepository memberRepository, JwtUtil jwtUtil){
         this.memberRepository = memberRepository;
+        this.jwtUtil = jwtUtil;
     };
 
     //TODO: 이메일 인증을 위한 정보, Gmail 관련 Server App이  OAuth2.0으로 Google에 로그인해야 함
@@ -33,6 +36,7 @@ public class AuthServiceImpl implements AuthService {
     private final EmailAuth emailAuth = new EmailAuth(serviceMail, servicePW);
 
     private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(13);
+    private final JwtUtil jwtUtil;
 
     @Override
     public EmailAuthJob sendAuthChallenge(String email) {
@@ -90,9 +94,15 @@ public class AuthServiceImpl implements AuthService {
         String loginid = loginreqDTO.getLoginID();
         String password = loginreqDTO.getPassword();
 
-        Optional<String> DBpassword = memberRepository.findByid(loginid);
-        try {boolean passed = passwordEncoder.matches(password, DBpassword.get());} catch (Exception e) {throw new RuntimeException(e);}
-        return new LoginResponseDTO();
+        Optional<Member> memberOptional = memberRepository.findByid(loginid);
+        if (memberOptional.isPresent()) {
+            Member member = memberOptional.get();
+            if (passwordEncoder.matches(password, member.getPassword())) {
+                String token = jwtUtil.generateToken(member.getMemberUID());
+                return new LoginResponseDTO(token);
+            }
+        }
+        throw new RuntimeException("Invalid username or password");
     }
 
     @Override
@@ -126,5 +136,16 @@ public class AuthServiceImpl implements AuthService {
         String newPassword = passwordEncoder.encode(resetPWreqDTO.getNewPW());
         memberRepository.updatePasswordByUuid(resetPWreqDTO.getMemberUID(), newPassword);
         return new ResetPWResponseDTO();
+    }
+    public Optional<Member> findMemberByUid(String memberUid) {
+        // Implement the logic to find a member by memberUid
+        // For example, using a repository to fetch the member from the database
+        return memberRepository.findByMemberUID(memberUid);
+    }
+
+    public String generateToken(UserDetails userDetails) {
+        // Implement the logic to generate a JWT token
+        // For example, using a JWT utility class to create the token
+        return jwtUtil.generateToken(userDetails);
     }
 }
