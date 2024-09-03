@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.product.domain;
 
+import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
@@ -15,7 +16,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product_option")
-public class ProductOption {
+public class ProductOption extends BaseEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -33,14 +34,14 @@ public class ProductOption {
     private Integer price = 0;
 
     @Column(name = "qty" , nullable = false)
-    private Integer quantity; // 수량
+    private Long quantity; // 수량
 
     @Column(name = "is_input_option" , nullable = false)
     @ColumnDefault("false")
     private Boolean isInputOption = false; // 사용자 입력 옵션 (각인 등) 여부
 
     @Column(name = "discount_rate")
-    private Double discountRate= 0.00; // 할인율
+    private Float discountRate= 0.0f; // 할인율
 
     @Column(name = "status", nullable = false, length = 20)
     private SalesStatus status; // 판매 상태 : AVAILABLE, DISCONTINUED , HIDDEN

@@ -57,8 +57,6 @@ public class Member extends BaseEntity {
     private String memberUID;
 
 
-
-
 //    public Member(Long id, String loginId, String phone, String email, String password, String name, String nickName, String birth, Boolean isDeleted) {
 //        this.id = id;
 //        this.loginID = loginId;

@@ -32,7 +32,7 @@ public class Product extends BaseEntity {
     private Boolean isDiscounted = false; // 할인 여부
 
     @Column(name = "discount_rate")
-    private Double discountRate= 0.00; // 할인율
+    private Float discountRate= 0.0f; // 할인율
 
     @Column(name = "short_description", length = 200)
     private String shortDescription; // 짧은 상품설명 (텍스트)
@@ -54,6 +54,8 @@ public class Product extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category; // 상품의 카테고리
+
+
 
 
 }

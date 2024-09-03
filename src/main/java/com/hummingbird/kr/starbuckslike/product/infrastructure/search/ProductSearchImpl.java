@@ -1,8 +1,12 @@
 package com.hummingbird.kr.starbuckslike.product.infrastructure.search;
 
 import com.hummingbird.kr.starbuckslike.product.domain.Product;
-import com.hummingbird.kr.starbuckslike.product.dto.ProductListDto;
-import com.hummingbird.kr.starbuckslike.product.dto.QProductListDto;
+import com.hummingbird.kr.starbuckslike.product.domain.ProductImage;
+import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
+import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
+import com.hummingbird.kr.starbuckslike.product.dto.*;
+import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductImageRepository;
+import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.OrderCondition;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.PriceType;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
@@ -21,10 +25,12 @@ import org.springframework.stereotype.Repository;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import static com.hummingbird.kr.starbuckslike.category.domain.QCategory.category;
 import static com.hummingbird.kr.starbuckslike.exhibition.domain.QExhibitionProduct.exhibitionProduct;
 import static com.hummingbird.kr.starbuckslike.product.domain.QProduct.product;
+import static com.hummingbird.kr.starbuckslike.product.domain.QProductImage.productImage;
 
 /**
  * 상품 조회  (querydsl 등 조회 쿼리, JpaRepository와 따로 두었음)
@@ -33,8 +39,10 @@ import static com.hummingbird.kr.starbuckslike.product.domain.QProduct.product;
  */
 @Repository
 public class ProductSearchImpl implements ProductSearch {
+
     private final JPAQueryFactory queryFactory;
-    public ProductSearchImpl(EntityManager em) {
+    public ProductSearchImpl(EntityManager em)
+    {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
@@ -109,38 +117,26 @@ public class ProductSearchImpl implements ProductSearch {
     }
 
     @Override
-    public Page<Long> searchProductListIdsPageV1(ProductCondition productCondition, Pageable pageable) {
-        List<Long> fetch = queryFactory
-                .select(product.id) // Todo : UUID로 변경
+    public ProductDetailDto findProductDetailDtoById(Long productId) {
+        return queryFactory.select(new QProductDetailDto(product.fullDescription))
                 .from(product)
-                .leftJoin(category).on(product.category.id.eq(category.id))
-                .leftJoin(exhibitionProduct).on(product.id.eq(exhibitionProduct.id))
-                .where(
-                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
-                        categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
-                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
-                        isExhibitionCondition(productCondition.getExhibitionIds()) // 여러 기획전 상품 필터링
-                )
-                .orderBy(
-                        getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-        // 카운트 쿼리
-        JPAQuery<Long> countQuery = queryFactory
-                .select(product.count())
-                .from(product)
-                .leftJoin(category).on(product.category.id.eq(category.id))
-                .leftJoin(exhibitionProduct).on(product.id.eq(exhibitionProduct.id))
-                .where(
-                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
-                        categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
-                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
-                        isExhibitionCondition(productCondition.getExhibitionIds()) // 여러 기획전 상품 필터링
-                );
+                .where(product.id.eq(productId))
+                .fetchOne();
 
-        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
+    }
+
+    @Override
+    public List<ProductImageDto> findProductImageDtoById(Long productId) {
+        return queryFactory.select(new QProductImageDto(productImage.url,
+                                        new CaseBuilder()
+                                                .when(isMainCondition).then(true)
+                                                .otherwise(false)
+                                        )
+                )
+                .from(productImage)
+                .where(productImage.product.id.eq(productId))
+                .orderBy(productImage.seq.asc())
+                .fetch();
     }
 
 
@@ -177,7 +173,8 @@ public class ProductSearchImpl implements ProductSearch {
         return (exhibitionIds == null || exhibitionIds.isEmpty()) ? null :
                 exhibitionProduct.exhibition.id.in(exhibitionIds);
     }
-
+    // 상품 대표이미지 조건
+    private final BooleanExpression  isMainCondition = productImage.seq.eq(0);
     // 정렬 조건
     private OrderSpecifier<?>[] getOrderSpecifier(OrderCondition orderCondition) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();

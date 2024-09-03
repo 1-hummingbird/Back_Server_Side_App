@@ -29,7 +29,7 @@ public class QProduct extends EntityPathBase<Product> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
-    public final NumberPath<Double> discountRate = createNumber("discountRate", Double.class);
+    public final NumberPath<Float> discountRate = createNumber("discountRate", Float.class);
 
     public final StringPath fullDescription = createString("fullDescription");
 

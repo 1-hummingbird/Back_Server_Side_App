@@ -3,6 +3,8 @@ package com.hummingbird.kr.starbuckslike.config;
 
 import com.hummingbird.kr.starbuckslike.banner.domain.Banner;
 import com.hummingbird.kr.starbuckslike.banner.infrastructure.BannerRepository;
+import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
+import com.hummingbird.kr.starbuckslike.cart.infrastructure.CartRepository;
 import com.hummingbird.kr.starbuckslike.category.domain.Category;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.CategoryRepository;
 import com.hummingbird.kr.starbuckslike.exhibition.domain.Exhibition;
@@ -12,7 +14,11 @@ import com.hummingbird.kr.starbuckslike.exhibition.infrastructure.ExhibitionRepo
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import com.hummingbird.kr.starbuckslike.product.domain.Product;
+import com.hummingbird.kr.starbuckslike.product.domain.ProductImage;
+import com.hummingbird.kr.starbuckslike.product.domain.ProductOption;
 import com.hummingbird.kr.starbuckslike.product.domain.SalesStatus;
+import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductImageRepository;
+import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductOptionRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
@@ -34,6 +40,9 @@ public class LoadTestData {
     CommandLineRunner initDatabase(
             CategoryRepository categoryRepository,
             ProductRepository productRepository,
+            ProductImageRepository productImageRepository,
+            ProductOptionRepository productOptionRepository,
+            CartRepository cartRepository,
             ExhibitionRepository exhibitionRepository,
             ExhibitionProductRepository exhibitionProductRepository,
             MemberRepository memberRepository,
@@ -114,7 +123,7 @@ public class LoadTestData {
                     .name("스탠리 텀블러")
                     .price(30000)
                     .isDiscounted(false)
-                    .discountRate(0.0)
+                    .discountRate(0.0f)
                     .shortDescription("스탠리 텀블러입니다.")
                     .fullDescription("<p>스탠리 텀블러 상품 상세</p>")
                     .status(SalesStatus.AVAILABLE)
@@ -128,7 +137,7 @@ public class LoadTestData {
                     .name("스탠리 스테인리스 텀블러")
                     .price(40000)
                     .isDiscounted(true)
-                    .discountRate(10.0)
+                    .discountRate(10.0f)
                     .shortDescription("스탠리 스테인리스 텀블러 압나더.")
                     .fullDescription("<p>스탠리 스테인리스 텀블러 상품 상세</p>")
                     .status(SalesStatus.AVAILABLE)
@@ -142,7 +151,7 @@ public class LoadTestData {
                     .name("스탠리 고급 스테인리스 텀블러")
                     .price(50000)
                     .isDiscounted(true)
-                    .discountRate(15.0)
+                    .discountRate(15.0f)
                     .shortDescription("스탠리 고급 스테인리스 텀블러 입니다")
                     .fullDescription("<p>스탠리 고급 스테인리스 텀블러 상품 상세</p>")
                     .status(SalesStatus.AVAILABLE)
@@ -155,7 +164,7 @@ public class LoadTestData {
                     .name("펭귄 컵")
                     .price(10000)
                     .isDiscounted(true)
-                    .discountRate(15.0)
+                    .discountRate(15.0f)
                     .shortDescription("펭귄 컵 입니다")
                     .fullDescription("<p>펭귄 컵 상품 상세</p>")
                     .status(SalesStatus.AVAILABLE)
@@ -168,7 +177,7 @@ public class LoadTestData {
                     .name("펭귄 유리 컵")
                     .price(10000)
                     .isDiscounted(true)
-                    .discountRate(15.0)
+                    .discountRate(15.0f)
                     .shortDescription("펭귄 유리 컵 입니다")
                     .fullDescription("<p>펭귄 유리 컵 상품 상세</p>")
                     .status(SalesStatus.AVAILABLE)
@@ -177,6 +186,57 @@ public class LoadTestData {
                     .category(glassCup)
                     .build()
             );
+            // 상품 이미지
+            productImageRepository.save(ProductImage.builder()
+                    .product(product1)
+                    .url("test/path/스탠리 텀블러 이미지0.jpg")
+                    .seq(0)
+                    .build()
+            );
+            productImageRepository.save(ProductImage.builder()
+                    .product(product1)
+                    .url("test/path/스탠리 텀블러 이미지1.jpg")
+                    .seq(1)
+                    .build()
+            );
+            productImageRepository.save(ProductImage.builder()
+                    .product(product1)
+                    .url("test/path/스탠리 텀블러 이미지2.jpg")
+                    .seq(2)
+                    .build()
+            );
+            // 상품 옵션
+            ProductOption product1_option1 = ProductOption.builder()
+                    .product(product1) // 스탠리 텀블러의 옵션
+                    .name("스탠리 텀블러 옵션1")
+                    .price(30000)
+                    .quantity(20000L)
+                    .isInputOption(false)
+                    .discountRate(0.0f)
+                    .status(SalesStatus.AVAILABLE)
+                    .build();
+            productOptionRepository.save(product1_option1);
+            ProductOption product1_option2 = ProductOption.builder()
+                    .product(product1) // 스탠리 텀블러의 옵션
+                    .name("스탠리 텀블러 옵션2")
+                    .price(29000)
+                    .quantity(10000L)
+                    .isInputOption(false)
+                    .discountRate(0.0f)
+                    .status(SalesStatus.AVAILABLE)
+                    .build();
+            productOptionRepository.save(product1_option2);
+
+            ProductOption product4_option1 = ProductOption.builder()
+                    .product(product4) // 펭퀸컵의 옵션
+                    .name("펭퀸컵 옵션1")
+                    .price(10000)
+                    .quantity(3000L)
+                    .isInputOption(true)
+                    .discountRate(12.5f)
+                    .status(SalesStatus.AVAILABLE)
+                    .build();
+            productOptionRepository.save(product4_option1);
 
             /**
              * 가획전 테스트 데이터
@@ -275,6 +335,24 @@ public class LoadTestData {
                             .seq(1)
                             .build()
             );
+            /**
+             * 장바구니 테스트 데이터
+             */
+            cartRepository.save(Cart.builder()
+                    .userUid(member1.getMemberUID())
+                    .productOption(product1_option1) // 스탠리 텀블러 옵션1
+                    .qty(2)
+                    .build()
+            );
+            cartRepository.save(Cart.builder()
+                    .userUid(member1.getMemberUID())
+                    .productOption(product1_option2) // 스탠리 텀블러 옵션2
+                    .qty(4) // todo :  서비스 계층에서 수량제한 확인해야 함
+                    .build()
+            );
+
+
+
         };
     }
 }

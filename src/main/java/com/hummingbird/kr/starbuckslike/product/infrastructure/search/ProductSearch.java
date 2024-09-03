@@ -1,6 +1,8 @@
 package com.hummingbird.kr.starbuckslike.product.infrastructure.search;
 
 import com.hummingbird.kr.starbuckslike.product.domain.Product;
+import com.hummingbird.kr.starbuckslike.product.dto.ProductDetailDto;
+import com.hummingbird.kr.starbuckslike.product.dto.ProductImageDto;
 import com.hummingbird.kr.starbuckslike.product.dto.ProductListDto;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
 import org.springframework.data.domain.Page;
@@ -26,11 +28,21 @@ public interface ProductSearch {
      */
     Page<ProductListDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable);
 
-    // 강사님 피드백 id(UUID) List로 넘기기
-    Page<Long> searchProductListIdsPageV1(ProductCondition productCondition, Pageable pageable);
 
 
-    // 상품 id로 ProductListDto 단건조회
-    //Optional<ProductListDto> findProductListDtoByProductId()
+    /*
+        ---------------------
+        여기서 부터 상품 디테일 정보 (상품상세 , 상품의 이미지)
+        ---------------------
+     */
+
+    // 상품 id로 상품 상세정보 조회
+    ProductDetailDto findProductDetailDtoById(Long productId);
+
+    // 상품 Id로 상품 이미지 조회
+    List<ProductImageDto> findProductImageDtoById(Long productId);
+
+
+
 
 }

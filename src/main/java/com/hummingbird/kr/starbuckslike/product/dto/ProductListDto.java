@@ -11,7 +11,6 @@ import lombok.NoArgsConstructor;
  */
 @Data
 @Builder
-//@AllArgsConstructor
 @NoArgsConstructor
 public class ProductListDto {
     private Long id; // 상품 id
@@ -27,13 +26,13 @@ public class ProductListDto {
 
     private Boolean isDiscounted; // 할인 여부
 
-    private Double discountRate; // 할인율
+    private Float discountRate; // 할인율
 
 
 
     @QueryProjection
     public ProductListDto(Long id, String name, Integer price, Boolean isNew,
-                          Boolean isDiscounted, Double discountRate) {
+                          Boolean isDiscounted, Float discountRate) {
         this.id = id;
         this.name = name;
         this.price = price;
