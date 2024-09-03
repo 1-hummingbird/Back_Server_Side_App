@@ -22,7 +22,12 @@ public class QProductOption extends EntityPathBase<ProductOption> {
 
     public static final QProductOption productOption = new QProductOption("productOption");
 
-    public final NumberPath<Double> discountRate = createNumber("discountRate", Double.class);
+    public final com.hummingbird.kr.starbuckslike.common.entity.QBaseEntity _super = new com.hummingbird.kr.starbuckslike.common.entity.QBaseEntity(this);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
+
+    public final NumberPath<Float> discountRate = createNumber("discountRate", Float.class);
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
@@ -34,9 +39,12 @@ public class QProductOption extends EntityPathBase<ProductOption> {
 
     public final QProduct product;
 
-    public final NumberPath<Integer> quantity = createNumber("quantity", Integer.class);
+    public final NumberPath<Long> quantity = createNumber("quantity", Long.class);
 
     public final EnumPath<SalesStatus> status = createEnum("status", SalesStatus.class);
+
+    //inherited
+    public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public QProductOption(String variable) {
         this(ProductOption.class, forVariable(variable), INITS);
