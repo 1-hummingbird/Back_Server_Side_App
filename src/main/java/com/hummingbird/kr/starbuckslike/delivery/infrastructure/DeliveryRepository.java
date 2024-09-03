@@ -4,5 +4,12 @@ import com.hummingbird.kr.starbuckslike.delivery.domain.Delivery;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.JpaSpecificationExecutor;
 
-public interface DeliveryRepository extends JpaRepository<Delivery,Long>, JpaSpecificationExecutor<Delivery> {
+import java.util.List;
+
+public interface DeliveryRepository extends JpaRepository<Delivery,Long>{
+
+    List<Delivery> findByUserUUid(String uuid);
+
 }
+
+//동적쿼리 :
