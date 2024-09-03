@@ -12,7 +12,7 @@ import lombok.*;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
-@Table(name = "category")
+@Table(name = "category", uniqueConstraints = { @UniqueConstraint(columnNames = { "category_name"}) } )
 public class Category {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
