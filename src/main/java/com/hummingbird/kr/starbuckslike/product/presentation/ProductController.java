@@ -16,12 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 @RequiredArgsConstructor
 public class ProductController {
 
-    private  final ProductSearch productSearch;
+    private final ProductSearch productSearch;
 
     // 상품 리스트 조회 [가격,카테고리]
     @GetMapping("/api/v1/products")
     public Page<ProductListDto> searchMemberV1(ProductCondition condition, Pageable pageable) {
         return productSearch.searchProductListPageV1(condition, pageable);
     }
+
+
 
 }

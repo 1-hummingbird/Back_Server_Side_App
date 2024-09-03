@@ -205,6 +205,7 @@ public class LoadTestData {
                     .seq(2)
                     .build()
             );
+
             // 상품 옵션
             ProductOption product1_option1 = ProductOption.builder()
                     .product(product1) // 스탠리 텀블러의 옵션
