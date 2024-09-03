@@ -48,7 +48,7 @@ public class ProductSearchImpl implements ProductSearch {
     }
 
     @Override
-    public List<ProductListDto> findProductListById(Long exhibitionId) {
+    public List<ProductListDto> findProductListDtoByExhibitionId(Long exhibitionId) {
         return queryFactory
                 .selectDistinct(
                         new QProductListDto(product.id, product.name, product.price,
@@ -75,7 +75,6 @@ public class ProductSearchImpl implements ProductSearch {
                                         .when(isNewCondition).then(true)
                                         .otherwise(false),
                                 product.isDiscounted, product.discountRate
-
                         )
                 )
                 .from(product)
@@ -109,6 +108,40 @@ public class ProductSearchImpl implements ProductSearch {
         return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
     }
 
+    @Override
+    public Page<Long> searchProductListIdsPageV1(ProductCondition productCondition, Pageable pageable) {
+        List<Long> fetch = queryFactory
+                .select(product.id) // Todo : UUID로 변경
+                .from(product)
+                .leftJoin(category).on(product.category.id.eq(category.id))
+                .leftJoin(exhibitionProduct).on(product.id.eq(exhibitionProduct.id))
+                .where(
+                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
+                        categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
+                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
+                        isExhibitionCondition(productCondition.getExhibitionIds()) // 여러 기획전 상품 필터링
+                )
+                .orderBy(
+                        getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        // 카운트 쿼리
+        JPAQuery<Long> countQuery = queryFactory
+                .select(product.count())
+                .from(product)
+                .leftJoin(category).on(product.category.id.eq(category.id))
+                .leftJoin(exhibitionProduct).on(product.id.eq(exhibitionProduct.id))
+                .where(
+                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
+                        categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
+                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
+                        isExhibitionCondition(productCondition.getExhibitionIds()) // 여러 기획전 상품 필터링
+                );
+
+        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
+    }
 
 
     /**
@@ -149,6 +182,7 @@ public class ProductSearchImpl implements ProductSearch {
     private OrderSpecifier<?>[] getOrderSpecifier(OrderCondition orderCondition) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
 
+        // todo : 이상한 값 들어오면 예외처리
         if (orderCondition==null) { // 기본 정렬 (최신순)
             orderSpecifiers.add(new OrderSpecifier<>(Order.DESC, product.createdAt));
         }
@@ -164,7 +198,7 @@ public class ProductSearchImpl implements ProductSearch {
                         orderSpecifiers.add(new OrderSpecifier<>(Order.ASC, product.price));
                 // todo : 추천순
 
-                // todo : 이상한 값 들어오면 예외처리
+
             }
         }
         return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);

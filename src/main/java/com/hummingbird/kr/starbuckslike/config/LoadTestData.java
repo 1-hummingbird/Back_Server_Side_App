@@ -9,6 +9,8 @@ import com.hummingbird.kr.starbuckslike.exhibition.domain.Exhibition;
 import com.hummingbird.kr.starbuckslike.exhibition.domain.ExhibitionProduct;
 import com.hummingbird.kr.starbuckslike.exhibition.infrastructure.ExhibitionProductRepository;
 import com.hummingbird.kr.starbuckslike.exhibition.infrastructure.ExhibitionRepository;
+import com.hummingbird.kr.starbuckslike.member.domain.Member;
+import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import com.hummingbird.kr.starbuckslike.product.domain.Product;
 import com.hummingbird.kr.starbuckslike.product.domain.SalesStatus;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
@@ -17,6 +19,7 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 import java.time.LocalDate;
+import java.util.UUID;
 
 /**
  * 테스트용 (상품,카테고리)데이터 초기화
@@ -33,6 +36,7 @@ public class LoadTestData {
             ProductRepository productRepository,
             ExhibitionRepository exhibitionRepository,
             ExhibitionProductRepository exhibitionProductRepository,
+            MemberRepository memberRepository,
             BannerRepository bannerRepository
                                    ) {
         return args -> {
@@ -225,7 +229,30 @@ public class LoadTestData {
             /**
              * 회원 테스트 데이터
              */
-
+            Member member1 = Member.builder()
+                    .loginID("testMemberId1")
+                    .name("테스트유저1")
+                    .nickname("테스트유저닉네임1")
+                    .birthdate("1998-01-01")
+                    .phone("010-1234-5678")
+                    .email("test@test.com")
+                    .password("test1234")
+                    .isDeleted(false)
+                    .memberUID(UUID.randomUUID().toString())
+                    .build();
+            memberRepository.save(member1);
+            Member member2 = Member.builder()
+                    .loginID("testMemberId1")
+                    .name("테스트유저2")
+                    .nickname("테스트유저닉네임2")
+                    .birthdate("1998-01-02")
+                    .phone("010-1234-5678")
+                    .email("test@test.com")
+                    .password("test1234")
+                    .isDeleted(false)
+                    .memberUID(UUID.randomUUID().toString())
+                    .build();
+            memberRepository.save(member2);
 
             /**
              * 배너 테스트 데이터

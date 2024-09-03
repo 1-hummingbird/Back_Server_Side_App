@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface ProductSearch {
 
@@ -15,7 +16,7 @@ public interface ProductSearch {
     List<Product> findProductsByPath(String path);
 
     // 기획전에 해당하는 상품 리스트 조회
-    List<ProductListDto> findProductListById(Long exhibitionId);
+    List<ProductListDto> findProductListDtoByExhibitionId(Long exhibitionId);
 
 
     /**
@@ -25,5 +26,11 @@ public interface ProductSearch {
      */
     Page<ProductListDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable);
 
+    // 강사님 피드백 id(UUID) List로 넘기기
+    Page<Long> searchProductListIdsPageV1(ProductCondition productCondition, Pageable pageable);
+
+
+    // 상품 id로 ProductListDto 단건조회
+    //Optional<ProductListDto> findProductListDtoByProductId()
 
 }
