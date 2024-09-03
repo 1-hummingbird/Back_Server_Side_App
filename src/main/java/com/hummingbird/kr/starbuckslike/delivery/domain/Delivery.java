@@ -18,16 +18,15 @@ public class Delivery {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "delivery_id")
     private Long id;   //배송지 아이디
 
-    @Column(name = "alias")
+    @Column(name = "alias",length = 50)
     private String alias; //배송지 별칭
 
-    @Column(name = "name")
+    @Column(name = "name",length = 20)
     private String name; //배송지 받는사람 이름
 
-    @Column(name = "address")
+    @Column(name = "address",nullable = false)
     private String address; //배송지 기본주소 기입 우편번호 + 상세주소 + 기본주소 풀주소가 들어온다.
 
     @Column(name = "phone")  //@Column(name = " ") 필드와 매핑할 컬럼의 이름을 설정, 기본값 객체의 필드이름

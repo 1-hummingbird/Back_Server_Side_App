@@ -693,7 +693,7 @@ ASALocalRun/
 .localhistory/
 
 # Visual Studio History (VSHistory) files
-.vshistory/
+.vshistory/ f
 
 # BeatPulse healthcheck temp database
 healthchecksdb
