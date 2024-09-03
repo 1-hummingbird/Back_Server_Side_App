@@ -739,10 +739,5 @@ FodyWeavers.xsd
 .gradle/8.8/executionHistory/executionHistory.bin
 
 
-<<<<<<< HEAD
-.gradle **
-
-
-=======
 .gradle
->>>>>>> 34faf950f970cbf5726e2c19ed698b743408440a
+caches/
