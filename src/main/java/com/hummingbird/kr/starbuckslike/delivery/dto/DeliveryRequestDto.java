@@ -5,8 +5,8 @@ import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
 @Getter
-@NoArgsConstructor
 @Builder
+@NoArgsConstructor
 @AllArgsConstructor
 public class DeliveryRequestDto {
     //DTD는 사용자의 요청이나 응답이 필요한
@@ -15,7 +15,7 @@ public class DeliveryRequestDto {
     private String alias; // 배송지 별칭
     private String name;
     private String address; //주소
-    private String  phone; // 휴대폰 번호
+    private String  phone; // 휴대폰 번호 int로 하면 안된.
     private String userUuid;
     private String memo; //배송지 메모
     private Boolean isBasic;

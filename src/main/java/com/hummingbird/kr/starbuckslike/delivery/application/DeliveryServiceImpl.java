@@ -5,10 +5,13 @@ import com.hummingbird.kr.starbuckslike.delivery.infrastructure.DeliveryReposito
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
-@RequiredArgsConstructor
+
 @Service
+@RequiredArgsConstructor
 public class DeliveryServiceImpl implements DeliveryService{
+
     private final DeliveryRepository deliveryRepository;
+
     @Override
     public void creatDelivery(DeliveryRequestDto deliveryRequestDto) {
 
