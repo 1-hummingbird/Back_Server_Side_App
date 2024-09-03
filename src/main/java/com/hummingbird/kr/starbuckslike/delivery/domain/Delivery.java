@@ -39,7 +39,7 @@ public class Delivery {
 
     @Column(name = "is_basic")
     @ColumnDefault("false")
-    private Boolean isBasic;   // 기본주소지 등록할껀지 묻는 부분..
+    private Boolean isBasic;   // 11기본주소지 등록할껀지 묻는 부분..
 
 
     @Builder //생성자.
