@@ -1,72 +1,33 @@
 package com.hummingbird.kr.starbuckslike.delivery.dto;
 
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.*;
 
-@Getter
-@Setter
+@Data
 @NoArgsConstructor
-@AllArgsConstructor
 @Builder
-@ToString
-
 public class DeliveryDto {
     //DTD는 사용자의 요청이나 응답이 필요한
 
     private Long id;
-    private String alias;
-    private String name;
-    private String address;
-    private int phone;
-    private String userid;
+    private String alias; // 배송지 별칭
+    //private String name;
+    private String address; //주소
+    private int phone; // 휴대폰 번호
+    private String userUid;
+    private String memo; //배송지 메모
 
     //   private String basic_flag;
 
 
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
+    @QueryProjection
+    public DeliveryDto(Long id, String alias, String address, int phone, String userUid) {
         this.id = id;
-    }
-
-    public String getAlias() {
-        return alias;
-    }
-
-    public void setAlias(String alias) {
         this.alias = alias;
-    }
-
-    public String getName() {
-        return name;
-    }
-
-    public void setName(String name) {
-        this.name = name;
-    }
-
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
         this.address = address;
-    }
-
-    public int getPhone() {
-        return phone;
-    }
-
-    public void setPhone(int phone) {
         this.phone = phone;
-    }
-
-    public String getUserid() {
-        return userid;
-    }
-
-    public void setUserid(String userid) {
-        this.userid = userid;
+        this.userUid = userUid;
+        this.memo = memo;
     }
 }
+

@@ -6,13 +6,14 @@ import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.ColumnDefault;
 
 @Entity
 @Getter
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-@Table(name = "Delivery")
+@Table(name = "delivery")
 public class Delivery {
 
     @Id
@@ -27,13 +28,19 @@ public class Delivery {
     private String name; //배송지 받는사람 이름
 
     @Column(name = "address")
-    private String address; //배송지 기본주소 기입
+    private String address; //배송지 기본주소 기입 우편번호 + 상세주소 + 기본주소 풀주소가 들어온다.
 
     @Column(name = "phone")  //@Column(name = " ") 필드와 매핑할 컬럼의 이름을 설정, 기본값 객체의 필드이름
     private int phone; //배송지연락처
 
-    private String userid; // 유저아이디
+    @Column(name = "user_uuid" , nullable = false, length = 100)
+    private String userUid; // 유저아이디
 
- //   private String basic_flag;   // 기본주소지 등록할껀지 묻는 부분..
+    private String memo;
+
+
+    @Column(name = "is_basic")
+    @ColumnDefault("false")
+    private Boolean isBasic = false;   // 기본주소지 등록할껀지 묻는 부분..
 
 }
