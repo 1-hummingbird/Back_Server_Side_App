@@ -7,10 +7,13 @@ import com.hummingbird.kr.starbuckslike.delivery.infrastructure.DeliveryReposito
 import com.hummingbird.kr.starbuckslike.delivery.vo.DeliveryRequestVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import javax.sql.CommonDataSource;
 
 
 @RestController
@@ -21,16 +24,24 @@ public class DeliveryController {
 
     private final DeliveryService deliveryService;
 
-    @PostMapping
-    public CommonResponseEntity<Void> CreateDelivery(
-            @RequestBody DeliveryRequestVo deliveryRequestVo) {
+    @PostMapping("/delivery-create")
+    public CommonResponseEntity<Void> createDelivery(
+            @RequestBody DeliveryRequestVo deliveryRequestVo
+    ){
         DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
+                .userUuid(deliveryRequestVo.getUserUuid())
                 .id(deliveryRequestVo.getId())
+                .alias(deliveryRequestVo.getAlias())
+                .phone(deliveryRequestVo.getPhone())
+                .memo(deliveryRequestVo.getMemo())
+                .isBasic(deliveryRequestVo.getIsBasic())
+                .build();
+        deliveryService.createDelivery(deliveryRequestDto);
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                "등록완료",
+                null);
+
     }
-
-
-
-
-
 
 }
