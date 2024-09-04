@@ -5,4 +5,8 @@ public class LoginResponseDTO {
     public LoginResponseDTO(String accessToken) {
         this.accessToken = accessToken;
     }
+
+    public String getToken() {
+        return this.accessToken;
+    }
 }

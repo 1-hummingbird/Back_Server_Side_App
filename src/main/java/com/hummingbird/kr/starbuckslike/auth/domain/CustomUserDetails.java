@@ -17,7 +17,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        // Assuming Member has a method getAuthorities() that returns a collection of GrantedAuthority
+        // Assuming a Member has a method getAuthorities() that returns a collection of GrantedAuthority
         return Collections.emptyList(); // Replace with member.getAuthorities() if applicable
     }
 
@@ -28,7 +28,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public String getUsername() {
-        return member.getEmail();
+        return member.getLoginID();
     }
 
     @Override
@@ -48,7 +48,7 @@ public class CustomUserDetails implements UserDetails {
 
     @Override
     public boolean isEnabled() {
-        return true; // Implement logic if needed
+        return !member.getIsDeleted(); // Implement logic if needed
     }
 
     public Member getMember() {

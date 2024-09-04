@@ -5,7 +5,10 @@ import javax.crypto.KeyGenerator;
 import javax.crypto.SecretKey;
 import java.util.Base64;
 
+// todo: someday will update this by spring security's Encryptor
+
 public class Cryptor {
+
     private static final String Algo = "AES";
 
     public static String encrypt(String data, SecretKey key) throws Exception{

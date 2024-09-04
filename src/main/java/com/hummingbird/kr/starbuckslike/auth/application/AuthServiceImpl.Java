@@ -25,18 +25,19 @@ public class AuthServiceImpl implements AuthService {
     private final MemberRepository memberRepository;
 
     @Autowired
-    public AuthServiceImpl(MemberRepository memberRepository, JwtUtil jwtUtil){
+    public AuthServiceImpl(MemberRepository memberRepository, JwtUtil jwtUtil, PasswordEncoder passwordEncoder ) {
+        this.passwordEncoder = passwordEncoder;
         this.memberRepository = memberRepository;
         this.jwtUtil = jwtUtil;
     };
-
+    private final PasswordEncoder passwordEncoder;
+    private final JwtUtil jwtUtil;
     //TODO: 이메일 인증을 위한 정보, Gmail 관련 Server App이  OAuth2.0으로 Google에 로그인해야 함
     private final String serviceMail = "";
     private final String servicePW = "";
     private final EmailAuth emailAuth = new EmailAuth(serviceMail, servicePW);
 
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(13);
-    private final JwtUtil jwtUtil;
+
 
     @Override
     public EmailAuthJob sendAuthChallenge(String email) {
@@ -117,6 +118,11 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
+    public Optional<Member> findByMemberUID(String memberUid) {
+        return memberRepository.findByMemberUID(memberUid);
+    }
+
+    @Override
     public void logout() {
 
     }
@@ -143,9 +149,4 @@ public class AuthServiceImpl implements AuthService {
         return memberRepository.findByMemberUID(memberUid);
     }
 
-    public String generateToken(UserDetails userDetails) {
-        // Implement the logic to generate a JWT token
-        // For example, using a JWT utility class to create the token
-        return jwtUtil.generateToken(userDetails);
-    }
 }
