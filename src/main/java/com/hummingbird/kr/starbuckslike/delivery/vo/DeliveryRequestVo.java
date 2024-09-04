@@ -7,10 +7,10 @@ import lombok.ToString;
 @Getter
 
 public class DeliveryRequestVo {
-    private Long id;
+ //   private Long id;
     private String alias;
-//    private name;
-//    private address;
+    private String name;
+    private String address;
     private String phone;
     private String userUuid;
     private String memo;

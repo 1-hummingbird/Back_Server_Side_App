@@ -30,6 +30,7 @@ public class DeliveryRequestDto {
                 .phone(phone)
                 .memo(memo)
                 .name(name)
+                .alias(alias)
                 .build();
 
     }

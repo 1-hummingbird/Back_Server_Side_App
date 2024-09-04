@@ -30,7 +30,9 @@ public class DeliveryController {
     ){
         DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
                 .userUuid(deliveryRequestVo.getUserUuid())
-                .id(deliveryRequestVo.getId())
+//                .id(deliveryRequestVo.getId())
+                .name(deliveryRequestVo.getName())
+                .address(deliveryRequestVo.getAddress())
                 .alias(deliveryRequestVo.getAlias())
                 .phone(deliveryRequestVo.getPhone())
                 .memo(deliveryRequestVo.getMemo())
