@@ -35,9 +35,25 @@ public class Cart extends BaseEntity {
     private ProductOption productOption; // 상품 옵션
 
     @Column(name = "qty" , nullable = false)
-    private Integer qty; // 수량
+    private Integer qty = 1; // 수량
 
     @Column(name = "input_data" , nullable = true , length = 80)
     private String inputData; // 각인정보 같은 입력 데이터
+
+    // 장바구니 아이템 추가
+    public void addOptionQty(Integer addQty) {
+        this.qty += addQty;
+    }
+    // 장바구니 아이템 수량 증가
+    public void increaseCartItemQuantity() {
+        this.qty++;
+    }
+    // 장바구니 아이템 수량 감소
+    public void decreaseCartItemQuantity() {
+        if(this.qty <= 1)
+            throw new IllegalStateException("최소 선택수량은 1개 이상입니다.");
+        this.qty--;
+
+    }
 
 }

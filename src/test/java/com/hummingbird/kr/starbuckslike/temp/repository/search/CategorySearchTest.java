@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.temp.repository.search;
 
 import com.hummingbird.kr.starbuckslike.category.dto.CategoryListDto;
+import com.hummingbird.kr.starbuckslike.category.dto.MainCategoryListDto;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.search.CategorySearch;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -30,7 +31,7 @@ class CategorySearchTest {
 
     @Test
     void testFindAllRootCategory(){
-        List<CategoryListDto> result = categorySearch.findAllRootCategory();
+        List<MainCategoryListDto> result = categorySearch.findAllRootCategory();
         result.forEach(category -> {
             log.info(
                     "Category id: " + category.getId() +

@@ -127,8 +127,8 @@ public class LoadTestData {
                     .shortDescription("스탠리 텀블러입니다.")
                     .fullDescription("<p>스탠리 텀블러 상품 상세</p>")
                     .status(SalesStatus.AVAILABLE)
-                    .maxOrder(5)
-                    .maxPeriod(30)
+                    //.maxOrder(5)
+                    //.maxPeriod(30)
                     .category(tumbler)
                     .build()
             );
@@ -141,8 +141,6 @@ public class LoadTestData {
                     .shortDescription("스탠리 스테인리스 텀블러 압나더.")
                     .fullDescription("<p>스탠리 스테인리스 텀블러 상품 상세</p>")
                     .status(SalesStatus.AVAILABLE)
-                    .maxOrder(3)
-                    .maxPeriod(30)
                     .category(stainlessTumbler)
                     .build()
             );
@@ -155,8 +153,6 @@ public class LoadTestData {
                     .shortDescription("스탠리 고급 스테인리스 텀블러 입니다")
                     .fullDescription("<p>스탠리 고급 스테인리스 텀블러 상품 상세</p>")
                     .status(SalesStatus.AVAILABLE)
-                    .maxOrder(2)
-                    .maxPeriod(15)
                     .category(highStainlessTumbler)
                     .build()
             );
@@ -168,8 +164,7 @@ public class LoadTestData {
                     .shortDescription("펭귄 컵 입니다")
                     .fullDescription("<p>펭귄 컵 상품 상세</p>")
                     .status(SalesStatus.AVAILABLE)
-                    .maxOrder(2)
-                    .maxPeriod(15)
+
                     .category(cup)
                     .build()
             );
@@ -181,8 +176,6 @@ public class LoadTestData {
                     .shortDescription("펭귄 유리 컵 입니다")
                     .fullDescription("<p>펭귄 유리 컵 상품 상세</p>")
                     .status(SalesStatus.AVAILABLE)
-                    .maxOrder(2)
-                    .maxPeriod(15)
                     .category(glassCup)
                     .build()
             );
