@@ -21,12 +21,13 @@ import org.springframework.web.filter.OncePerRequestFilter;
 
 @Component
 @Lazy
+@RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-    @Autowired
+//    @Autowired
     private UserDetailsService userDetailsService;
 
-    @Autowired
+//    @Autowired
     private JwtUtil jwtUtil;
 
     @Override

@@ -15,7 +15,7 @@ import java.util.function.Function;
 public class JwtUtil {
 
     private static final String SECRET = "your-256-bit-secret"; // Use a secure way to store and retrieve this key
-    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET));
+//    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET));
 
     public Date extractExpiration(String token) {
         return extractClaim(token, Claims::getExpiration);
@@ -28,7 +28,7 @@ public class JwtUtil {
 
     private Claims extractAllClaims(String token) {
         return Jwts.parser()
-                .setSigningKey(SECRET_KEY)
+                .setSigningKey(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET)))
                 .build()
                 .parseClaimsJws(token)
                 .getBody();
@@ -43,7 +43,7 @@ public class JwtUtil {
                 .setSubject(username)
                 .setIssuedAt(new Date(System.currentTimeMillis()))
                 .setExpiration(new Date(System.currentTimeMillis() + 1000 * 1800)) // Valid for 30 minutes
-                .signWith(SECRET_KEY)
+                .signWith(Keys.hmacShaKeyFor(Decoders.BASE64.decode(SECRET)))
                 .compact();
     }
 
