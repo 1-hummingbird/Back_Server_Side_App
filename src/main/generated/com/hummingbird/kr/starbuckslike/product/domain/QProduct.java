@@ -37,10 +37,6 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final BooleanPath isDiscounted = createBoolean("isDiscounted");
 
-    public final NumberPath<Integer> maxOrder = createNumber("maxOrder", Integer.class);
-
-    public final NumberPath<Integer> maxPeriod = createNumber("maxPeriod", Integer.class);
-
     public final StringPath name = createString("name");
 
     public final NumberPath<Integer> price = createNumber("price", Integer.class);

@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddCartItem {
+public class AddCartItemDto {
 
     private String memberUID; // 유저 정보
 
@@ -22,7 +22,7 @@ public class AddCartItem {
 
     private Integer qty = 1; // 상품 옵션 선택 수량
 
-
+    private String inputData; // 각인 옵션상품의 경우 입력 데이터
 
 
 }

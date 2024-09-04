@@ -45,11 +45,11 @@ public class Product extends BaseEntity {
     private SalesStatus status; // 판매 상태 : AVAILABLE, DISCONTINUED , HIDDEN
 
 
-    @Column(name = "max_order", nullable = false)
-    private Integer maxOrder; // 최대 주문 가능 수량
-
-    @Column(name = "max_period", nullable = false)
-    private Integer maxPeriod; // 최대 주문 가능 수량 정책 일
+//    @Column(name = "max_order", nullable = false)
+//    private Integer maxOrder; // 최대 주문 가능 수량
+//
+//    @Column(name = "max_period", nullable = false)
+//    private Integer maxPeriod; // 최대 주문 가능 수량 정책 일
 
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
