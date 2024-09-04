@@ -13,7 +13,7 @@ public class DeliveryServiceImpl implements DeliveryService{
     private final DeliveryRepository deliveryRepository;
 
     @Override
-    public void creatDelivery(DeliveryRequestDto deliveryRequestDto) {
+    public void createDelivery(DeliveryRequestDto deliveryRequestDto) {
 
         deliveryRepository.save(deliveryRequestDto.toEntity());
 
