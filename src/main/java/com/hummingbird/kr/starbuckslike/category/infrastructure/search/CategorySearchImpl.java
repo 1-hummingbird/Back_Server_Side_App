@@ -1,7 +1,9 @@
 package com.hummingbird.kr.starbuckslike.category.infrastructure.search;
 
 import com.hummingbird.kr.starbuckslike.category.dto.CategoryListDto;
+import com.hummingbird.kr.starbuckslike.category.dto.MainCategoryListDto;
 import com.hummingbird.kr.starbuckslike.category.dto.QCategoryListDto;
+import com.hummingbird.kr.starbuckslike.category.dto.QMainCategoryListDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -28,7 +30,7 @@ public class CategorySearchImpl implements CategorySearch {
     @Override
     public List<CategoryListDto> findCategoryByDepth(Integer depth) {
         return queryFactory
-                .select(new QCategoryListDto(category.id, category.name, category.path, category.image))
+                .select(new QCategoryListDto(category.id, category.name, category.path))
                 .from(category)
                 .where(category.depth.eq(depth))
                 .orderBy(category.id.asc())
@@ -36,9 +38,9 @@ public class CategorySearchImpl implements CategorySearch {
     }
 
     @Override
-    public List<CategoryListDto> findAllRootCategory() {
+    public List<MainCategoryListDto> findAllRootCategory() {
         return queryFactory
-                .select(new QCategoryListDto(category.id, category.name, category.path, category.image))
+                .select(new QMainCategoryListDto(category.id, category.name, category.path, category.image))
                 .from(category)
                 .where(
                         rootCondition() // 최상위 부모 카테고리만 검색
