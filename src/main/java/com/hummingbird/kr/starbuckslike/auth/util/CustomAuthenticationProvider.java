@@ -12,6 +12,7 @@ import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 import java.util.Optional;
@@ -20,11 +21,14 @@ import java.util.UUID;
 @Component
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    private final AuthService authService;
-
     @Autowired
-    public CustomAuthenticationProvider(AuthService authService) {
+    private final AuthService authService;
+    @Autowired
+    private final PasswordEncoder passwordEncoder;
+
+    public CustomAuthenticationProvider(AuthService authService, PasswordEncoder passwordEncoder) {
         this.authService = authService;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -41,19 +45,16 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         }
 
         // Fetch user details using memberUid to get authorities
-        String memberUid = loginResponseDTO.getMemberUid();
+        String memberUid = loginResponseDTO.getToken();
         Optional<Member> memberOptional = authService.findByMemberUID(memberUid);
-        if (!memberOptional.isPresent()) {
+        if (memberOptional.isEmpty()) {
             throw new UsernameNotFoundException("User not found.");
         }
         Member member = memberOptional.get();
         UserDetails userDetails = new CustomUserDetails(member);
 
-        // Generate JWT token
-        String jwtToken = authService.generateToken(userDetails);
-
         // Create and return an Authentication object with JWT token
-        return new UsernamePasswordAuthenticationToken(userDetails, jwtToken, userDetails.getAuthorities());
+        return new UsernamePasswordAuthenticationToken(userDetails,  userDetails.getAuthorities());
     }
 
     @Override

@@ -293,33 +293,6 @@ public class LoadTestData {
                             .product(product1) // 스탠리 고급 스테인리스 텀블러 상품 연결
                             .build()
             );
-            /**
-             * 회원 테스트 데이터
-             */
-            Member member1 = Member.builder()
-                    .loginID("testMemberId1")
-                    .name("테스트유저1")
-                    .nickname("테스트유저닉네임1")
-                    .birthdate("1998-01-01")
-                    .phone("010-1234-5678")
-                    .email("test@test.com")
-                    .password("test1234")
-                    .isDeleted(false)
-                    .memberUID(UUID.randomUUID().toString())
-                    .build();
-            memberRepository.save(member1);
-            Member member2 = Member.builder()
-                    .loginID("testMemberId1")
-                    .name("테스트유저2")
-                    .nickname("테스트유저닉네임2")
-                    .birthdate("1998-01-02")
-                    .phone("010-1234-5678")
-                    .email("test@test.com")
-                    .password("test1234")
-                    .isDeleted(false)
-                    .memberUID(UUID.randomUUID().toString())
-                    .build();
-            memberRepository.save(member2);
 
             /**
              * 배너 테스트 데이터

@@ -3,6 +3,7 @@ package com.hummingbird.kr.starbuckslike.auth.config;
 import com.hummingbird.kr.starbuckslike.auth.application.AuthService;
 import com.hummingbird.kr.starbuckslike.auth.util.CustomAuthenticationProvider;
 import com.hummingbird.kr.starbuckslike.auth.util.JwtRequestFilter;
+import com.hummingbird.kr.starbuckslike.auth.util.JwtUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -33,14 +34,18 @@ public class SecurityConfig {
 
     @Bean
     public CustomAuthenticationProvider customAuthenticationProvider() {
-        return new CustomAuthenticationProvider(authService);
+        return new CustomAuthenticationProvider(authService, passwordEncoder());
     }
 
     @Bean
     public PasswordEncoder passwordEncoder() {
-        return new BCryptPasswordEncoder();
+        return new BCryptPasswordEncoder(13);
     }
 
+    @Bean
+    public JwtUtil jwtUtil(){
+        return new JwtUtil();
+    }
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
