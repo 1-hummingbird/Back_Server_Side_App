@@ -54,4 +54,6 @@ public class Product extends BaseEntity {
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "category_id")
     private Category category; // 상품의 카테고리
+
+
 }

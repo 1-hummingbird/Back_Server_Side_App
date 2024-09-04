@@ -2,6 +2,8 @@ package com.hummingbird.kr.starbuckslike.member.domain;
 
 import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
@@ -13,6 +15,8 @@ import org.hibernate.annotations.Comment;
 @Slf4j
 @Entity
 @Table(name = "member")
+@Builder
+@AllArgsConstructor
 public class Member extends BaseEntity {
 
     @Id
@@ -54,17 +58,20 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String memberUID;
 
-    public Member(Long id, String loginId, String phone, String email, String password, String name, String nickName, String birth, Boolean isDeleted) {
-        this.id = id;
-        this.loginID = loginId;
-        this.phone = phone;
-        this.email = email;
-        this.password = password;
-        this.name = name;
-        this.nickname = nickName;
-        this.birthdate = birth;
-        this.isDeleted = isDeleted;
-    }
+
+
+
+//    public Member(Long id, String loginId, String phone, String email, String password, String name, String nickName, String birth, Boolean isDeleted) {
+//        this.id = id;
+//        this.loginID = loginId;
+//        this.phone = phone;
+//        this.email = email;
+//        this.password = password;
+//        this.name = name;
+//        this.nickname = nickName;
+//        this.birthdate = birth;
+//        this.isDeleted = isDeleted;
+//    }
 
     public Member() {
     }
