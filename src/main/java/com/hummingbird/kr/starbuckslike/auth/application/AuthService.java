@@ -10,7 +10,7 @@ import java.util.Optional;
 public interface AuthService {
 
 
-    EmailAuthJob sendAuthChallenge(String email);
+    //EmailAuthJob sendAuthChallenge(String email);
 
     String sendAuthSMS(String phoneNumber);
 

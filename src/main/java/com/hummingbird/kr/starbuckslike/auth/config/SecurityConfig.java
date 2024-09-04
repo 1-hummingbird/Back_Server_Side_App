@@ -4,6 +4,7 @@ import com.hummingbird.kr.starbuckslike.auth.application.AuthService;
 import com.hummingbird.kr.starbuckslike.auth.util.CustomAuthenticationProvider;
 import com.hummingbird.kr.starbuckslike.auth.util.JwtRequestFilter;
 import com.hummingbird.kr.starbuckslike.auth.util.JwtUtil;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -27,14 +28,11 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@DependsOn("authServiceImpl")
+@RequiredArgsConstructor
 public class SecurityConfig {
 
-    @Autowired
+//    @Autowired
     private AuthService authService;
-
-   @Autowired
-    private JwtRequestFilter jwtRequestFilter;
 
     @Bean
     public CustomAuthenticationProvider customAuthenticationProvider() {
@@ -46,10 +44,6 @@ public class SecurityConfig {
         return new BCryptPasswordEncoder(13);
     }
 
-    @Bean
-    public JwtUtil jwtUtil(){
-        return new JwtUtil();
-    }
     @Bean
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
@@ -73,16 +67,8 @@ public class SecurityConfig {
                         .requestMatchers("/api/auth/**").permitAll()
                         .anyRequest().authenticated()
                 )
-                .authenticationProvider(customAuthenticationProvider())
-                .addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
+                .authenticationProvider(customAuthenticationProvider());
 
         return http.build();
-    }
-
-    @Bean
-    public AuthenticationManager authenticationManager(HttpSecurity http) throws Exception {
-        return http.getSharedObject(AuthenticationManagerBuilder.class)
-                .authenticationProvider(customAuthenticationProvider())
-                .build();
     }
 }

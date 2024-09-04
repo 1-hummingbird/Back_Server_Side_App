@@ -5,6 +5,7 @@ import com.hummingbird.kr.starbuckslike.auth.domain.CustomUserDetails;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
@@ -18,18 +19,15 @@ import org.springframework.stereotype.Component;
 import java.util.Optional;
 import java.util.UUID;
 
+
 @Component
+@RequiredArgsConstructor
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
-    @Autowired
     private final AuthService authService;
-    @Autowired
+
     private final PasswordEncoder passwordEncoder;
 
-    public CustomAuthenticationProvider(AuthService authService, PasswordEncoder passwordEncoder) {
-        this.authService = authService;
-        this.passwordEncoder = passwordEncoder;
-    }
 
     @Override
     public Authentication authenticate(Authentication authentication) throws AuthenticationException {

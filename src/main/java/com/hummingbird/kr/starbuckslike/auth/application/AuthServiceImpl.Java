@@ -7,10 +7,8 @@ import com.hummingbird.kr.starbuckslike.auth.util.EmailAuth;
 import com.hummingbird.kr.starbuckslike.auth.util.JwtUtil;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.config.ConfigurableBeanFactory;
-import org.springframework.context.annotation.Scope;
-import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -21,31 +19,27 @@ import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service("authServiceImpl")
+@Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final MemberRepository memberRepository;
-
-    @Autowired
-    public AuthServiceImpl(MemberRepository memberRepository, JwtUtil jwtUtil) {
-        this.passwordEncoder = new BCryptPasswordEncoder(13);
-        this.memberRepository = memberRepository;
-        this.jwtUtil = jwtUtil;
-        System.out.println("Auth Service init.");
-    };
-    private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
-    //TODO: 이메일 인증을 위한 정보, Gmail 관련 Server App이  OAuth2.0으로 Google에 로그인해야 함
-    private final String serviceMail = "";
-    private final String servicePW = "";
-    private final EmailAuth emailAuth = new EmailAuth(serviceMail, servicePW);
+//    private final EmailAuth emailAuth;
+    public PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(13);
 
+//    @Autowired
+//    public AuthServiceImpl(MemberRepository memberRepository, JwtUtil jwtUtil) {
+//        this.memberRepository = memberRepository;
+//        this.jwtUtil = jwtUtil;
+//        this.emailAuth = new EmailAuth("", ""); // Initialize with actual values
+//        System.out.println("Auth Service init.");
+//    }
 
-
-    @Override
-    public EmailAuthJob sendAuthChallenge(String email) {
-        return emailAuth.AuthStart(email);
-    }
+//    @Override
+//    public EmailAuthJob sendAuthChallenge(String email) {
+//        return emailAuth.AuthStart(email);
+//    }
 
     @Override
     public String sendAuthSMS(String phoneNumber) {
@@ -54,16 +48,15 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public boolean verifyAuthChallenge(EmailAuthJob authjob, String authChallenge) {
-        return emailAuth.AuthCheck(authjob, authChallenge);
+//        return emailAuth.AuthCheck(authjob, authChallenge);
+        return false;
     }
 
     @Override
     public void verifyAuthSMS(String phoneNumber, String authSMS) {
-
     }
 
     public RegisterResponseDTO registerMember(RegisterRequestDTO registerRequestDTO) {
-
         Member m = new Member();
         m.setBirthdate(registerRequestDTO.getBirthdate());
         m.setName(registerRequestDTO.getName());
@@ -74,30 +67,25 @@ public class AuthServiceImpl implements AuthService {
         m.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
         m.setMemberUID(UUID.randomUUID().toString());
         memberRepository.save(m);
-        
         return new RegisterResponseDTO();
     }
 
     @Override
     public void checkEmail(String email) {
-
     }
 
     @Override
     public void checkId(String loginID) {
-
     }
 
     @Override
     public void checkphone(String phone) {
-
     }
 
     @Override
     public LoginResponseDTO login(LoginRequestDTO loginreqDTO) {
         String loginid = loginreqDTO.getLoginID();
         String password = loginreqDTO.getPassword();
-
         Optional<Member> memberOptional = memberRepository.findByid(loginid);
         if (memberOptional.isPresent()) {
             Member member = memberOptional.get();
@@ -110,11 +98,10 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public String getSecret(){
+    public String getSecret() {
         try {
             SecretKey secretKey = Cryptor.generateKey();
-            String SendingKey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
-            return SendingKey;
+            return Base64.getEncoder().encodeToString(secretKey.getEncoded());
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
@@ -127,17 +114,14 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void logout() {
-
     }
 
     @Override
     public void OAuthLogin(String loginID, String password) {
-
     }
 
     @Override
     public void OAuthRegister(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth) {
-
     }
 
     @Override
@@ -146,10 +130,8 @@ public class AuthServiceImpl implements AuthService {
         memberRepository.updatePasswordByUuid(resetPWreqDTO.getMemberUID(), newPassword);
         return new ResetPWResponseDTO();
     }
+
     public Optional<Member> findMemberByUid(String memberUid) {
-        // Implement the logic to find a member by memberUid
-        // For example, using a repository to fetch the member from the database
         return memberRepository.findByMemberUID(memberUid);
     }
-
 }
