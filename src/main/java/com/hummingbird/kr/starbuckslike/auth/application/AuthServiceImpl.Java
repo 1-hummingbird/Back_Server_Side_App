@@ -8,7 +8,9 @@ import com.hummingbird.kr.starbuckslike.auth.util.JwtUtil;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.config.ConfigurableBeanFactory;
+import org.springframework.context.annotation.Scope;
+import org.springframework.core.annotation.Order;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
@@ -19,16 +21,17 @@ import java.util.Base64;
 import java.util.Optional;
 import java.util.UUID;
 
-@Service
+@Service("authServiceImpl")
 public class AuthServiceImpl implements AuthService {
 
     private final MemberRepository memberRepository;
 
     @Autowired
-    public AuthServiceImpl(MemberRepository memberRepository, JwtUtil jwtUtil, PasswordEncoder passwordEncoder ) {
-        this.passwordEncoder = passwordEncoder;
+    public AuthServiceImpl(MemberRepository memberRepository, JwtUtil jwtUtil) {
+        this.passwordEncoder = new BCryptPasswordEncoder(13);
         this.memberRepository = memberRepository;
         this.jwtUtil = jwtUtil;
+        System.out.println("Auth Service init.");
     };
     private final PasswordEncoder passwordEncoder;
     private final JwtUtil jwtUtil;
