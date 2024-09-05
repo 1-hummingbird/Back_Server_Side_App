@@ -12,10 +12,17 @@ public class DeliveryServiceImpl implements DeliveryService{
 
     private final DeliveryRepository deliveryRepository;
 
+    //배송지 추가
     @Override
     public void createDelivery(DeliveryRequestDto deliveryRequestDto) {
-
         deliveryRepository.save(deliveryRequestDto.toEntity());
+    }
+
+    @Override
+    public void updateDelivery(DeliveryRequestDto deliveryRequestDto) {
+        deliveryRepository.save((deliveryRequestDto.toEntity()));
 
     }
+
+
 }

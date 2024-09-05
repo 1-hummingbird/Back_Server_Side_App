@@ -5,15 +5,14 @@ import com.hummingbird.kr.starbuckslike.delivery.application.DeliveryService;
 import com.hummingbird.kr.starbuckslike.delivery.dto.DeliveryRequestDto;
 import com.hummingbird.kr.starbuckslike.delivery.infrastructure.DeliveryRepository;
 import com.hummingbird.kr.starbuckslike.delivery.vo.DeliveryRequestVo;
+import com.hummingbird.kr.starbuckslike.delivery.vo.DeliveryResponseVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.sql.CommonDataSource;
+import java.util.Optional;
 
 
 @RestController
@@ -43,7 +42,21 @@ public class DeliveryController {
                 HttpStatus.OK,
                 "등록완료",
                 null);
-
     }
 
+    //@PutMapping 를 사용해야하나?//@PostMapping 를 사용해야하나?
+    @PutMapping("/delivery-update/{id}") //왜 빨간줄이냐?
+    public CommonResponseEntity<Void> updateDelivery(
+            @PathVariable Long id,
+            @RequestBody DeliveryRequestVo deliveryRequestVo
+            ){
+        Optional<DeliveryRequestDto> updatedelivery = deliveryService.updateDelivery(id,deliveryRequestVo);
+          //  DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
+
+
+
+
+
+
+    }
 }
