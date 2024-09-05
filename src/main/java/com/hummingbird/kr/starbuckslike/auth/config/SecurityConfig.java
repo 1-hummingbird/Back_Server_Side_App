@@ -1,25 +1,17 @@
 package com.hummingbird.kr.starbuckslike.auth.config;
 
 import com.hummingbird.kr.starbuckslike.auth.application.AuthService;
-import com.hummingbird.kr.starbuckslike.auth.util.CustomAuthenticationProvider;
-import com.hummingbird.kr.starbuckslike.auth.util.JwtRequestFilter;
-import com.hummingbird.kr.starbuckslike.auth.util.JwtUtil;
-import lombok.RequiredArgsConstructor;
+import com.hummingbird.kr.starbuckslike.auth.application.CustomAuthenticationProvider;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.DependsOn;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.core.annotation.Order;
-import org.springframework.security.authentication.AuthenticationManager;
-import org.springframework.security.config.annotation.authentication.builders.AuthenticationManagerBuilder;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
-import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
@@ -28,10 +20,10 @@ import java.util.List;
 
 @Configuration
 @EnableWebSecurity
-@RequiredArgsConstructor
+@DependsOn("authServiceImpl")
 public class SecurityConfig {
 
-//    @Autowired
+    @Autowired
     private AuthService authService;
 
     @Bean
@@ -51,7 +43,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
         config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.setAllowedMethods(List.of("GET","POST"));
         config.setExposedHeaders(List.of("Authorization"));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);

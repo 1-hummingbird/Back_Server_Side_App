@@ -24,22 +24,19 @@ import java.util.UUID;
 public class AuthServiceImpl implements AuthService {
 
     private final MemberRepository memberRepository;
-    private final JwtUtil jwtUtil;
-//    private final EmailAuth emailAuth;
     public PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(13);
 
-//    @Autowired
-//    public AuthServiceImpl(MemberRepository memberRepository, JwtUtil jwtUtil) {
-//        this.memberRepository = memberRepository;
-//        this.jwtUtil = jwtUtil;
-//        this.emailAuth = new EmailAuth("", ""); // Initialize with actual values
-//        System.out.println("Auth Service init.");
-//    }
+    @Override
+    public LoginResponseDTO login(LoginRequestDTO loginreqDTO) {
 
-//    @Override
-//    public EmailAuthJob sendAuthChallenge(String email) {
-//        return emailAuth.AuthStart(email);
-//    }
+
+        throw new RuntimeException("Invalid username or password");
+    }
+
+    @Override
+    public Optional<Member> findByMemberUID(String memberUid) {
+        return memberRepository.findByMemberUID(memberUid);
+    }
 
     @Override
     public String sendAuthSMS(String phoneNumber) {
@@ -83,21 +80,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     @Override
-    public LoginResponseDTO login(LoginRequestDTO loginreqDTO) {
-        String loginid = loginreqDTO.getLoginID();
-        String password = loginreqDTO.getPassword();
-        Optional<Member> memberOptional = memberRepository.findByid(loginid);
-        if (memberOptional.isPresent()) {
-            Member member = memberOptional.get();
-            if (passwordEncoder.matches(password, member.getPassword())) {
-                String token = jwtUtil.generateToken(member.getMemberUID());
-                return new LoginResponseDTO(token);
-            }
-        }
-        throw new RuntimeException("Invalid username or password");
-    }
-
-    @Override
     public String getSecret() {
         try {
             SecretKey secretKey = Cryptor.generateKey();
@@ -105,11 +87,6 @@ public class AuthServiceImpl implements AuthService {
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
-    }
-
-    @Override
-    public Optional<Member> findByMemberUID(String memberUid) {
-        return memberRepository.findByMemberUID(memberUid);
     }
 
     @Override
