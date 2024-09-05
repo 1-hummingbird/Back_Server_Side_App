@@ -14,7 +14,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class AddCartItemDto {
+public class RequestAddCartItemDto {
 
     private String memberUID; // 유저 정보
 

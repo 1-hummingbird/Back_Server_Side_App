@@ -9,7 +9,6 @@ import lombok.*;
  */
 @Entity
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "banner")
@@ -28,4 +27,11 @@ public class Banner {
 
     @Column(name = "banner_url" , nullable = true)
     private String url;
+
+    @Builder
+    public Banner(String image, Integer seq, String url) {
+        this.image = image;
+        this.seq = seq;
+        this.url = url;
+    }
 }

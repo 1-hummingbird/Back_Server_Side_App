@@ -13,14 +13,13 @@ import java.time.LocalDate;
  */
 @Entity
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "exhibition")
 public class Exhibition extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "exhibition_id")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "exhibition_name" , length = 100 , nullable = false)
@@ -40,11 +39,20 @@ public class Exhibition extends BaseEntity {
 
     @Column(name = "is_deleted", nullable = false)
     @ColumnDefault("false")
-    private Boolean isDeleted = false ; // 기획전 삭제 여부
+    private Boolean isDeleted; // 기획전 삭제 여부
 
     // 기획전 이미지를 메인 베너로 쓰려고 했지만 베너 도메인 생성하자고 계획 수정되어 주석처리
 //    @Column(name = "is_Banner" , nullable = false)
 //    private Boolean isBanner = false; // banner 이미지 존재 여부
 
-
+    @Builder
+    public Exhibition( String name, String title, String fullDescription,
+                       LocalDate startDate, LocalDate endDate, Boolean isDeleted) {
+        this.name = name;
+        this.title = title;
+        this.fullDescription = fullDescription;
+        this.startDate = startDate;
+        this.endDate = endDate;
+        this.isDeleted = isDeleted;
+    }
 }

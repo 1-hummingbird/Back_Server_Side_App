@@ -31,6 +31,12 @@ public class QCart extends EntityPathBase<Cart> {
 
     public final StringPath inputData = createString("inputData");
 
+    public final BooleanPath isChecked = createBoolean("isChecked");
+
+    public final BooleanPath isDeleted = createBoolean("isDeleted");
+
+    public final com.hummingbird.kr.starbuckslike.product.domain.QProduct product;
+
     public final com.hummingbird.kr.starbuckslike.product.domain.QProductOption productOption;
 
     public final NumberPath<Integer> qty = createNumber("qty", Integer.class);
@@ -58,6 +64,7 @@ public class QCart extends EntityPathBase<Cart> {
 
     public QCart(Class<? extends Cart> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
+        this.product = inits.isInitialized("product") ? new com.hummingbird.kr.starbuckslike.product.domain.QProduct(forProperty("product"), inits.get("product")) : null;
         this.productOption = inits.isInitialized("productOption") ? new com.hummingbird.kr.starbuckslike.product.domain.QProductOption(forProperty("productOption"), inits.get("productOption")) : null;
     }
 
