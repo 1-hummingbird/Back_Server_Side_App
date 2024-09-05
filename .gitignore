@@ -741,3 +741,4 @@ FodyWeavers.xsd
 
 .gradle
 caches/
+src/main/resources/application.yaml
