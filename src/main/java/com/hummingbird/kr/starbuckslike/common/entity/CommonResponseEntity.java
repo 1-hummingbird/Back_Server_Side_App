@@ -11,6 +11,7 @@ import org.springframework.http.HttpStatus;
 public class CommonResponseEntity<T> {
 
     private HttpStatus status;
+
     private String message;
     private T data;
 

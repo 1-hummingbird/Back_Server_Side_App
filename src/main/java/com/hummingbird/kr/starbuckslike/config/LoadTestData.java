@@ -28,7 +28,7 @@ import java.time.LocalDate;
 import java.util.UUID;
 
 /**
- * 테스트용 (상품,카테고리)데이터 초기화
+ * 테스트용 데이터
  * yml 파일 ddl-auto: create 되어 있어야 함
  * @author 허정현
  */
@@ -198,6 +198,19 @@ public class LoadTestData {
                     .seq(2)
                     .build()
             );
+            productImageRepository.save(ProductImage.builder()
+                    .product(product4)
+                    .url("test/path/펭귄컵 이미지0.jpg")
+                    .seq(0)
+                    .build()
+            );
+            productImageRepository.save(ProductImage.builder()
+                    .product(product4)
+                    .url("test/path/펭귄컵 이미지1.jpg")
+                    .seq(1)
+                    .build()
+            );
+
 
             // 상품 옵션
             ProductOption product1_option1 = ProductOption.builder()
@@ -315,18 +328,21 @@ public class LoadTestData {
                     Banner.builder()
                             .image("??/??/bannerImg3.jpg")
                             .seq(3)
+                            .url(null)
                             .build()
             );
             bannerRepository.save(
                     Banner.builder()
                             .image("??/??/bannerImg2.jpg")
                             .seq(2)
+                            .url(null)
                             .build()
             );
             bannerRepository.save(
                     Banner.builder()
                             .image("??/??/bannerImg1.jpg")
                             .seq(1)
+                            .url(null)
                             .build()
             );
             /**
@@ -334,16 +350,33 @@ public class LoadTestData {
              */
             cartRepository.save(Cart.builder()
                     .userUid(member1.getMemberUID())
+                    .product(product1_option2.getProduct())
                     .productOption(product1_option1) // 스탠리 텀블러 옵션1
                     .qty(2)
+                    .isChecked(false)
+                    .isDeleted(false)
                     .build()
             );
             cartRepository.save(Cart.builder()
                     .userUid(member1.getMemberUID())
+                    .product(product1_option2.getProduct())
                     .productOption(product1_option2) // 스탠리 텀블러 옵션2
-                    .qty(4) // todo :  서비스 계층에서 수량제한 확인해야 함
+                    .qty(4)
+                    .isChecked(false)
+                    .isDeleted(false)
                     .build()
             );
+
+            cartRepository.save(Cart.builder()
+                    .userUid(member1.getMemberUID())
+                    .product(product4_option1.getProduct()) //
+                    .productOption(product4_option1) // 펭귄컵 옵션1
+                    .qty(4)
+                    .isChecked(false)
+                    .isDeleted(false)
+                    .build()
+            );
+
 
 
 

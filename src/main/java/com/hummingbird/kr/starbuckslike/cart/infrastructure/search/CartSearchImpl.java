@@ -2,7 +2,10 @@ package com.hummingbird.kr.starbuckslike.cart.infrastructure.search;
 
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
 import com.hummingbird.kr.starbuckslike.cart.domain.QCart;
-import com.hummingbird.kr.starbuckslike.cart.dto.CartListDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.*;
+import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
+import com.hummingbird.kr.starbuckslike.product.domain.QProductOption;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
@@ -10,6 +13,8 @@ import org.springframework.stereotype.Repository;
 import java.util.List;
 
 import static com.hummingbird.kr.starbuckslike.cart.domain.QCart.cart;
+import static com.hummingbird.kr.starbuckslike.product.domain.QProductImage.productImage;
+import static com.hummingbird.kr.starbuckslike.product.domain.QProductOption.productOption;
 
 @Repository
 public class CartSearchImpl implements CartSearch {
@@ -20,8 +25,47 @@ public class CartSearchImpl implements CartSearch {
     }
 
     @Override
-    public List<CartListDto> findCartListDtoByUserUid(String userUid) {
-        return null;
+    public List<Long> findAllCartIdByUserUid(String userUid) {
+        return queryFactory
+                    .select(cart.id)
+                    .from(cart)
+                    .where(cart.userUid.eq(userUid))
+                    .fetch();
+    }
+
+    @Override
+    public ResponseCartItemImageDto findCartMainImageDtoById(Long cartId) {
+         return queryFactory
+                .select(new QResponseCartItemImageDto(
+                               Expressions.asNumber(cartId).as("cartId") // 조회컬럼 최소화
+                             , productImage.url
+                        )
+                )
+                .from(productImage)
+                .join(cart).on(productImage.product.id.eq(cart.product.id))
+                .where(
+                        productImage.seq.eq(0).and(cart.id.eq(cartId))
+                )
+                .fetchOne();
+    }
+
+    @Override
+    public ResponseCartItemDto findCartItemDtoById(Long cartId) {
+        return
+                queryFactory
+                .select(new QResponseCartItemDto(
+                                Expressions.asNumber(cartId).as("cartId"),
+                                cart.inputData, productOption.id, productOption.name, productOption.quantity,
+                                productOption.price, productOption.status, productOption.discountRate
+                        )
+                )
+                .from(productOption)
+                .join(cart).on(productOption.id.eq(cart.productOption.id))
+                .where(
+                        (cart.id.eq(cartId))
+                )
+                .fetchOne();
+
     }
 
     @Override

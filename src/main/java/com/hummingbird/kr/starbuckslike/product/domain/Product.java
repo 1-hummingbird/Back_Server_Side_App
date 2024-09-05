@@ -11,28 +11,27 @@ import org.hibernate.annotations.ColumnDefault;
  */
 @Entity
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product")
 public class Product extends BaseEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_id")
+    @Column(name = "id")
     private Long id;
 
     @Column(name = "product_name" , length = 200 , nullable = false)
     private String name;
 
     @Column(name = "price" , nullable = false)
-    private Integer price = 0;
+    private Integer price;
 
     @Column(name = "is_discounted")
     @ColumnDefault("false")
-    private Boolean isDiscounted = false; // 할인 여부
+    private Boolean isDiscounted; // 할인 여부
 
     @Column(name = "discount_rate")
-    private Float discountRate= 0.0f; // 할인율
+    private Float discountRate; // 할인율
 
     @Column(name = "short_description", length = 200)
     private String shortDescription; // 짧은 상품설명 (텍스트)
@@ -55,7 +54,16 @@ public class Product extends BaseEntity {
     @JoinColumn(name = "category_id")
     private Category category; // 상품의 카테고리
 
-
-
-
+    @Builder
+    public Product(String name, Integer price, Boolean isDiscounted, Float discountRate, String shortDescription,
+                   String fullDescription, SalesStatus status, Category category) {
+        this.name = name;
+        this.price = price;
+        this.isDiscounted = isDiscounted;
+        this.discountRate = discountRate;
+        this.shortDescription = shortDescription;
+        this.fullDescription = fullDescription;
+        this.status = status;
+        this.category = category;
+    }
 }

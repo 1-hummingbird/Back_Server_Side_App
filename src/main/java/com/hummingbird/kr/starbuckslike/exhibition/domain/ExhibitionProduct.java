@@ -19,7 +19,7 @@ import static jakarta.persistence.FetchType.LAZY;
 public class ExhibitionProduct {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "exhibition_product_id")
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = LAZY)

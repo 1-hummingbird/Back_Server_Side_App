@@ -9,7 +9,6 @@ import lombok.*;
  */
 @Entity
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "category", uniqueConstraints = { @UniqueConstraint(columnNames = { "category_name"}) } )
@@ -35,4 +34,13 @@ public class Category {
 
     @Column(name = "category_image", nullable = true)
     private String image; // 카테고리 이미지 경로
+
+    @Builder
+    public Category(String name, Category parent, Integer depth, String path, String image) {
+        this.name = name;
+        this.parent = parent;
+        this.depth = depth;
+        this.path = path;
+        this.image = image;
+    }
 }

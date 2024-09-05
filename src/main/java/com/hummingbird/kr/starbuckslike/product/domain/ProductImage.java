@@ -19,7 +19,7 @@ public class ProductImage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "product_image_id")
+    @Column(name = "id")
     private Long id;
 
     @ManyToOne(fetch = LAZY) // 상품이미지 <-> 상품  다대일 관계
@@ -31,5 +31,6 @@ public class ProductImage {
 
     @Column(name = "seq")
     private Integer seq; // 이미지 순서 0,1,2 ... 0이 대표이미지
+
 
 }
