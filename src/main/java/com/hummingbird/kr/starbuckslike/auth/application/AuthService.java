@@ -41,5 +41,4 @@ public interface AuthService {
 
     String getSecret();
 
-    Optional<Member> findByMemberUID(String memberUid);
 }

@@ -1,8 +1,8 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
 import com.hummingbird.kr.starbuckslike.auth.domain.CustomUserDetails;
+import com.hummingbird.kr.starbuckslike.auth.infrastucture.AuthRepository;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
-import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
@@ -13,12 +13,12 @@ import java.util.function.Supplier;
 @RequiredArgsConstructor
 public class CustomUserDetailService implements UserDetailsService {
 
-    private final MemberRepository memberRepository;
+    private final AuthRepository authRepository;
 
     @Override
     public CustomUserDetails loadUserByUsername(String loginId) { Supplier<UsernameNotFoundException> s =
             () -> new UsernameNotFoundException("invalid username or password");
-        Member m = memberRepository.findByid(loginId).orElseThrow(s);
+        Member m = authRepository.findByid(loginId).orElseThrow(s);
         return new CustomUserDetails(m);
     }
 }

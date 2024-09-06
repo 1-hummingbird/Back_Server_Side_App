@@ -1,25 +1,21 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
 import com.hummingbird.kr.starbuckslike.auth.domain.CustomUserDetails;
-import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.AuthenticationException;
-import org.springframework.security.core.userdetails.User;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Collections;
-import java.util.Optional;
 
 public class CustomAuthenticationProvider implements AuthenticationProvider {
 
     private final UserDetailsService customUserDetailsService;
     private final PasswordEncoder passwordEncoder;
 
-    public CustomAuthenticationProvider(UserDetailsService customUserDetailsService, PasswordEncoder passwordEncoder) {
+    public CustomAuthenticationProvider() {
         this.customUserDetailsService = customUserDetailsService;
         this.passwordEncoder = passwordEncoder;
     }
@@ -33,6 +29,7 @@ public class CustomAuthenticationProvider implements AuthenticationProvider {
         if (memberOptional.isEnabled()) {
             CustomUserDetails member = memberOptional;
             if (passwordEncoder.matches(password, member.getPassword())) {
+                // make jwt token with spring auth server's methods, token has memberUID and
                 String token ="";
                 return new UsernamePasswordAuthenticationToken(member.getMemberUID(), token, Collections.emptyList());
             }

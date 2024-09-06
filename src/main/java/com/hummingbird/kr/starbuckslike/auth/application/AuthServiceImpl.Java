@@ -2,14 +2,13 @@ package com.hummingbird.kr.starbuckslike.auth.application;
 
 import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
 import com.hummingbird.kr.starbuckslike.auth.dto.*;
+import com.hummingbird.kr.starbuckslike.auth.infrastucture.AuthRepository;
 import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
-import com.hummingbird.kr.starbuckslike.auth.util.EmailAuth;
-import com.hummingbird.kr.starbuckslike.auth.util.JwtUtil;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
@@ -23,19 +22,44 @@ import java.util.UUID;
 @RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
+    private final PasswordEncoder passwordEncoder;
     private final MemberRepository memberRepository;
-    public PasswordEncoder passwordEncoder = new BCryptPasswordEncoder(13);
+    private final AuthRepository authRepository;
+    private final CustomAuthenticationProvider customAuthenticationProvider;
 
     @Override
     public LoginResponseDTO login(LoginRequestDTO loginreqDTO) {
-
-
+        try {
+            customAuthenticationProvider.authenticate(
+                new UsernamePasswordAuthenticationToken(loginreqDTO.getLoginID(), loginreqDTO.getPassword())
+            );
+            Optional<Member> memberOptional = memberRepository.findByid(loginreqDTO.getLoginID());
+            if (memberOptional.isPresent()) {
+                Member member = memberOptional.get();
+                String token = jwtUtil.generateToken(member.getMemberUID());
+                return new LoginResponseDTO(token);
+            }
+        } catch (AuthenticationException e) {
+            throw new RuntimeException("Invalid username or password");
+        }
         throw new RuntimeException("Invalid username or password");
     }
 
-    @Override
-    public Optional<Member> findByMemberUID(String memberUid) {
-        return memberRepository.findByMemberUID(memberUid);
+    public SecondLoginResponseDTO SecondLogin(SecondLoginRequestDTO login2ReqDTO){
+        try {
+            customAuthenticationProvider.authenticate(
+                    new UsernamePasswordAuthenticationToken(login2ReqDTO.getLoginID(), login2ReqDTO.getPassword())
+            );
+            Optional<Member> memberOptional = memberRepository.findByid(login2ReqDTO.getLoginID());
+            if (memberOptional.isPresent()) {
+                Member member = memberOptional.get();
+                String token = jwtUtil.generateToken(member.getMemberUID());
+                return new SecondLoginResponseDTO(token);
+            }
+        } catch (AuthenticationException e) {
+            throw new RuntimeException("Invalid username or password");
+        }
+        throw new RuntimeException("Invalid username or password");
     }
 
     @Override
@@ -104,7 +128,7 @@ public class AuthServiceImpl implements AuthService {
     @Override
     public ResetPWResponseDTO updatePassword(ResetPWRequestDTO resetPWreqDTO) {
         String newPassword = passwordEncoder.encode(resetPWreqDTO.getNewPW());
-        memberRepository.updatePasswordByUuid(resetPWreqDTO.getMemberUID(), newPassword);
+        authRepository.updatePasswordByUuid(resetPWreqDTO.getMemberUID(), newPassword);
         return new ResetPWResponseDTO();
     }
 

@@ -1,15 +1,13 @@
-package com.hummingbird.kr.starbuckslike.auth.util;
+package com.hummingbird.kr.starbuckslike.auth.config;
 
-import com.hummingbird.kr.starbuckslike.auth.application.AuthService;
-import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.io.IOException;
+import com.hummingbird.kr.starbuckslike.auth.application.JwtUtil;
+
+import java.io.IOException;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
@@ -24,11 +22,8 @@ import org.springframework.web.filter.OncePerRequestFilter;
 @RequiredArgsConstructor
 public class JwtRequestFilter extends OncePerRequestFilter {
 
-//    @Autowired
-    private UserDetailsService userDetailsService;
-
-//    @Autowired
-    private JwtUtil jwtUtil;
+    private final UserDetailsService userDetailsService;
+    private final JwtUtil jwtUtil;
 
     @Override
     protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain chain)
