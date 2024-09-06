@@ -741,3 +741,8 @@ FodyWeavers.xsd
 
 .gradle
 caches/
+*.yaml
+/daemon
+/jdks
+/native
+/wrapper
