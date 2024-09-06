@@ -9,7 +9,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 public class DeliveryRequestDto {
-    //DTD는 사용자의 요청이나 응답이 필요한
+    //DTo는 사용자의 요청이나 응답이 필요한
 
     private Long id;
     private String alias; // 배송지 별칭
@@ -30,6 +30,7 @@ public class DeliveryRequestDto {
                 .phone(phone)
                 .memo(memo)
                 .name(name)
+                .alias(alias)
                 .build();
 
     }

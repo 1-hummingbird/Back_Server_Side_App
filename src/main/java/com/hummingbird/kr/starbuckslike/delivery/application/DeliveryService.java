@@ -2,11 +2,14 @@ package com.hummingbird.kr.starbuckslike.delivery.application;
 
 import com.hummingbird.kr.starbuckslike.delivery.dto.DeliveryRequestDto;
 
-import java.util.List;
-
 public interface DeliveryService {
-    void creatDelivery(DeliveryRequestDto deliveryRequestDto);
 
+    //배송지등록
+    void createDelivery(DeliveryRequestDto deliveryRequestDto);
+
+
+    //배송지수정
+    void updateDelivery(DeliveryRequestDto deliveryRequestDto);
 //    List<DeliveryResponseDto> getDeliveryListByUserUUid(String uuid);
 }
 

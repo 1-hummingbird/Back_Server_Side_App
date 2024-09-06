@@ -8,7 +8,7 @@ import java.util.List;
 
 public interface DeliveryRepository extends JpaRepository<Delivery,Long>{
 
-    List<Delivery> findByUserUUid(String uuid);
+    List<Delivery> findByUserUuid(String uuid);
 
 }
 
