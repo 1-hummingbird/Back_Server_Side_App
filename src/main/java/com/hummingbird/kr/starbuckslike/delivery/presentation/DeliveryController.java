@@ -44,14 +44,14 @@ public class DeliveryController {
                 null);
     }
 
-    //@PutMapping 를 사용해야하나?//@PostMapping 를 사용해야하나?
-    @PutMapping("/delivery-update/{id}") //왜 빨간줄이냐?
-    public CommonResponseEntity<Void> updateDelivery(
-            @PathVariable Long id,
-            @RequestBody DeliveryRequestVo deliveryRequestVo
-            ){
-        Optional<DeliveryRequestDto> updatedelivery = deliveryService.updateDelivery(id,deliveryRequestVo);
-          //  DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
+//    //@PutMapping 를 사용해야하나?//@PostMapping 를 사용해야하나?
+//    @PutMapping("/delivery-update/{id}") //왜 빨간줄이냐?
+//    public CommonResponseEntity<Void> updateDelivery(
+//            @PathVariable Long id,
+//            @RequestBody DeliveryRequestVo deliveryRequestVo
+//            ){
+//        Optional<DeliveryRequestDto> updatedelivery = deliveryService.updateDelivery(id,deliveryRequestVo);
+//          //  DeliveryRequestDto deliveryRequestDto = DeliveryRequestDto.builder()
 
 
 
@@ -59,4 +59,4 @@ public class DeliveryController {
 
 
     }
-}
+
