@@ -155,19 +155,16 @@ public class ProductSearchImpl implements ProductSearch {
         // 가격으로 조회
         return product.price.between(priceType.getMinPrice(), priceType.getMaxPrice());
     }
-
     // 카테고리 path 검색
     private BooleanExpression categoryPathStartsWith(String path) {
         return (path == null || path.isEmpty()) ?
                 null : category.path.startsWith(path);
     }
-
     // 자식 카테고리 검색 (여러개 선택 가능)
     private BooleanExpression isChildCategoryCondition(List<Long> childCategoryIds) {
         return (childCategoryIds == null || childCategoryIds.isEmpty()) ? null :
                 category.id.in(childCategoryIds);
     }
-
     // 기획전으로 검색 (여러개 선택 가능)
     private BooleanExpression isExhibitionCondition(List<Long> exhibitionIds) {
         return (exhibitionIds == null || exhibitionIds.isEmpty()) ? null :
@@ -178,7 +175,6 @@ public class ProductSearchImpl implements ProductSearch {
     // 정렬 조건
     private OrderSpecifier<?>[] getOrderSpecifier(OrderCondition orderCondition) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
-
         // todo : 이상한 값 들어오면 예외처리
         if (orderCondition==null) { // 기본 정렬 (최신순)
             orderSpecifiers.add(new OrderSpecifier<>(Order.DESC, product.createdAt));
@@ -194,8 +190,6 @@ public class ProductSearchImpl implements ProductSearch {
                 case LOWEST_PRICE -> // 낮은 가격순
                         orderSpecifiers.add(new OrderSpecifier<>(Order.ASC, product.price));
                 // todo : 추천순
-
-
             }
         }
         return orderSpecifiers.toArray(new OrderSpecifier[orderSpecifiers.size()]);

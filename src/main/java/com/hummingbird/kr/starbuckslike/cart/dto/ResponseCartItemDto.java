@@ -24,8 +24,10 @@ public class ResponseCartItemDto {
     private Long optionId;
     // 상품 옵션명
     private String optionName;
-    // 수량
-    private Long quantity;
+    // 옵션의 재고
+    private Long optionQuantity;
+    // 장바구니 선택 수량
+    private Integer cartQuantity;
     // 옵션 가격
     private Integer price;
     // 판매상태(상품 옵션 판매상태)
@@ -34,13 +36,14 @@ public class ResponseCartItemDto {
     private Float discountRate;
 
     @QueryProjection
-    public ResponseCartItemDto(Long cartId, String inputData, Long optionId, String optionName,
-                       Long quantity, Integer price, SalesStatus status, Float discountRate) {
+    public ResponseCartItemDto(Long cartId, String inputData, Long optionId, String optionName, Long optionQuantity,
+                               Integer cartQuantity, Integer price, SalesStatus status, Float discountRate) {
         this.cartId = cartId;
         this.inputData = inputData;
         this.optionId = optionId;
         this.optionName = optionName;
-        this.quantity = quantity;
+        this.optionQuantity = optionQuantity;
+        this.cartQuantity = cartQuantity;
         this.price = price;
         this.status = status;
         this.discountRate = discountRate;

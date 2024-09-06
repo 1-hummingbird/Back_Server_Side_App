@@ -51,21 +51,19 @@ public class CartSearchImpl implements CartSearch {
 
     @Override
     public ResponseCartItemDto findCartItemDtoById(Long cartId) {
-        return
-                queryFactory
+        return queryFactory
                 .select(new QResponseCartItemDto(
                                 Expressions.asNumber(cartId).as("cartId"),
                                 cart.inputData, productOption.id, productOption.name, productOption.quantity,
-                                productOption.price, productOption.status, productOption.discountRate
+                                cart.qty, productOption.price, productOption.status, productOption.discountRate
                         )
                 )
                 .from(productOption)
                 .join(cart).on(productOption.id.eq(cart.productOption.id))
                 .where(
-                        (cart.id.eq(cartId))
+                        cart.id.eq(cartId)
                 )
                 .fetchOne();
-
     }
 
     @Override
@@ -84,7 +82,9 @@ public class CartSearchImpl implements CartSearch {
                 .select(cart.count())
                 .from(cart)
                 .where(
-                        cart.userUid.eq(userUid).and(cart.productOption.id.eq(optionId))
+                        cart.userUid.eq(userUid)
+                        .and(cart.productOption.id.eq(optionId))
+                        .and(cart.isDeleted.eq(false))
                 )
                 .fetchOne();
     }
@@ -94,7 +94,9 @@ public class CartSearchImpl implements CartSearch {
         return queryFactory
                 .select(cart.count())
                 .from(cart)
-                .where( cart.userUid.eq(userUid) )
+                .where( cart.userUid.eq(userUid)
+                        .and(cart.isDeleted.eq(false))
+                )
                 .fetchOne();
     }
 

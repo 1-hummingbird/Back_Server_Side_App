@@ -14,7 +14,7 @@ public interface CustomCartRepository {
     public void selectCartItem(Long cartId);
 
     // 장바구니 전체 선택(활성,비활성)
-    public long selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto);
+    public void selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto);
 
 
 
@@ -22,6 +22,6 @@ public interface CustomCartRepository {
     public void removeCartItem(Long cartId);
 
     // 장바구니 전체 삭제
-    public long removeAllCartItemsByUserUid(String userUid);
+    public void removeAllCartItemsByUserUid(String userUid);
 
 }

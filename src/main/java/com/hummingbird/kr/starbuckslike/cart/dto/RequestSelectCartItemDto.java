@@ -19,8 +19,7 @@ import java.util.List;
 @NoArgsConstructor
 public class RequestSelectCartItemDto {
 
-    // 선택된 장바구니 id 리스트
-    private List<Long> cartIds = new ArrayList<>();
+    private String userUid;
 
     // 전체 선택 활성화 or 비활성화
     private CartStatus cartStatus;

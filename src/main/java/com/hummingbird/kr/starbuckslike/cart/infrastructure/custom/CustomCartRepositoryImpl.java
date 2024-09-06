@@ -26,16 +26,15 @@ public class CustomCartRepositoryImpl implements  CustomCartRepository{
     }
 
     @Override
-    public long selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto) {
-        List<Long> cartIds = requestSelectCartItemDto.getCartIds();
+    public void selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto) {
+
         CartStatus status = requestSelectCartItemDto.getCartStatus();
-        long count = queryFactory
+        queryFactory
                 .update(cart)
                 .set(cart.isChecked, status == CartStatus.ACTIVE)
-                .where(cart.id.in(cartIds))  // 선택한 장바구니 아이템만 업데이트
+                .where(cart.userUid.eq(requestSelectCartItemDto.getUserUid()))  // 해당 유저의 장바구니
                 .execute();
         em.clear();
-        return count;
     }
 
     @Override
@@ -48,13 +47,12 @@ public class CustomCartRepositoryImpl implements  CustomCartRepository{
     }
 
     @Override
-    public long removeAllCartItemsByUserUid(String userUid) {
+    public void removeAllCartItemsByUserUid(String userUid) {
         long count = queryFactory
                 .update(cart)
                 .set(cart.isDeleted, true)
                 .where(cart.userUid.eq(userUid))
                 .execute();
         em.clear();
-        return count;
     }
 }
