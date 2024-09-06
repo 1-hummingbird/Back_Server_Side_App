@@ -1,65 +1,47 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
+import com.hummingbird.kr.starbuckslike.auth.config.JwtSecrets;
 
-import com.nimbusds.jose.*;
-import com.nimbusds.jose.crypto.RSADecrypter;
-import com.nimbusds.jose.crypto.RSAEncrypter;
 import com.nimbusds.jwt.JWTClaimsSet;
 import org.springframework.stereotype.Component;
 
-import com.nimbusds.jose.crypto.MACSigner;
-import com.nimbusds.jose.crypto.MACVerifier;
-import com.nimbusds.jose.jwk.JWK;
-import com.nimbusds.jose.jwk.JWKSet;
-import com.nimbusds.jose.jwk.KeyUse;
-import com.nimbusds.jose.jwk.KeyType;
-import com.nimbusds.jose.jwk.RSAKey;
-
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.*;
+import java.security.*;
+import java.security.interfaces.*;
+
+import com.nimbusds.jose.*;
+import com.nimbusds.jose.crypto.*;
+import com.nimbusds.jose.jwk.*;
 
 @Component
 public class JwtUtil {
 
-    private String secret = "your_secret_key"; // Use a strong secret key
+    RSAPrivateKey privateKey = JwtSecrets.getPrivateKey();
+    RSAPublicKey publicKey = JwtSecrets.getPublicKey();
 
-    public String generateToken(String memberUID) {
-        Map<String, Object> claims = new HashMap<>();
-        return createToken(claims, memberUID);
-    }
+    // nimbusds's jwt claim default set's data
+    String jwtissuer = "Team Hummingbird in Spharos Academy 5th";
+    List<String> audience = Arrays.asList("kr.starbuckslike.front","kr.starbuckslike.api");
 
-    private String createToken(Map<String, Object> claims, String subject) {
-        return Jwts.builder()
-                .setClaims(claims)
-                .setSubject(subject)
-                .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 1000 * 60 * 60 * 10)) // 10 hours
-                .signWith(SignatureAlgorithm.HS256, secret)
-                .compact();
-    }
+     JWEHeader header = new JWEHeader(
+             JWEAlgorithm.RSA_OAEP_256,
+             EncryptionMethod.A128GCM
+     );
 
-    public Boolean validateToken(String token, String memberUID) {
-        final String username = extractUsername(token);
-        return (username.equals(memberUID) && !isTokenExpired(token));
-    }
+     public String issueJwt(String userUID, String Priv){
 
-    public String extractUsername(String token) {
-        return extractClaim(token, Claims::getSubject);
-    }
+         Date now = new Date();
 
-    public <T> T extractClaim(String token, Function<Claims, T> claimsResolver) {
-        final Claims claims = extractAllClaims(token);
-        return claimsResolver.apply(claims);
-    }
+         JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder()
+                 .issuer(jwtissuer)
+                 .subject(userUID)
+                 .audience(audience)
+                 .notBeforeTime(now)
+                 .issueTime(now)
+                 .jwtID(UUID.randomUUID().toString())
+                 .build();
+     }
 
-    private Claims extractAllClaims(String token) {
-        return Jwts.parser().setSigningKey(secret).parseClaimsJws(token).getBody();
-    }
-
-    private Boolean isTokenExpired(String token) {
-        return extractExpiration(token).before(new Date());
-    }
-
-    private Date extractExpiration(String token) {
-        return extractClaim(token, Claims::getExpiration);
-    }
 }
