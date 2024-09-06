@@ -2,21 +2,18 @@ package com.hummingbird.kr.starbuckslike.cart.application;
 
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
 import com.hummingbird.kr.starbuckslike.cart.domain.CartAdjustType;
-import com.hummingbird.kr.starbuckslike.cart.domain.CartStatus;
 import com.hummingbird.kr.starbuckslike.cart.dto.*;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.CartRepository;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.custom.CustomCartRepository;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.search.CartSearch;
 import com.hummingbird.kr.starbuckslike.product.domain.ProductOption;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductOptionRepository;
-import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
 import java.util.NoSuchElementException;
-import java.util.Optional;
 
 @Service
 @Log4j2
@@ -60,6 +57,8 @@ public class CartServiceImpl implements CartService{
                     .userUid(requestAddCartItemDto.getMemberUID())
                     .qty(requestAddCartItemDto.getQty())
                     .inputData(requestAddCartItemDto.getInputData())
+                    .isDeleted(false)
+                    .isChecked(false)
                     .build();
             cartRepository.save(newCart); // 신규 장바구니 상품 저장 완료
         }
@@ -96,8 +95,8 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public long removeAllCartItemsByUserUid(String userUid) {
-        return customCartRepository.removeAllCartItemsByUserUid(userUid); // 업데이트 된 row 반환
+    public void removeAllCartItemsByUserUid(String userUid) {
+        customCartRepository.removeAllCartItemsByUserUid(userUid);
     }
 
     @Override
@@ -106,10 +105,9 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public long selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto) {
-        return customCartRepository.selectCartItems(requestSelectCartItemDto); // 업데이트 된 row 반환
+    public void selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto) {
+        customCartRepository.selectCartItems(requestSelectCartItemDto); // 업데이트 된 row 반환
     }
-
 
     @Override
     public List<Long> findAllCartIdByUserUid(String userUid) {

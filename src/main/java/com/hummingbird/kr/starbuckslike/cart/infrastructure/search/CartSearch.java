@@ -3,12 +3,10 @@ package com.hummingbird.kr.starbuckslike.cart.infrastructure.search;
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
 import com.hummingbird.kr.starbuckslike.cart.dto.ResponseCartItemDto;
 import com.hummingbird.kr.starbuckslike.cart.dto.ResponseCartItemImageDto;
-import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
 public interface CartSearch {
-
 
     // 회원 uuid로 회원 장바구니 번호 리스트 조회
     List<Long> findAllCartIdByUserUid(String userUid);
@@ -20,7 +18,7 @@ public interface CartSearch {
     ResponseCartItemDto findCartItemDtoById(Long cartId);
 
     // todo 각인옵션 같은 입력 정보 그냥 String으로 받는데 별도로 테이블로 빼는 것도 나중에 생각해보자
-    //  ex) 옵션타입T , 옵션타입디테일T  => 그래야 각인옵션에서도 한문 영어 등 자유롭게 선택가능하다
+    // ex) 옵션타입T , 옵션타입디테일T  => 그래야 각인옵션에서도 한문 영어 등 자유롭게 선택가능하다
 
     // 회원 장바구니에 담은 상품 조회
     Cart findCartOption(String userUid, Long optionId);

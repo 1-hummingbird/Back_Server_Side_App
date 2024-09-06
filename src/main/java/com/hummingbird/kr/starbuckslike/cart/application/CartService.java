@@ -15,11 +15,9 @@ public interface CartService {
     @Transactional
     public void addCartItem(RequestAddCartItemDto requestAddCartItemDto);
 
-
     //  장바구니 아이템 (증가 또는 감소)
     @Transactional
     public void adjustCartItemQuantity(RequestAdjustCartItemDto requestAdjustCartItemDto);
-
 
     // 장바구니 단건 삭제 (soft)
     @Transactional
@@ -27,14 +25,15 @@ public interface CartService {
 
     // 장바구니 전체 삭제 (soft)
     @Transactional
-    public long removeAllCartItemsByUserUid(String userUid);
+    public void removeAllCartItemsByUserUid(String userUid);
 
     // 장바구니 단건 선택
     @Transactional
     public void selectCartItem(Long cartId);
 
     // 장바구니 전체 선택(활성,비활성)
-    public long selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto);
+    @Transactional
+    public void selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto);
 
 
     /**
