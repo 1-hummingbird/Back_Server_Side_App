@@ -34,7 +34,7 @@ public class JwtUtil {
              EncryptionMethod.A128GCM
      );
 
-     public String issueRefresh(int requestExpiration, String authJWT){
+     public String issueRefresh(int requestedExpiration, String authJWT){
 
          Date now = new Date();
          String userUID = getClaimOfToken(authJWT, "subject");
@@ -47,7 +47,7 @@ public class JwtUtil {
                  .notBeforeTime(now)
                  .issueTime(now)
                  .expirationTime(new Date(now.getTime() +
-                         1000 * 86400 * requestExpiration))
+                         1000 * 86400 * requestedExpiration))
                  //Token is usable for user request days
                  .jwtID(UUID.randomUUID().toString())
                  .build();
@@ -64,6 +64,36 @@ public class JwtUtil {
          //return serialized jwt Token
          return jwt.serialize();
      }
+    public String issueRefresh(String authJWT){
+
+        Date now = new Date();
+        String userUID = getClaimOfToken(authJWT, "subject");
+
+        //Create JWT claims
+        JWTClaimsSet jwtClaims = new JWTClaimsSet.Builder()
+                .issuer(jwtissuer)
+                .subject(userUID)
+                .audience(jwtaudience)
+                .notBeforeTime(now)
+                .issueTime(now)
+                .expirationTime(new Date(now.getTime() +
+                        1000 * 86400))
+                //Token is usable for user default refresh token life is 1 day
+                .jwtID(UUID.randomUUID().toString())
+                .build();
+
+        EncryptedJWT jwt = new EncryptedJWT(header, jwtClaims);
+
+        RSAEncrypter encrypter = new RSAEncrypter(publicKey);
+
+        try {
+            jwt.encrypt(encrypter);
+        } catch (JOSEException e) {
+            throw new RuntimeException(e);
+        }
+        //return serialized jwt Token
+        return jwt.serialize();
+    }
 
      public String refreshByToken(String refreshToken){
          try{
