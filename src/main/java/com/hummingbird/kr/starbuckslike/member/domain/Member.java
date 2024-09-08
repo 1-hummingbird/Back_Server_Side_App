@@ -2,19 +2,21 @@ package com.hummingbird.kr.starbuckslike.member.domain;
 
 import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
+import java.util.Date;
+
+@Setter
 @Getter
 @Slf4j
 @Entity
-@Table(name = "member")
 @Builder
-@AllArgsConstructor
+@Table(name = "member")
 public class Member extends BaseEntity {
 
     @Id
@@ -32,8 +34,8 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Comment("회원 생년월일")
-    @Column( length = 12)
-    private String birthdate;
+    @Column(nullable = false)
+    private Date birthdate;
 
     @Comment("회원 전화번호")
     @Column(nullable = false, length = 20)
@@ -44,7 +46,7 @@ public class Member extends BaseEntity {
     private String email;
 
     @Comment("회원 비밀번호")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 85)
     private String password;
 
     @Comment("삭제 여부")
@@ -57,19 +59,29 @@ public class Member extends BaseEntity {
     private String memberUID;
 
 
-//    public Member(Long id, String loginId, String phone, String email, String password, String name, String nickName, String birth, Boolean isDeleted) {
-//        this.id = id;
-//        this.loginID = loginId;
-//        this.phone = phone;
-//        this.email = email;
-//        this.password = password;
-//        this.name = name;
-//        this.nickname = nickName;
-//        this.birthdate = birth;
-//        this.isDeleted = isDeleted;
-//    }
+    public Member(String loginId, String phone, String email, String password, String name, String nickName, Date birth, Boolean isDeleted) {
+        this.loginID = loginId;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickName;
+        this.birthdate = birth;
+        this.isDeleted = isDeleted;
+    }
+    public Member(Long id, String loginId, String phone, String email, String password, String name, String nickName, Date birth, Boolean isDeleted) {
+        this.id = id;
+        this.loginID = loginId;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.name = name;
+        this.nickname = nickName;
+        this.birthdate = birth;
+        this.isDeleted = isDeleted;
+    }
 
-    protected Member() {
+    public Member() {
     }
 
 }
