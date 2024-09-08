@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-// todo 팀장이 spring security 작업되면 수정
+// todo 팀장님 spring security 작업되면 수정
 
 @RestController
 @RequiredArgsConstructor
@@ -85,8 +85,8 @@ public class CartController {
     // 장바구니 전체 선택(활성,비활성)
     @PostMapping("/select-all")
     public CommonResponseEntity<Void>selectCartItemsV1(
-            @RequestBody RequestSelectCartItemDto requestSelectCartItemDto){
-        cartService.selectCartItems(requestSelectCartItemDto);
+            @RequestBody List<Long> cartIds){
+        cartService.selectAllCartItems(cartIds);
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 "장바구니 전체 선택 성공",
@@ -108,7 +108,7 @@ public class CartController {
 
 
     // 장바구니 옵션상품의 대표상품 이미지 조회
-    @GetMapping("/items/image/{cartId}")
+    @GetMapping("/item/image/{cartId}")
     public CommonResponseEntity<ResponseCartItemImageDto> findCartMainImageDtoByIdV1(
             @PathVariable("cartId") Long cartId){
         return new CommonResponseEntity<>(
@@ -120,7 +120,7 @@ public class CartController {
 
 
     // 장바구니 옵션상품 정보(옵션가격,수량,옵션명 등등) 조회
-    @GetMapping("/items/info/{cartId}")
+    @GetMapping("/item/info/{cartId}")
     public CommonResponseEntity<ResponseCartItemDto> findCartItemDtoByIdV1(@PathVariable("cartId") Long cartId){
         return new CommonResponseEntity<>(
                 HttpStatus.OK,

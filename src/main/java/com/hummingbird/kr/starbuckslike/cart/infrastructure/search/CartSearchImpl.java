@@ -42,7 +42,7 @@ public class CartSearchImpl implements CartSearch {
                         )
                 )
                 .from(productImage)
-                .join(cart).on(productImage.product.id.eq(cart.product.id))
+                .join(cart).on(productImage.product.id.eq(cart.productId))
                 .where(
                         productImage.seq.eq(0).and(cart.id.eq(cartId))
                 )

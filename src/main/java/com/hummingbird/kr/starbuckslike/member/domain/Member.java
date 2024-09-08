@@ -9,6 +9,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
+import java.time.LocalDate;
+
 @Getter
 @Slf4j
 @Entity
@@ -32,8 +34,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Comment("회원 생년월일")
-    @Column( length = 12)
-    private String birthdate;
+    private LocalDate birthdate;
 
     @Comment("회원 전화번호")
     @Column(nullable = false, length = 20)

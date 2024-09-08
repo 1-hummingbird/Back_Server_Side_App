@@ -26,7 +26,7 @@ public class QExhibitionProduct extends EntityPathBase<ExhibitionProduct> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final com.hummingbird.kr.starbuckslike.product.domain.QProduct product;
+    public final NumberPath<Long> productId = createNumber("productId", Long.class);
 
     public QExhibitionProduct(String variable) {
         this(ExhibitionProduct.class, forVariable(variable), INITS);
@@ -47,7 +47,6 @@ public class QExhibitionProduct extends EntityPathBase<ExhibitionProduct> {
     public QExhibitionProduct(Class<? extends ExhibitionProduct> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
         this.exhibition = inits.isInitialized("exhibition") ? new QExhibition(forProperty("exhibition")) : null;
-        this.product = inits.isInitialized("product") ? new com.hummingbird.kr.starbuckslike.product.domain.QProduct(forProperty("product"), inits.get("product")) : null;
     }
 
 }

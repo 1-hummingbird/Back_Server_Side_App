@@ -1,18 +1,13 @@
 package com.hummingbird.kr.starbuckslike.cart.domain;
-
-
-
 /**
  * 장바구니 엔티티
  * @author 허정현
  */
 
 import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
-import com.hummingbird.kr.starbuckslike.product.domain.Product;
 import com.hummingbird.kr.starbuckslike.product.domain.ProductOption;
 import jakarta.persistence.*;
 import lombok.*;
-import org.hibernate.annotations.ColumnDefault;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -30,9 +25,8 @@ public class Cart extends BaseEntity {
     @Column(name = "user_uuid" , nullable = false, length = 100)
     private String userUid; // 유저 uuid
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name="product_id")
-    private Product product; // 상품
+    @Column(name="product_id")
+    private Long productId; // 상품
 
     @ManyToOne(fetch = LAZY)
     @JoinColumn(name="option_id")
@@ -50,29 +44,21 @@ public class Cart extends BaseEntity {
     @Column(name = "is_deleted", nullable = false)
     private Boolean isDeleted;
 
-    // 장바구니 아이템 추가
-    public void addOptionQty(Integer addQty) {
-        this.qty += addQty;
+    // 장바구니 아이템 수량 변경 (단순 상태 변경 메서드)
+    public void changeQty(int qty) {
+        this.qty = qty;
     }
-    // 장바구니 아이템 수량 증가
-    public void increaseCartItemQuantity() {
-        this.qty++;
-    }
-    // 장바구니 아이템 수량 감소
-    public void decreaseCartItemQuantity() {
-        if(this.qty <= 1)
-            throw new IllegalStateException("최소 선택수량은 1개 이상입니다.");
-        this.qty--;
-    }
-    // 장바구니 아이템 선택
-    public void select(){
+
+    // 장바구니 아이템 선택/해제 (단순 상태 변경 메서드)
+    public void toggleSelect() {
         this.isChecked = !this.isChecked;
     }
+
     @Builder
-    public Cart(String userUid, Product product, ProductOption productOption, Integer qty, String inputData,
+    public Cart(String userUid, Long productId, ProductOption productOption, Integer qty, String inputData,
                 Boolean isChecked, Boolean isDeleted) {
         this.userUid = userUid;
-        this.product = product;
+        this.productId = productId;
         this.productOption = productOption;
         this.qty = qty;
         this.inputData = inputData;

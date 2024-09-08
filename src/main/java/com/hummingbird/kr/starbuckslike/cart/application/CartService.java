@@ -31,10 +31,9 @@ public interface CartService {
     @Transactional
     public void selectCartItem(Long cartId);
 
-    // 장바구니 전체 선택(활성,비활성)
+    // 장바구니 전체 선택
     @Transactional
-    public void selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto);
-
+    public void selectAllCartItems(List<Long> cartIds);
 
     /**
      * Select

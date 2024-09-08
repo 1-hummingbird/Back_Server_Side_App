@@ -1,8 +1,6 @@
 package com.hummingbird.kr.starbuckslike.cart.infrastructure.custom;
 
-import com.hummingbird.kr.starbuckslike.cart.domain.CartStatus;
-import com.hummingbird.kr.starbuckslike.cart.domain.QCart;
-import com.hummingbird.kr.starbuckslike.cart.dto.RequestSelectCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.CartRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
@@ -22,19 +20,18 @@ public class CustomCartRepositoryImpl implements  CustomCartRepository{
 
     @Override
     public void selectCartItem(Long cartId) {
-        cartRepository.findById(cartId).orElseThrow().select();
+        cartRepository.findById(cartId).orElseThrow().toggleSelect();
     }
 
     @Override
-    public void selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto) {
-
-        CartStatus status = requestSelectCartItemDto.getCartStatus();
-        queryFactory
-                .update(cart)
-                .set(cart.isChecked, status == CartStatus.ACTIVE)
-                .where(cart.userUid.eq(requestSelectCartItemDto.getUserUid()))  // 해당 유저의 장바구니
-                .execute();
-        em.clear();
+    public void selectAllCartItems(List<Long> cartIds) {
+        List<Cart> carts = queryFactory
+                .selectFrom(cart)
+                .where(
+                        cart.id.in(cartIds).and(cart.isDeleted.eq(false))
+                )
+                .fetch();
+        carts.forEach(Cart::toggleSelect); //
     }
 
     @Override

@@ -46,14 +46,17 @@ public class ProductSearchImpl implements ProductSearch {
         this.queryFactory = new JPAQueryFactory(em);
     }
 
-    @Override
-    public List<Product> findProductsByPath(String path) {
-        return queryFactory
-                .selectFrom(product)
-                .join(product.category, category)
-                .where(category.path.startsWith(path)) // like path %
-                .fetch();
-    }
+//    @Override
+//    public List<Product> findProductsByPath(String path) {
+//        return queryFactory
+//                .selectFrom(product)
+//                .join(product.category, category)
+//                .where(
+//                        category.path.startsWith(path) // like path %
+//                        .and(product.isDeleted.eq(false))
+//                )
+//                .fetch();
+//    }
 
     @Override
     public List<ProductListDto> findProductListDtoByExhibitionId(Long exhibitionId) {
@@ -68,59 +71,89 @@ public class ProductSearchImpl implements ProductSearch {
                 )
                 .from(product)
                 // 상품 id 와 기획전상품(중간 태이블)의 id 조인
-                .join(exhibitionProduct).on(product.id.eq(exhibitionProduct.product.id))
+                .join(exhibitionProduct).on(product.id.eq(exhibitionProduct.productId))
                 // 특정 기획전 상품에 (exhibitionId) 에 해당하는 상품만 조회
-                .where(exhibitionProduct.exhibition.id.eq(exhibitionId))
+                .where(
+                        exhibitionProduct.exhibition.id.eq(exhibitionId)
+                        .and(product.isDeleted.eq(false))
+                )
                 .fetch();
     }
 
     @Override
-    public Page<ProductListDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable) {
-        List<ProductListDto> fetch = queryFactory
-                .select(
-                        new QProductListDto(product.id, product.name, product.price,
-                                new CaseBuilder() // sql case문
-                                        .when(isNewCondition).then(true)
-                                        .otherwise(false),
-                                product.isDiscounted, product.discountRate
-                        )
-                )
-                .from(product)
-                .leftJoin(category).on(product.category.id.eq(category.id))
-                .leftJoin(exhibitionProduct).on(product.id.eq(exhibitionProduct.id))
-                .where(
-                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
-                        categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
-                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
-                        isExhibitionCondition(productCondition.getExhibitionIds()) // 여러 기획전 상품 필터링
-                )
-                .orderBy(
-                        getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
-                )
-                .offset(pageable.getOffset())
-                .limit(pageable.getPageSize())
-                .fetch();
-        // 카운트 쿼리
-        JPAQuery<Long> countQuery = queryFactory
-                .select(product.count())
-                .from(product)
-                .leftJoin(category).on(product.category.id.eq(category.id))
-                .leftJoin(exhibitionProduct).on(product.id.eq(exhibitionProduct.id))
-                .where(
-                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
-                        categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
-                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
-                        isExhibitionCondition(productCondition.getExhibitionIds()) // 여러 기획전 상품 필터링
-                );
+    public List<Long> findProductIdListByExhibitionId(Long exhibitionId) {
+        return null;
+    }
 
-        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
+//    @Override
+//    public Page<ProductListDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable) {
+//        List<ProductListDto> fetch = queryFactory
+//                .select(
+//                        new QProductListDto(product.id, product.name, product.price,
+//                                new CaseBuilder() // sql case문
+//                                        .when(isNewCondition).then(true)
+//                                        .otherwise(false),
+//                                product.isDiscounted, product.discountRate
+//                        )
+//                )
+//                .from(product)
+//                .leftJoin(category).on(product.category.id.eq(category.id))
+//                .leftJoin(exhibitionProduct).on(product.id.eq(exhibitionProduct.id))
+//                .where(
+//                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
+//                        categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
+//                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
+//                        isExhibitionCondition(productCondition.getExhibitionIds()), // 여러 기획전 상품 필터링
+//                        product.isDeleted.eq(false)
+//                )
+//                .orderBy(
+//                        getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
+//                )
+//                .offset(pageable.getOffset())
+//                .limit(pageable.getPageSize())
+//                .fetch();
+//        // 카운트 쿼리
+//        JPAQuery<Long> countQuery = queryFactory
+//                .select(product.count())
+//                .from(product)
+//                .leftJoin(category).on(product.category.id.eq(category.id))
+//                .leftJoin(exhibitionProduct).on(product.id.eq(exhibitionProduct.id))
+//                .where(
+//                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
+//                        categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
+//                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
+//                        isExhibitionCondition(productCondition.getExhibitionIds()), // 여러 기획전 상품 필터링
+//                        product.isDeleted.eq(false)
+//                );
+//
+//        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
+//    }
+
+    @Override
+    public RequestProductInfoDto findProductInfoById(Long productId) {
+        return queryFactory
+                .select(new QRequestProductInfoDto(product.name,
+                            new CaseBuilder() // sql case문
+                                .when(isNewCondition).then(true)
+                                .otherwise(false),
+                            product.shortDescription, product.isDiscounted , product.discountRate
+                        ))
+                .from(product)
+                .where(
+                        product.id.eq(productId)
+                        .and(product.isDeleted.eq(false))
+                )
+                .fetchOne();
     }
 
     @Override
     public ProductDetailDto findProductDetailDtoById(Long productId) {
         return queryFactory.select(new QProductDetailDto(product.fullDescription))
                 .from(product)
-                .where(product.id.eq(productId))
+                .where(
+                        product.id.eq(productId)
+                        .and(product.isDeleted.eq(false))
+                )
                 .fetchOne();
 
     }
@@ -134,7 +167,10 @@ public class ProductSearchImpl implements ProductSearch {
                                         )
                 )
                 .from(productImage)
-                .where(productImage.product.id.eq(productId))
+                .where(
+                        productImage.product.id.eq(productId)
+                        .and(product.isDeleted.eq(false))
+                )
                 .orderBy(productImage.seq.asc())
                 .fetch();
     }

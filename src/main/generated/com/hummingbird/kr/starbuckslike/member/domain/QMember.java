@@ -21,7 +21,7 @@ public class QMember extends EntityPathBase<Member> {
 
     public final com.hummingbird.kr.starbuckslike.common.entity.QBaseEntity _super = new com.hummingbird.kr.starbuckslike.common.entity.QBaseEntity(this);
 
-    public final StringPath birthdate = createString("birthdate");
+    public final DatePath<java.time.LocalDate> birthdate = createDate("birthdate", java.time.LocalDate.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;

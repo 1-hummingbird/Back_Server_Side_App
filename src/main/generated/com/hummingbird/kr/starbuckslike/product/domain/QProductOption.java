@@ -31,6 +31,10 @@ public class QProductOption extends EntityPathBase<ProductOption> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isAvailable = createBoolean("isAvailable");
+
+    public final BooleanPath isHidden = createBoolean("isHidden");
+
     public final BooleanPath isInputOption = createBoolean("isInputOption");
 
     public final StringPath name = createString("name");
@@ -40,8 +44,6 @@ public class QProductOption extends EntityPathBase<ProductOption> {
     public final QProduct product;
 
     public final NumberPath<Long> quantity = createNumber("quantity", Long.class);
-
-    public final EnumPath<SalesStatus> status = createEnum("status", SalesStatus.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
@@ -64,7 +66,7 @@ public class QProductOption extends EntityPathBase<ProductOption> {
 
     public QProductOption(Class<? extends ProductOption> type, PathMetadata metadata, PathInits inits) {
         super(type, metadata, inits);
-        this.product = inits.isInitialized("product") ? new QProduct(forProperty("product"), inits.get("product")) : null;
+        this.product = inits.isInitialized("product") ? new QProduct(forProperty("product")) : null;
     }
 
 }
