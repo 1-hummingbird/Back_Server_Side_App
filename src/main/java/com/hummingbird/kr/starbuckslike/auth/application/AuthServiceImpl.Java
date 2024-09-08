@@ -5,8 +5,10 @@ import com.hummingbird.kr.starbuckslike.auth.dto.*;
 import com.hummingbird.kr.starbuckslike.auth.infrastucture.AuthRepository;
 import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
-import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
+
+
 import lombok.RequiredArgsConstructor;
+
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -23,9 +25,9 @@ import java.util.UUID;
 public class AuthServiceImpl implements AuthService {
 
     private final PasswordEncoder passwordEncoder;
-    private final MemberRepository memberRepository;
     private final AuthRepository authRepository;
     private final CustomAuthenticationProvider customAuthenticationProvider;
+    private final JwtUtil jwtUtil;
 
     @Override
     public LoginResponseDTO login(LoginRequestDTO loginreqDTO) {
@@ -33,10 +35,10 @@ public class AuthServiceImpl implements AuthService {
             customAuthenticationProvider.authenticate(
                 new UsernamePasswordAuthenticationToken(loginreqDTO.getLoginID(), loginreqDTO.getPassword())
             );
-            Optional<Member> memberOptional = memberRepository.findByid(loginreqDTO.getLoginID());
+            Optional<Member> memberOptional = authRepository.findByid(loginreqDTO.getLoginID());
             if (memberOptional.isPresent()) {
                 Member member = memberOptional.get();
-                String token = jwtUtil.generateToken(member.getMemberUID());
+                String token = jwtUtil.issueJwt(member.getMemberUID(), false);
                 return new LoginResponseDTO(token);
             }
         } catch (AuthenticationException e) {
@@ -50,16 +52,21 @@ public class AuthServiceImpl implements AuthService {
             customAuthenticationProvider.authenticate(
                     new UsernamePasswordAuthenticationToken(login2ReqDTO.getLoginID(), login2ReqDTO.getPassword())
             );
-            Optional<Member> memberOptional = memberRepository.findByid(login2ReqDTO.getLoginID());
+            Optional<Member> memberOptional = authRepository.findByid(login2ReqDTO.getLoginID());
             if (memberOptional.isPresent()) {
                 Member member = memberOptional.get();
-                String token = jwtUtil.generateToken(member.getMemberUID());
+                String token = jwtUtil.issueJwt(member.getMemberUID(), true);
                 return new SecondLoginResponseDTO(token);
             }
         } catch (AuthenticationException e) {
             throw new RuntimeException("Invalid username or password");
         }
         throw new RuntimeException("Invalid username or password");
+    }
+
+    @Override
+    public EmailAuthJob sendAuthChallenge(String email) {
+        return null;
     }
 
     @Override
@@ -87,7 +94,7 @@ public class AuthServiceImpl implements AuthService {
         m.setLoginID(registerRequestDTO.getLoginID());
         m.setPassword(passwordEncoder.encode(registerRequestDTO.getPassword()));
         m.setMemberUID(UUID.randomUUID().toString());
-        memberRepository.save(m);
+        authRepository.save(m);
         return new RegisterResponseDTO();
     }
 
@@ -123,6 +130,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void OAuthRegister(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth) {
+
     }
 
     @Override
@@ -133,6 +141,6 @@ public class AuthServiceImpl implements AuthService {
     }
 
     public Optional<Member> findMemberByUid(String memberUid) {
-        return memberRepository.findByMemberUID(memberUid);
+        return authRepository.findByMemberUID(memberUid);
     }
 }

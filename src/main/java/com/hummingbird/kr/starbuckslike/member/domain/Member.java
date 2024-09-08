@@ -32,7 +32,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Comment("회원 생년월일")
-    @Column()
+    @Column(nullable = false)
     private Date birthdate;
 
     @Comment("회원 전화번호")
@@ -44,7 +44,7 @@ public class Member extends BaseEntity {
     private String email;
 
     @Comment("회원 비밀번호")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 85)
     private String password;
 
     @Comment("삭제 여부")

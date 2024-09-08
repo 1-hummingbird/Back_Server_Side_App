@@ -8,6 +8,7 @@ import org.springframework.data.repository.query.Param;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.Date;
 import java.util.Optional;
 
 //custom repository for memeber, to protect user
@@ -24,4 +25,18 @@ public interface AuthRepository extends JpaRepository<Member, Long> {
     @Transactional
     @Query("UPDATE Member m SET m.password = :password WHERE m.memberUID = :uuid")
     void updatePasswordByUuid(@Param("uuid") String uuid, @Param("password") String password);
+
+    @Modifying
+    @Transactional
+    @Query(value = "INSERT INTO Member (loginID, name, nickname, birthdate, phone, email, password, memberUID, isDeleted) VALUES (:loginID, :name, :nickname, :birthdate, :phone, :email, :password, :memberUID, :isDeleted)",
+            nativeQuery = true)
+    int saveMember(@Param("loginID") String loginID,
+                    @Param("name") String name,
+                    @Param("nickname") String nickname,
+                    @Param("birthdate") Date birthdate,
+                    @Param("phone") String phone,
+                    @Param("email") String email,
+                    @Param("password") String password,
+                    @Param("memberUID") String memberUID,
+                    @Param("isDeleted") Boolean isDeleted);
 }
