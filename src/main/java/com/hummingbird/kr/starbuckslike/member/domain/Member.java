@@ -8,6 +8,8 @@ import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
+import java.util.Date;
+
 @Setter
 @Getter
 @Slf4j
@@ -30,8 +32,8 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Comment("회원 생년월일")
-    @Column( length = 12)
-    private String birthdate;
+    @Column()
+    private Date birthdate;
 
     @Comment("회원 전화번호")
     @Column(nullable = false, length = 20)
@@ -57,7 +59,7 @@ public class Member extends BaseEntity {
 
 
 
-    public Member(Long id, String loginId, String phone, String email, String password, String name, String nickName, String birth, Boolean isDeleted) {
+    public Member(Long id, String loginId, String phone, String email, String password, String name, String nickName, Date birth, Boolean isDeleted) {
         this.id = id;
         this.loginID = loginId;
         this.phone = phone;
