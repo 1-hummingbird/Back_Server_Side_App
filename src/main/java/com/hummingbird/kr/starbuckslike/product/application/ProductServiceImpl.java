@@ -1,8 +1,6 @@
 package com.hummingbird.kr.starbuckslike.product.application;
 
-import com.hummingbird.kr.starbuckslike.product.dto.ProductDetailDto;
-import com.hummingbird.kr.starbuckslike.product.dto.ProductImageDto;
-import com.hummingbird.kr.starbuckslike.product.dto.RequestProductInfoDto;
+import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.search.ProductSearch;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -14,17 +12,32 @@ import java.util.List;
 public class ProductServiceImpl implements  ProductService{
     private final ProductSearch productSearch;
     @Override
-    public RequestProductInfoDto findProductInfoById(Long productId) {
+    public ProductInfoResponseDto findProductInfoById(Long productId) {
         return productSearch.findProductInfoById(productId);
     }
 
     @Override
-    public ProductDetailDto findProductDetailDtoById(Long productId) {
+    public ProductDetailResponseDto findProductDetailDtoById(Long productId) {
         return productSearch.findProductDetailDtoById(productId);
     }
 
     @Override
-    public List<ProductImageDto> findProductImageDtoById(Long productId) {
+    public List<ProductImageResponseDto> findProductImageDtoById(Long productId) {
         return productSearch.findProductImageDtoById(productId);
+    }
+
+    @Override
+    public List<ProductOptionResponseDto> findProductOptionDtoById(Long productId) {
+        return productSearch.findProductOptionDtoById(productId);
+    }
+
+    @Override
+    public List<Long> findProductIdListByExhibitionId(Long exhibitionId) {
+        return productSearch.findProductIdListByExhibitionId(exhibitionId);
+    }
+
+    @Override
+    public ProductListResponseDto findProductListDtoByProductId(Long productId) {
+        return productSearch.findProductListDtoByProductId(productId);
     }
 }

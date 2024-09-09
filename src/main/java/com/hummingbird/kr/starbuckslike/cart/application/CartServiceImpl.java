@@ -3,6 +3,10 @@ package com.hummingbird.kr.starbuckslike.cart.application;
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
 import com.hummingbird.kr.starbuckslike.cart.domain.CartAdjustType;
 import com.hummingbird.kr.starbuckslike.cart.dto.*;
+import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAddCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAdjustCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.CartRepository;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.custom.CustomCartRepository;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.search.CartSearch;
@@ -50,17 +54,7 @@ public class CartServiceImpl implements CartService{
             ProductOption selectOption = productOptionRepository
                                             .findById(requestAddCartItemDto.getOptionId())
                                             .orElseThrow(() -> new NoSuchElementException("상품 옵션을 찾을 수 없습니다. " ));
-            // 장바구니 객체 생성
-            Cart newCart = Cart.builder() // todo dto->entity 메서드 만들기
-                    .productId(selectOption.getProduct().getId())
-                    .productOption(selectOption)
-                    .userUid(requestAddCartItemDto.getMemberUID())
-                    .qty(requestAddCartItemDto.getQty())
-                    .inputData(requestAddCartItemDto.getInputData())
-                    .isDeleted(false)
-                    .isChecked(false)
-                    .build();
-            cartRepository.save(newCart); // 신규 장바구니 상품 저장 완료
+            cartRepository.save(requestAddCartItemDto.toEntity(selectOption)); // 신규 장바구니 상품 저장 완료
         }
         // 이미 장바구니에 담긴 옵션, 수량만 더해주면 됨
         else if(cartOptionCount == 1L){

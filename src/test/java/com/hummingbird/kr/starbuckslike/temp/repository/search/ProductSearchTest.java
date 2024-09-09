@@ -1,8 +1,7 @@
 package com.hummingbird.kr.starbuckslike.temp.repository.search;
 
-import com.hummingbird.kr.starbuckslike.product.dto.ProductDetailDto;
-import com.hummingbird.kr.starbuckslike.product.dto.ProductImageDto;
-import com.hummingbird.kr.starbuckslike.product.dto.ProductListDto;
+import com.hummingbird.kr.starbuckslike.product.dto.out.ProductDetailResponseDto;
+import com.hummingbird.kr.starbuckslike.product.dto.out.ProductImageResponseDto;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.search.ProductSearch;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
@@ -20,13 +19,13 @@ class ProductSearchTest {
 
     @Test
     void findProductDetailDtoById(){
-        ProductDetailDto result = productSearch.findProductDetailDtoById((1L));
+        ProductDetailResponseDto result = productSearch.findProductDetailDtoById((1L));
         log.info(result);
     }
 
     @Test
     void findProductImageDtoById(){
-        List<ProductImageDto> result = productSearch.findProductImageDtoById(1L);
+        List<ProductImageResponseDto> result = productSearch.findProductImageDtoById(1L);
         result.forEach(log::info);
     }
 

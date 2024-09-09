@@ -1,4 +1,4 @@
-package com.hummingbird.kr.starbuckslike.cart.dto;
+package com.hummingbird.kr.starbuckslike.cart.dto.in;
 
 import com.hummingbird.kr.starbuckslike.cart.domain.CartAdjustType;
 import lombok.AllArgsConstructor;

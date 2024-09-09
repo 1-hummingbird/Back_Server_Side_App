@@ -20,7 +20,7 @@ public class MiddleCategory extends BaseEntity {
     private Integer id;
     @Column(name = "category_name" ,nullable = false, length = 30)
     private String categoryName;
-    @Column(name = "category_name" ,nullable = true, length = 150)
+    @Column(name = "category_description" ,nullable = true, length = 150)
     private String categoryDescription;
     @Column(name = "category_code" ,nullable = false, length = 20)
     private String categoryCode;

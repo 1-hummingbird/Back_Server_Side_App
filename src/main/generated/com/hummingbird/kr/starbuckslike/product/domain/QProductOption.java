@@ -33,6 +33,8 @@ public class QProductOption extends EntityPathBase<ProductOption> {
 
     public final BooleanPath isAvailable = createBoolean("isAvailable");
 
+    public final BooleanPath isDeleted = createBoolean("isDeleted");
+
     public final BooleanPath isHidden = createBoolean("isHidden");
 
     public final BooleanPath isInputOption = createBoolean("isInputOption");

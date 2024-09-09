@@ -24,7 +24,6 @@ import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import com.hummingbird.kr.starbuckslike.product.domain.Product;
 import com.hummingbird.kr.starbuckslike.product.domain.ProductImage;
 import com.hummingbird.kr.starbuckslike.product.domain.ProductOption;
-import com.hummingbird.kr.starbuckslike.product.domain.SalesStatus;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductImageRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductOptionRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
@@ -167,31 +166,31 @@ public class LoadTestData {
             // 상품 이미지
             productImageRepository.save(ProductImage.builder()
                     .product(product1)
-                    .url("test/path/스탠리 텀블러 이미지0.jpg")
+                    .imageUrl("test/path/스탠리 텀블러 이미지0.jpg")
                     .seq(0)
                     .build()
             );
             productImageRepository.save(ProductImage.builder()
                     .product(product1)
-                    .url("test/path/스탠리 텀블러 이미지1.jpg")
+                    .imageUrl("test/path/스탠리 텀블러 이미지1.jpg")
                     .seq(1)
                     .build()
             );
             productImageRepository.save(ProductImage.builder()
                     .product(product1)
-                    .url("test/path/스탠리 텀블러 이미지2.jpg")
+                    .imageUrl("test/path/스탠리 텀블러 이미지2.jpg")
                     .seq(2)
                     .build()
             );
             productImageRepository.save(ProductImage.builder()
                     .product(product4)
-                    .url("test/path/펭귄컵 이미지0.jpg")
+                    .imageUrl("test/path/펭귄컵 이미지0.jpg")
                     .seq(0)
                     .build()
             );
             productImageRepository.save(ProductImage.builder()
                     .product(product4)
-                    .url("test/path/펭귄컵 이미지1.jpg")
+                    .imageUrl("test/path/펭귄컵 이미지1.jpg")
                     .seq(1)
                     .build()
             );
@@ -207,6 +206,7 @@ public class LoadTestData {
                     .discountRate(0.0f)
                     .isAvailable(true)
                     .isHidden(false)
+                    .isDeleted(false)
                     .build();
             productOptionRepository.save(product1_option1);
             ProductOption product1_option2 = ProductOption.builder()
@@ -218,6 +218,7 @@ public class LoadTestData {
                     .discountRate(0.0f)
                     .isAvailable(true)
                     .isHidden(false)
+                    .isDeleted(false)
                     .build();
             productOptionRepository.save(product1_option2);
 
@@ -230,6 +231,7 @@ public class LoadTestData {
                     .discountRate(12.5f)
                     .isAvailable(true)
                     .isHidden(false)
+                    .isDeleted(false)
                     .build();
             productOptionRepository.save(product4_option1);
 

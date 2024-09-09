@@ -1,6 +1,10 @@
 package com.hummingbird.kr.starbuckslike.cart.application;
 
 import com.hummingbird.kr.starbuckslike.cart.dto.*;
+import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAddCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAdjustCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -38,6 +42,8 @@ public interface CartService {
     /**
      * Select
      */
+
+
     // 장바구니 ID 리스트 조회
     public List<Long> findAllCartIdByUserUid(String userUid);
 

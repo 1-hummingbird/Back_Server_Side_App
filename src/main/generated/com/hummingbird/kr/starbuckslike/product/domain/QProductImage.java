@@ -24,11 +24,11 @@ public class QProductImage extends EntityPathBase<ProductImage> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final StringPath imageUrl = createString("imageUrl");
+
     public final QProduct product;
 
     public final NumberPath<Integer> seq = createNumber("seq", Integer.class);
-
-    public final StringPath url = createString("url");
 
     public QProductImage(String variable) {
         this(ProductImage.class, forVariable(variable), INITS);

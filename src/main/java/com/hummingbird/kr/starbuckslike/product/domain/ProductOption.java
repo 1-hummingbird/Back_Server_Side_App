@@ -12,7 +12,6 @@ import static jakarta.persistence.FetchType.LAZY;
  */
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product_option")
 public class ProductOption extends BaseEntity {
@@ -36,7 +35,7 @@ public class ProductOption extends BaseEntity {
 
     @Column(name = "is_input_option" , nullable = false)
     @ColumnDefault("false")
-    private Boolean isInputOption = false; // 사용자 입력 옵션 (각인 등) 여부
+    private Boolean isInputOption; // 사용자 입력 옵션 (각인 등) 여부
 
     @Column(name = "discount_rate")
     private Float discountRate; // 할인율
@@ -47,9 +46,12 @@ public class ProductOption extends BaseEntity {
     @Column(nullable = false , name = "is_hidden")
     private Boolean isHidden; // 숨김 여부
 
+    @Column(name = "is_deleted", nullable = false)
+    @ColumnDefault("false")
+    private Boolean isDeleted; // 삭제 여부
     @Builder
-    public ProductOption( Product product, String name, Integer price, Long quantity, Boolean isInputOption,
-                          Float discountRate, Boolean isAvailable, Boolean isHidden) {
+    public ProductOption(Product product, String name, Integer price, Long quantity, Boolean isInputOption,
+                         Float discountRate, Boolean isAvailable, Boolean isHidden, Boolean isDeleted) {
         this.product = product;
         this.name = name;
         this.price = price;
@@ -58,5 +60,6 @@ public class ProductOption extends BaseEntity {
         this.discountRate = discountRate;
         this.isAvailable = isAvailable;
         this.isHidden = isHidden;
+        this.isDeleted = isDeleted;
     }
 }

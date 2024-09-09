@@ -32,6 +32,8 @@ public class QTopCategory extends EntityPathBase<TopCategory> {
 
     public final NumberPath<Integer> id = createNumber("id", Integer.class);
 
+    public final StringPath imageUrl = createString("imageUrl");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
