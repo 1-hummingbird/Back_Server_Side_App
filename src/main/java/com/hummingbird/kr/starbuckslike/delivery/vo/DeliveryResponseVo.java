@@ -10,10 +10,11 @@ import lombok.*;
 public class DeliveryResponseVo {
 
     private Long id;
-    private String alias;
+    private String addressnickname;
 //    private name;
 //    private address;
-    private String phone;
+    private String mainphone;
+    private String secphone;
     private String userUuid;
     private String memo;
     private Boolean isBasic;

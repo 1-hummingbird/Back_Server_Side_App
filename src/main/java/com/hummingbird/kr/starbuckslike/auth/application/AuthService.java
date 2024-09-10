@@ -18,13 +18,13 @@
 //    void verifyAuthSMS(String phoneNumber, String authSMS);
 //
 //
-//    void registerMember(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth);
+//    void registerMember(String loginID, String email, String password, String name, String mainphone, String Nickname, LocalDate birth);
 //
 //    void checkEmail(String email);
 //
 //    void checkId(String loginID);
 //
-//    void checkphone(String phone);
+//    void checkphone(String mainphone);
 //
 //
 //    LoginResponseDTO login(LoginRequestDTO loginreqDTO);
@@ -34,7 +34,7 @@
 //
 //    void OAuthLogin(String loginID, String password);
 //
-//    void OAuthRegister(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth);
+//    void OAuthRegister(String loginID, String email, String password, String name, String mainphone, String Nickname, LocalDate birth);
 //
 //    void updatePassword(String uuid, String newPassword);
 //

@@ -8,10 +8,11 @@ import lombok.ToString;
 
 public class DeliveryRequestVo {
  //   private Long id;
-    private String alias;
+    private String addressnickname;
     private String name;
     private String address;
-    private String phone;
+    private String mainphone;
+    private String secphone;
     private String userUuid;
     private String memo;
     private Boolean isBasic;
