@@ -31,7 +31,8 @@ public class QDelivery extends EntityPathBase<Delivery> {
 
     public final StringPath name = createString("name");
 
-    public final StringPath phone = createString("phone");
+    public final NumberPath<Integer> phone = createNumber("mainphone", Integer.class);
+
 
     public final StringPath userUuid = createString("userUuid");
 

@@ -2,7 +2,6 @@ package com.hummingbird.kr.starbuckslike.delivery.domain;
 
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -18,8 +17,8 @@ public class Delivery {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;   //배송지 아이디
 
-    @Column(name = "alias", length = 50, nullable = false)
-    private String alias; //배송지 별칭
+    @Column(name = "addressnickname", length = 50, nullable = false)
+    private String addressnickname; //배송지 별칭
 
     @Column(name = "name", length = 20, nullable = false)
     private String name; //배송지 받는사람 이름
@@ -27,8 +26,11 @@ public class Delivery {
     @Column(name = "address",length = 100, nullable = false)
     private String address; //배송지 기본주소 기입 우편번호 + 상세주소 + 기본주소 풀주소가 들어온다.
 
-    @Column(name = "phone", length = 30, nullable = false)  //@Column(name = " ") 필드와 매핑할 컬럼의 이름을 설정, 기본값 객체의 필드이름
-    private String phone; //배송지연락처  //연락처 하나더 추가하기.
+    @Column(name = "mainphone", length = 30, nullable = false)  //@Column(name = " ") 필드와 매핑할 컬럼의 이름을 설정, 기본값 객체의 필드이름
+    private String mainphone; //배송지연락처  //연락처 하나더 추가하기.
+
+    @Column(name = "secphone", length = 30, nullable = true) // 두번째 연락처
+    private String secphone; //배송지연락처  //연락처 하나더 추가하기.
 
     @Column(name = "user_uuid" , nullable = false, length = 100)
     private String userUuid; // 유저아이디
@@ -43,12 +45,13 @@ public class Delivery {
 
 
     @Builder //생성자.
-    public Delivery(Long id, String alias, String name, String address, String phone, String userUuid, String memo, Boolean isBasic) {
+    public Delivery(Long id, String addressnickname, String name, String address, String secphone, String mainphone, String userUuid, String memo, Boolean isBasic) {
         this.id = id;
-        this.alias = alias;
+        this.addressnickname = addressnickname;
         this.name = name;
         this.address = address;
-        this.phone = phone;
+        this.mainphone = mainphone;
+        this.secphone = secphone;
         this.userUuid = userUuid;
         this.memo = memo;
         this.isBasic = isBasic;

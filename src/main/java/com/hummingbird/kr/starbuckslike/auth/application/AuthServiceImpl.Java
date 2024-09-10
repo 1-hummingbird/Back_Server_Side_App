@@ -50,7 +50,7 @@
 //
 //    }
 //
-//    public void registerMember(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth) {
+//    public void registerMember(String loginID, String email, String password, String name, String mainphone, String Nickname, LocalDate birth) {
 //
 //    }
 //
@@ -65,7 +65,7 @@
 //    }
 //
 //    @Override
-//    public void checkphone(String phone) {
+//    public void checkphone(String mainphone) {
 //
 //    }
 //
@@ -101,7 +101,7 @@
 //    }
 //
 //    @Override
-//    public void OAuthRegister(String loginID, String email, String password, String name, String phone, String Nickname, LocalDate birth) {
+//    public void OAuthRegister(String loginID, String email, String password, String name, String mainphone, String Nickname, LocalDate birth) {
 //
 //    }
 //

@@ -3,16 +3,11 @@ package com.hummingbird.kr.starbuckslike.delivery.presentation;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import com.hummingbird.kr.starbuckslike.delivery.application.DeliveryService;
 import com.hummingbird.kr.starbuckslike.delivery.dto.DeliveryRequestDto;
-import com.hummingbird.kr.starbuckslike.delivery.infrastructure.DeliveryRepository;
 import com.hummingbird.kr.starbuckslike.delivery.vo.DeliveryRequestVo;
-import com.hummingbird.kr.starbuckslike.delivery.vo.DeliveryResponseVo;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import javax.sql.CommonDataSource;
-import java.util.Optional;
 
 
 @RestController
@@ -32,8 +27,9 @@ public class DeliveryController {
 //                .id(deliveryRequestVo.getId())
                 .name(deliveryRequestVo.getName())
                 .address(deliveryRequestVo.getAddress())
-                .alias(deliveryRequestVo.getAlias())
-                .phone(deliveryRequestVo.getPhone())
+                .addressnickname(deliveryRequestVo.getAddressnickname())
+                .mainphone(deliveryRequestVo.getMainphone())
+                .secphone(deliveryRequestVo.getSecphone())
                 .memo(deliveryRequestVo.getMemo())
                 .isBasic(deliveryRequestVo.getIsBasic())
                 .build();
