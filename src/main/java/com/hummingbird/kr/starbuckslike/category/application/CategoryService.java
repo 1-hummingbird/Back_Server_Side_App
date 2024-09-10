@@ -5,12 +5,16 @@ import com.hummingbird.kr.starbuckslike.category.dto.in.BottomCategoryRequestDto
 import com.hummingbird.kr.starbuckslike.category.dto.in.MiddleCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.in.TopCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.out.BottomCategoryResponseDto;
+import com.hummingbird.kr.starbuckslike.category.dto.out.MainCategoryResponseDto;
 import com.hummingbird.kr.starbuckslike.category.dto.out.MiddleCategoryResponseDto;
 import com.hummingbird.kr.starbuckslike.category.dto.out.TopCategoryResponseDto;
 
 import java.util.List;
 
 public interface CategoryService {
+
+    // 메인 카테고리 조회
+    List<MainCategoryResponseDto> findMainCategoryResponseDto();
 
     // 상 카테고리 생성
     void createTopCategory(TopCategoryRequestDto topCategoryRequestDto);

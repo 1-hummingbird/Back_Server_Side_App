@@ -1,13 +1,7 @@
 package com.hummingbird.kr.starbuckslike.product.infrastructure.search;
 
-import com.hummingbird.kr.starbuckslike.product.domain.Product;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
-import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
-
 import java.util.List;
-import java.util.Optional;
 
 public interface ProductSearch {
 
@@ -26,7 +20,7 @@ public interface ProductSearch {
      * offset based
      */
     //Page<ProductListDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable);
-
+    // 정렬만 적용
 
     /**
      *  상품 디테일 정보 (상품상세 , 상품의 이미지)

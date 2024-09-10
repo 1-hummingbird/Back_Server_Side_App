@@ -100,7 +100,7 @@ public class CartController {
     }
 
     // 장바구니 단 건 선택
-    @Operation(summary = "장바구니 단건 선택", description = "장바구니 id로 장바구니 단건 선택")
+    @Operation(summary = "장바구니 단건 선택 (토글)", description = "장바구니 id로 장바구니 단건 선택")
     @PostMapping("/select/{cartId}")
     public CommonResponseEntity<Void>selectCartItemV1(@PathVariable("cartId") Long cartId){
         cartService.selectCartItem(cartId);

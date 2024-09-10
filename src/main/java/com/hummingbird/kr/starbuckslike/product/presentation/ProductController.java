@@ -89,7 +89,6 @@ public class ProductController {
                 responseVoList
         );
     }
-
     /**
      * 기획전에 해당하는 상품 리스트
      */
@@ -105,6 +104,7 @@ public class ProductController {
         );
     }
     // 기획전에 해당하는 상품 id로 단건 조회
+    // todo 이미지 없으면 디폴트 이미지
     @Operation(summary = "기획전 상품 단건 조회", description = "기획전에 해당하는 상품 id로 단건 조회")
     @GetMapping("/{productId}")
     public CommonResponseEntity<ProductListResponseVo> findProductListDtoByProductIdV1(
@@ -116,9 +116,10 @@ public class ProductController {
         );
     }
 
-
     /**
-     *
+     * 상품 리스트 조회
+     * 우선 정렬만 적용 ()
+     * 추후에 상황보고 필터링은 조인 많이 일어나서 최소한으로 [카테고리, 가격]만 적용해볼까 함
      */
 
 

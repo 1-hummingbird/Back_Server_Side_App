@@ -66,12 +66,14 @@ public class LoadTestData {
                     .categoryName("대 스탠리")
                     .categoryDescription("대 스탠리 카테고리 입니다")
                     .categoryCode(CategoryCodeGenerator.generateCategoryCode("tc-"))
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2022/02/[9300000003591]_20220222165515109.jpg")
                     .build();
             topCategoryRepository.save(topCategory1);
             TopCategory topCategory2 = TopCategory.builder()
                     .categoryName("대 펭귄")
                     .categoryDescription("대 펭귄 카테고리 입니다")
                     .categoryCode(CategoryCodeGenerator.generateCategoryCode("tc-"))
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2024/08/[9300000005250]_20240822105816009.jpg")
                     .build();
             topCategoryRepository.save(topCategory2);;
             // 중 카테고리

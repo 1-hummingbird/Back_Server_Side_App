@@ -7,11 +7,13 @@ import com.hummingbird.kr.starbuckslike.category.dto.in.BottomCategoryRequestDto
 import com.hummingbird.kr.starbuckslike.category.dto.in.MiddleCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.in.TopCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.out.BottomCategoryResponseDto;
+import com.hummingbird.kr.starbuckslike.category.dto.out.MainCategoryResponseDto;
 import com.hummingbird.kr.starbuckslike.category.dto.out.MiddleCategoryResponseDto;
 import com.hummingbird.kr.starbuckslike.category.dto.out.TopCategoryResponseDto;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.BottomCategoryRepository;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.MiddleCategoryRepository;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.TopCategoryRepository;
+import com.hummingbird.kr.starbuckslike.category.infrastructure.search.CategorySearch;
 import com.hummingbird.kr.starbuckslike.common.utils.CategoryCodeGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -29,8 +31,15 @@ public class CategoryServiceImpl implements CategoryService{
     private final TopCategoryRepository topCategoryRepository;
     private final MiddleCategoryRepository middleCategoryRepository;
     private final BottomCategoryRepository bottomCategoryRepository;
+    private final CategorySearch categorySearch;
 
     private static final int MAX_CODE_TRIES = 5;  // 최대 재시도 횟수
+
+    @Transactional(readOnly = true)
+    @Override
+    public List<MainCategoryResponseDto> findMainCategoryResponseDto() {
+        return categorySearch.findMainCategoryResponseDto();
+    }
 
     @Transactional
     @Override

@@ -5,11 +5,13 @@ import com.hummingbird.kr.starbuckslike.category.dto.in.BottomCategoryRequestDto
 import com.hummingbird.kr.starbuckslike.category.dto.in.MiddleCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.in.TopCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.out.BottomCategoryResponseDto;
+import com.hummingbird.kr.starbuckslike.category.dto.out.MainCategoryResponseDto;
 import com.hummingbird.kr.starbuckslike.category.dto.out.MiddleCategoryResponseDto;
 import com.hummingbird.kr.starbuckslike.category.dto.out.TopCategoryResponseDto;
 import com.hummingbird.kr.starbuckslike.category.vo.*;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
+import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
@@ -25,6 +27,25 @@ import java.util.stream.Collectors;
 public class CategoryController {
 
     private final CategoryService categoryService;
+
+    // 메인 카테고리 조회
+    @Operation(summary = "메인 카테고리 조회", description = "메인 카테고리(코드,이름,이미지) 조회")
+    @GetMapping("/main")
+    public CommonResponseEntity<List<MainCategoryResponseVo>> findMainCategoryResponseDtoV1() {
+        List<MainCategoryResponseVo> res = categoryService.findMainCategoryResponseDto()
+                .stream()
+                .map(MainCategoryResponseDto::toVo)
+                .toList();
+
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                res
+        );
+    }
+
+
+
 
     // 대 카테고리 생성
     @PostMapping("/top-category")

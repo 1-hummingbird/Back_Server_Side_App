@@ -12,6 +12,7 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -30,13 +31,10 @@ import static com.hummingbird.kr.starbuckslike.product.domain.QProductOption.pro
  * @author 허정현
  */
 @Repository
+@RequiredArgsConstructor
 public class ProductSearchImpl implements ProductSearch {
 
     private final JPAQueryFactory queryFactory;
-    public ProductSearchImpl(EntityManager em)
-    {
-        this.queryFactory = new JPAQueryFactory(em);
-    }
 
     @Override
     public List<Long> findProductIdListByExhibitionId(Long exhibitionId) {
@@ -70,6 +68,7 @@ public class ProductSearchImpl implements ProductSearch {
                     product.id.eq(productImage.product.id)
                     .and(productImage.seq.eq(0)) // 상품의 대표이미지만 가져옴
                 )
+                .where(product.id.eq(productId))
                 .fetchOne();
     }
 
