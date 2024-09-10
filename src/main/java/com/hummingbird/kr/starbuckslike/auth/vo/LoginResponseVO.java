@@ -16,8 +16,8 @@ public class LoginResponseVO {
     public LoginResponseDTO toDTO(){
         LoginResponseDTO tempDTO = new LoginResponseDTO();
         tempDTO.setAccessToken(this.getAccessToken());
-        tempDTO.setName(this.getName());
-        tempDTO.setUuid(this.getUuid());
+//        tempDTO.setName(this.getName());
+//        tempDTO.setUuid(this.getUuid());
         return tempDTO;
     }
 }
