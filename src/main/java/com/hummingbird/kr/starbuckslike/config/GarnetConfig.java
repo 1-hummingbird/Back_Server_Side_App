@@ -15,10 +15,10 @@ import java.util.Date;
 
 @Configuration
 public class GarnetConfig {
-    @Value("${spring.garnet.host}")
+    @Value("${garnet.host}")
     private String redisHost;
 
-    @Value("${spring.garnet.port}")
+    @Value("${garnet.port}")
     private int redisPort;
     
     //Redis Connection Factory 객체 생성 : Redis - Spring App 연결 생성기입니다.
