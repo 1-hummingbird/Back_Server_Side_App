@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.auth.util;
 
 import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
+import org.springframework.stereotype.Component;
 
 import java.time.LocalDateTime;
 import java.util.Random;

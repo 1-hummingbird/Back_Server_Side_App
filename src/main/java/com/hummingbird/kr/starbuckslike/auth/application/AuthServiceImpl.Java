@@ -1,16 +1,13 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
-import com.hummingbird.kr.starbuckslike.auth.domain.EmailAuthJob;
 import com.hummingbird.kr.starbuckslike.auth.domain.CustomUserDetails;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginRequestDTO;
 import com.hummingbird.kr.starbuckslike.auth.dto.LoginResponseDTO;
-import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
-import com.hummingbird.kr.starbuckslike.auth.util.EmailAuth;
+import com.hummingbird.kr.starbuckslike.auth.dto.LogoutRequestDTO;
 import com.hummingbird.kr.starbuckslike.auth.infrastructure.AuthRepository;
-
+import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
 import com.hummingbird.kr.starbuckslike.auth.util.JwtTokenProvider;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
-import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -20,37 +17,46 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.time.LocalDate;
 import java.util.Base64;
-import java.util.Optional;
+import java.util.Date;
 
 @Service
-@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private AuthRepository memberRepository;
+    private final AuthRepository memberRepository;
 
     // todo : get service Mail and PW from env file
     private final String serviceMail = "";
     private final String servicePW = "";
-    private final EmailAuth emailAuth = new EmailAuth(serviceMail, servicePW);
+    //    private final EmailAuth emailAuth = new EmailAuth(serviceMail, servicePW);
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
-
+    private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
 
-    @Override
-    public EmailAuthJob sendAuthChallenge(String email) {
-        return emailAuth.AuthStart(email);
+    public AuthServiceImpl(AuthRepository memberRepository, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, TokenService tokenService, PasswordEncoder passwordEncoder) {
+        this.memberRepository = memberRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
+        this.passwordEncoder = passwordEncoder;
+
+        tokenService.saveToken("a",new Date());
     }
+
+//    @Override
+//    public EmailAuthJob sendAuthChallenge(String email) {
+//        return emailAuth.AuthStart(email);
+//    }
 
     @Override
     public String sendAuthSMS(String phoneNumber) {
         return null;
     }
 
-    @Override
-    public boolean verifyAuthChallenge(EmailAuthJob authjob, String authChallenge) {
-        return emailAuth.AuthCheck(authjob, authChallenge);
-    }
+//    @Override
+//    public boolean verifyAuthChallenge(EmailAuthJob authjob, String authChallenge) {
+//        return emailAuth.AuthCheck(authjob, authChallenge);
+//    }
 
     @Override
     public void verifyAuthSMS(String phoneNumber, String authSMS) {
@@ -81,28 +87,18 @@ public class AuthServiceImpl implements AuthService {
         String loginid = loginreqDTO.getLoginID();
         String password = loginreqDTO.getPassword();
 
-        try{
-            String token = createToken(authenticate(memberRepository.findByid(loginid),password));
-            return new LoginResponseDTO(token);
-        } catch (Exception e) {throw new RuntimeException(e);}
-
-
-    }
-
-    @Override
-    public String getSecret(){
         try {
-            SecretKey secretKey = Cryptor.generateKey();
-            String SendingKey = Base64.getEncoder().encodeToString(secretKey.getEncoded());
-            return SendingKey;
+            String token = createToken(authenticate(memberRepository.findByid(loginid), password));
+            return new LoginResponseDTO(token);
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
 
     @Override
-    public void logout() {
-
+    public void logout(LogoutRequestDTO requestDTO) {
+        String token = requestDTO.getToken();
+        tokenService.saveToken(jwtTokenProvider.getClaimOfToken(token, "jwtID").toString(), (Date) jwtTokenProvider.getClaimOfToken(token, "expirationTime"));
     }
 
     @Override
@@ -129,9 +125,20 @@ public class AuthServiceImpl implements AuthService {
         CustomUserDetails authUserDetail = new CustomUserDetails(member);
         return authenticationManager.authenticate(
                 new UsernamePasswordAuthenticationToken(
-                        authUserDetail.getUsername(),
+                        authUserDetail.getMemberUID(),
                         inputPassword
                 )
         );
     }
+
+    @Override
+    public String getSecret() {
+        try {
+            SecretKey secretKey = Cryptor.generateKey();
+            return Base64.getEncoder().encodeToString(secretKey.getEncoded());
+        } catch (Exception e) {
+            throw new RuntimeException(e);
+        }
+    }
+
 }

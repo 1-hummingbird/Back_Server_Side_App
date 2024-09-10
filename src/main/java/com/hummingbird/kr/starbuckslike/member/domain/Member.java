@@ -4,6 +4,7 @@ import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.Builder;
 import lombok.Getter;
+import lombok.RequiredArgsConstructor;
 import lombok.Setter;
 import lombok.extern.slf4j.Slf4j;
 import org.hibernate.annotations.ColumnDefault;
@@ -15,7 +16,6 @@ import java.util.Date;
 @Getter
 @Slf4j
 @Entity
-@Builder
 @Table(name = "member")
 public class Member extends BaseEntity {
 
@@ -58,7 +58,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String memberUID;
 
-
+    @Builder
     public Member(String loginId, String phone, String email, String password, String name, String nickName, Date birth, Boolean isDeleted) {
         this.loginID = loginId;
         this.phone = phone;
@@ -69,6 +69,7 @@ public class Member extends BaseEntity {
         this.birthdate = birth;
         this.isDeleted = isDeleted;
     }
+
     public Member(Long id, String loginId, String phone, String email, String password, String name, String nickName, Date birth, Boolean isDeleted) {
         this.id = id;
         this.loginID = loginId;
@@ -79,9 +80,6 @@ public class Member extends BaseEntity {
         this.nickname = nickName;
         this.birthdate = birth;
         this.isDeleted = isDeleted;
-    }
-
-    public Member() {
     }
 
 }
