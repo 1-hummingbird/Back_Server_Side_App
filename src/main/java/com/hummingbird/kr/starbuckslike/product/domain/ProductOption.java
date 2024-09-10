@@ -12,12 +12,9 @@ import static jakarta.persistence.FetchType.LAZY;
  */
 @Entity
 @Getter
-
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "product_option")
 public class ProductOption extends BaseEntity {
-
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
@@ -38,24 +35,31 @@ public class ProductOption extends BaseEntity {
 
     @Column(name = "is_input_option" , nullable = false)
     @ColumnDefault("false")
-    private Boolean isInputOption = false; // 사용자 입력 옵션 (각인 등) 여부
+    private Boolean isInputOption; // 사용자 입력 옵션 (각인 등) 여부
 
     @Column(name = "discount_rate")
     private Float discountRate; // 할인율
 
-    @Enumerated(EnumType.STRING)
-    @Column(name = "status", nullable = false, length = 20)
-    private SalesStatus status; // 판매 상태 : AVAILABLE, DISCONTINUED , HIDDEN
+    @Column(nullable = false , name = "is_available")
+    private Boolean isAvailable; // 판매 여부
 
+    @Column(nullable = false , name = "is_hidden")
+    private Boolean isHidden; // 숨김 여부
+
+    @Column(name = "is_deleted", nullable = false)
+    @ColumnDefault("false")
+    private Boolean isDeleted; // 삭제 여부
     @Builder
     public ProductOption(Product product, String name, Integer price, Long quantity, Boolean isInputOption,
-                         Float discountRate, SalesStatus status) {
+                         Float discountRate, Boolean isAvailable, Boolean isHidden, Boolean isDeleted) {
         this.product = product;
         this.name = name;
         this.price = price;
         this.quantity = quantity;
         this.isInputOption = isInputOption;
         this.discountRate = discountRate;
-        this.status = status;
+        this.isAvailable = isAvailable;
+        this.isHidden = isHidden;
+        this.isDeleted = isDeleted;
     }
 }

@@ -1,8 +1,8 @@
 package com.hummingbird.kr.starbuckslike.cart.infrastructure.search;
 
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
-import com.hummingbird.kr.starbuckslike.cart.dto.ResponseCartItemDto;
-import com.hummingbird.kr.starbuckslike.cart.dto.ResponseCartItemImageDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
 
 import java.util.List;
 

@@ -12,8 +12,6 @@ import static jakarta.persistence.FetchType.LAZY;
  */
 @Entity
 @Getter
-@Builder
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @Table(name = "exhibition_product")
 public class ExhibitionProduct {
@@ -26,9 +24,12 @@ public class ExhibitionProduct {
     @JoinColumn(name = "exhibition_id")
     private Exhibition exhibition;
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "product_id")
-    private Product product;
+    @Column(name = "product_id")
+    private Long productId;
 
-
+    @Builder
+    public ExhibitionProduct(Exhibition exhibition, Long productId) {
+        this.exhibition = exhibition;
+        this.productId = productId;
+    }
 }

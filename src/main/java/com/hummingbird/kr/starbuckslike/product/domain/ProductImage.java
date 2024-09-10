@@ -27,7 +27,7 @@ public class ProductImage {
     private Product product;
 
     @Column(name = "product_image_url")
-    private String url;
+    private String imageUrl;
 
     @Column(name = "seq")
     private Integer seq; // 이미지 순서 0,1,2 ... 0이 대표이미지

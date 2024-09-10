@@ -1,8 +1,6 @@
 package com.hummingbird.kr.starbuckslike.cart.infrastructure.custom;
 
-import com.hummingbird.kr.starbuckslike.cart.dto.RequestSelectCartItemDto;
-import org.springframework.stereotype.Repository;
-import org.springframework.transaction.annotation.Transactional;
+import java.util.List;
 
 /**
  * custom 레포지토리는 조회 이외에 CREATE, UPDATE, DELETE 를 담당
@@ -14,7 +12,7 @@ public interface CustomCartRepository {
     public void selectCartItem(Long cartId);
 
     // 장바구니 전체 선택(활성,비활성)
-    public void selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto);
+    public void selectAllCartItems(List<Long> cartIds);
 
 
 

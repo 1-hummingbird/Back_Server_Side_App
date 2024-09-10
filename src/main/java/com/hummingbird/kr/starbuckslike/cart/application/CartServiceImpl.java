@@ -3,6 +3,10 @@ package com.hummingbird.kr.starbuckslike.cart.application;
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
 import com.hummingbird.kr.starbuckslike.cart.domain.CartAdjustType;
 import com.hummingbird.kr.starbuckslike.cart.dto.*;
+import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAddCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAdjustCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.CartRepository;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.custom.CustomCartRepository;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.search.CartSearch;
@@ -50,22 +54,13 @@ public class CartServiceImpl implements CartService{
             ProductOption selectOption = productOptionRepository
                                             .findById(requestAddCartItemDto.getOptionId())
                                             .orElseThrow(() -> new NoSuchElementException("상품 옵션을 찾을 수 없습니다. " ));
-            // 장바구니 객체 생성
-            Cart newCart = Cart.builder() // todo dto->entity 메서드 만들기
-                    .product(selectOption.getProduct())
-                    .productOption(selectOption)
-                    .userUid(requestAddCartItemDto.getMemberUID())
-                    .qty(requestAddCartItemDto.getQty())
-                    .inputData(requestAddCartItemDto.getInputData())
-                    .isDeleted(false)
-                    .isChecked(false)
-                    .build();
-            cartRepository.save(newCart); // 신규 장바구니 상품 저장 완료
+            cartRepository.save(requestAddCartItemDto.toEntity(selectOption)); // 신규 장바구니 상품 저장 완료
         }
         // 이미 장바구니에 담긴 옵션, 수량만 더해주면 됨
         else if(cartOptionCount == 1L){
-            Cart findCart = cartSearch.findCartOption(requestAddCartItemDto.getMemberUID(), requestAddCartItemDto.getOptionId());
-            findCart.addOptionQty(requestAddCartItemDto.getQty()); // 수량 더해줌
+            Cart findCart =
+                    cartSearch.findCartOption(requestAddCartItemDto.getMemberUID(), requestAddCartItemDto.getOptionId());
+            findCart.changeQty(findCart.getQty() + requestAddCartItemDto.getQty()); // 수량 더해줌
         }
         else{
             // 같은 사람의 장바구니에 같은 상품이 2개가 담겼다. 문제있음 에러처리
@@ -79,14 +74,20 @@ public class CartServiceImpl implements CartService{
         Cart cart = cartRepository
                 .findById(requestAdjustCartItemDto.getCartId())
                 .orElseThrow(() -> new NoSuchElementException("장바구니가 존재하지 않습니다."));
-        // 타입에 따라 수량을 증가 또는 감소
+        int currentQty = cart.getQty();
+        // 수량 조정 타입에 따른 처리
         if (requestAdjustCartItemDto.getCartAdjustType() == CartAdjustType.INCREASE) {
-            cart.increaseCartItemQuantity();
-        } else if (requestAdjustCartItemDto.getCartAdjustType() == CartAdjustType.DECREASE) {
-            cart.decreaseCartItemQuantity();
+            cart.changeQty(currentQty + 1); // 수량 증가
+        }
+        else if (requestAdjustCartItemDto.getCartAdjustType() == CartAdjustType.DECREASE) {
+            if (currentQty <= 1) {
+                throw new IllegalStateException("최소 선택수량은 1개 이상입니다.");
+            }
+            cart.changeQty(currentQty - 1); // 수량 감소
         } else {
             throw new IllegalArgumentException("잘못된 장바구니 수량 조정 타입입니다.");
         }
+        cartRepository.save(cart); // 변경된 상태 저장
     }
 
     @Override
@@ -105,9 +106,10 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public void selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto) {
-        customCartRepository.selectCartItems(requestSelectCartItemDto); // 업데이트 된 row 반환
+    public void selectAllCartItems(List<Long> cartIds) {
+        customCartRepository.selectAllCartItems(cartIds);
     }
+
 
     @Override
     public List<Long> findAllCartIdByUserUid(String userUid) {

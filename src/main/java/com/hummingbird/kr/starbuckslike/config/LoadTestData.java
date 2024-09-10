@@ -5,8 +5,16 @@ import com.hummingbird.kr.starbuckslike.banner.domain.Banner;
 import com.hummingbird.kr.starbuckslike.banner.infrastructure.BannerRepository;
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.CartRepository;
-import com.hummingbird.kr.starbuckslike.category.domain.Category;
-import com.hummingbird.kr.starbuckslike.category.infrastructure.CategoryRepository;
+import com.hummingbird.kr.starbuckslike.category.application.CategoryService;
+import com.hummingbird.kr.starbuckslike.category.domain.CategoryProductList;
+import com.hummingbird.kr.starbuckslike.category.domain.MiddleCategory;
+import com.hummingbird.kr.starbuckslike.category.domain.TopCategory;
+import com.hummingbird.kr.starbuckslike.category.dto.in.MiddleCategoryRequestDto;
+import com.hummingbird.kr.starbuckslike.category.dto.in.TopCategoryRequestDto;
+import com.hummingbird.kr.starbuckslike.category.infrastructure.CategoryProductListRepository;
+import com.hummingbird.kr.starbuckslike.category.infrastructure.MiddleCategoryRepository;
+import com.hummingbird.kr.starbuckslike.category.infrastructure.TopCategoryRepository;
+import com.hummingbird.kr.starbuckslike.common.utils.CategoryCodeGenerator;
 import com.hummingbird.kr.starbuckslike.exhibition.domain.Exhibition;
 import com.hummingbird.kr.starbuckslike.exhibition.domain.ExhibitionProduct;
 import com.hummingbird.kr.starbuckslike.exhibition.infrastructure.ExhibitionProductRepository;
@@ -16,7 +24,6 @@ import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import com.hummingbird.kr.starbuckslike.product.domain.Product;
 import com.hummingbird.kr.starbuckslike.product.domain.ProductImage;
 import com.hummingbird.kr.starbuckslike.product.domain.ProductOption;
-import com.hummingbird.kr.starbuckslike.product.domain.SalesStatus;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductImageRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductOptionRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
@@ -38,8 +45,10 @@ public class LoadTestData {
     // CommandLineRunner : 애플리케이션 구동 후 코드 실행하는 인터페이스
     @Bean
     CommandLineRunner initDatabase(
-            CategoryRepository categoryRepository,
+            TopCategoryRepository topCategoryRepository,
+            MiddleCategoryRepository middleCategoryRepository,
             ProductRepository productRepository,
+            CategoryProductListRepository categoryProductListRepository,
             ProductImageRepository productImageRepository,
             ProductOptionRepository productOptionRepository,
             CartRepository cartRepository,
@@ -52,69 +61,37 @@ public class LoadTestData {
             /**
              * 테스트용 임시 카테고리 데이터 추가
              */
-            // depth 0단계 루트 카테고리 생성
-            Category tumbler = new Category(null, "텀블러", null, 0, "" ,
-                    "https://image.istarbucks.co.kr/upload/store/skuimg/2022/02/[9300000003591]_20220222165515488.jpg");
-            tumbler = categoryRepository.save(tumbler);  // ID가 생성됨
-            tumbler.setPath(String.valueOf(tumbler.getId()));  // ID를 사용하여 path 설정
-            tumbler = categoryRepository.save(tumbler);  // path 업데이트
-
-            Category cup = new Category(null, "컵", null, 0, "",
-                    "https://image.istarbucks.co.kr/upload/store/skuimg/2024/06/[9300000005354]_20240617142521983.jpg");
-            cup = categoryRepository.save(cup);
-            cup.setPath(String.valueOf(cup.getId()));
-            cup = categoryRepository.save(cup);
-
-            // depth 1단계 하위 카테고리 생성
-            Category stainlessTumbler = new Category(null, "스테인리스 텀블러", tumbler,
-                    1, "",null);
-            stainlessTumbler = categoryRepository.save(stainlessTumbler);
-            stainlessTumbler.setPath(tumbler.getPath() + "/" + stainlessTumbler.getId());
-            stainlessTumbler = categoryRepository.save(stainlessTumbler);
-
-            Category steelTumbler = new Category(null, "철 텀블러", tumbler,
-                    1, "",null);
-            steelTumbler = categoryRepository.save(steelTumbler);
-            steelTumbler.setPath(tumbler.getPath() + "/" + steelTumbler.getId());
-            steelTumbler = categoryRepository.save(steelTumbler);
-
-            Category glassCup = new Category(null, "유리 컵", cup,
-                    1, "",null);
-            glassCup = categoryRepository.save(glassCup);
-            glassCup.setPath(cup.getPath() + "/" + glassCup.getId());
-            glassCup = categoryRepository.save(glassCup);
-
-            Category stainlessCup = new Category(null, "스테인리스 컵", cup,
-                    1, "",null);
-            stainlessCup = categoryRepository.save(stainlessCup);
-            stainlessCup.setPath(cup.getPath() + "/" + stainlessCup.getId());
-            stainlessCup = categoryRepository.save(stainlessCup);
-
-            // depth 2단계 하위 카테고리 생성
-            Category highStainlessTumbler = new Category(null, "고급 스테인리스 텀블러", stainlessTumbler,
-                    2, "",null);
-            highStainlessTumbler = categoryRepository.save(highStainlessTumbler);
-            highStainlessTumbler.setPath(stainlessTumbler.getPath() + "/" + highStainlessTumbler.getId());
-            highStainlessTumbler = categoryRepository.save(highStainlessTumbler);
-
-            Category lowStainlessTumbler = new Category(null, "하급 스테인리스 컵", stainlessTumbler,
-                    2, "",null);
-            lowStainlessTumbler = categoryRepository.save(lowStainlessTumbler);
-            lowStainlessTumbler.setPath(stainlessTumbler.getPath() + "/" + lowStainlessTumbler.getId());
-            lowStainlessTumbler = categoryRepository.save(lowStainlessTumbler);
-
-            Category highGlassCup = new Category(null, "고급 유리 컵", glassCup,
-                    2, "",null);
-            highGlassCup = categoryRepository.save(highGlassCup);
-            highGlassCup.setPath(glassCup.getPath() + "/" + highGlassCup.getId());
-            highGlassCup = categoryRepository.save(highGlassCup);
-
-            Category lowGlassCup = new Category(null, "하급 유리 컵", glassCup,
-                    2, "",null);
-            lowGlassCup = categoryRepository.save(lowGlassCup);
-            lowGlassCup.setPath(glassCup.getPath() + "/" + lowGlassCup.getId());
-            lowGlassCup = categoryRepository.save(lowGlassCup);
-
+            // 상 카테고리
+            TopCategory topCategory1 = TopCategory.builder()
+                    .categoryName("대 스탠리")
+                    .categoryDescription("대 스탠리 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("tc-"))
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2022/02/[9300000003591]_20220222165515109.jpg")
+                    .build();
+            topCategoryRepository.save(topCategory1);
+            TopCategory topCategory2 = TopCategory.builder()
+                    .categoryName("대 펭귄")
+                    .categoryDescription("대 펭귄 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("tc-"))
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2024/08/[9300000005250]_20240822105816009.jpg")
+                    .build();
+            topCategoryRepository.save(topCategory2);;
+            // 중 카테고리
+            MiddleCategory middleCategory1 = MiddleCategory.builder()
+                    .categoryName("중 스탠리 스테인리스")
+                    .categoryDescription("중 스탠리 스테인리스 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("bc-"))
+                    .topCategory(topCategory1) // 대 스탠리
+                    .build();
+            middleCategoryRepository.save(middleCategory1);
+            MiddleCategory middleCategory2 = MiddleCategory.builder()
+                    .categoryName("중 펭귄 유리컵")
+                    .categoryDescription("중 펭귄 유리컵 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("bc-"))
+                    .topCategory(topCategory2) // 대 스탠리
+                    .build();
+            middleCategoryRepository.save(middleCategory2);
+            // 하 카테고리
 
             /**
              * 테스트용 임시 상품 데이터 추가
@@ -126,10 +103,12 @@ public class LoadTestData {
                     .discountRate(0.0f)
                     .shortDescription("스탠리 텀블러입니다.")
                     .fullDescription("<p>스탠리 텀블러 상품 상세</p>")
-                    .status(SalesStatus.AVAILABLE)
+                    .isAvailable(true)
+                    .isHidden(false)
                     //.maxOrder(5)
                     //.maxPeriod(30)
-                    .category(tumbler)
+                    //.category(tumbler)
+                    .isDeleted(false)
                     .build()
             );
 
@@ -140,8 +119,10 @@ public class LoadTestData {
                     .discountRate(10.0f)
                     .shortDescription("스탠리 스테인리스 텀블러 압나더.")
                     .fullDescription("<p>스탠리 스테인리스 텀블러 상품 상세</p>")
-                    .status(SalesStatus.AVAILABLE)
-                    .category(stainlessTumbler)
+                    .isAvailable(true)
+                    .isHidden(false)
+                    //.category(stainlessTumbler)
+                    .isDeleted(false)
                     .build()
             );
 
@@ -152,8 +133,10 @@ public class LoadTestData {
                     .discountRate(15.0f)
                     .shortDescription("스탠리 고급 스테인리스 텀블러 입니다")
                     .fullDescription("<p>스탠리 고급 스테인리스 텀블러 상품 상세</p>")
-                    .status(SalesStatus.AVAILABLE)
-                    .category(highStainlessTumbler)
+                    .isAvailable(true)
+                    .isHidden(false)
+                    .isDeleted(false)
+                    //.category(highStainlessTumbler)
                     .build()
             );
             Product product4 =productRepository.save(Product.builder()
@@ -163,9 +146,10 @@ public class LoadTestData {
                     .discountRate(15.0f)
                     .shortDescription("펭귄 컵 입니다")
                     .fullDescription("<p>펭귄 컵 상품 상세</p>")
-                    .status(SalesStatus.AVAILABLE)
-
-                    .category(cup)
+                    .isAvailable(true)
+                    .isHidden(false)
+                    .isDeleted(false)
+                    //.category(cup)
                     .build()
             );
             Product product5 =productRepository.save(Product.builder()
@@ -175,38 +159,40 @@ public class LoadTestData {
                     .discountRate(15.0f)
                     .shortDescription("펭귄 유리 컵 입니다")
                     .fullDescription("<p>펭귄 유리 컵 상품 상세</p>")
-                    .status(SalesStatus.AVAILABLE)
-                    .category(glassCup)
+                    .isAvailable(true)
+                    .isHidden(false)
+                    .isDeleted(false)
+                    //.category(glassCup)
                     .build()
             );
             // 상품 이미지
             productImageRepository.save(ProductImage.builder()
                     .product(product1)
-                    .url("test/path/스탠리 텀블러 이미지0.jpg")
+                    .imageUrl("test/path/스탠리 텀블러 이미지0.jpg")
                     .seq(0)
                     .build()
             );
             productImageRepository.save(ProductImage.builder()
                     .product(product1)
-                    .url("test/path/스탠리 텀블러 이미지1.jpg")
+                    .imageUrl("test/path/스탠리 텀블러 이미지1.jpg")
                     .seq(1)
                     .build()
             );
             productImageRepository.save(ProductImage.builder()
                     .product(product1)
-                    .url("test/path/스탠리 텀블러 이미지2.jpg")
+                    .imageUrl("test/path/스탠리 텀블러 이미지2.jpg")
                     .seq(2)
                     .build()
             );
             productImageRepository.save(ProductImage.builder()
                     .product(product4)
-                    .url("test/path/펭귄컵 이미지0.jpg")
+                    .imageUrl("test/path/펭귄컵 이미지0.jpg")
                     .seq(0)
                     .build()
             );
             productImageRepository.save(ProductImage.builder()
                     .product(product4)
-                    .url("test/path/펭귄컵 이미지1.jpg")
+                    .imageUrl("test/path/펭귄컵 이미지1.jpg")
                     .seq(1)
                     .build()
             );
@@ -220,7 +206,9 @@ public class LoadTestData {
                     .quantity(20000L)
                     .isInputOption(false)
                     .discountRate(0.0f)
-                    .status(SalesStatus.AVAILABLE)
+                    .isAvailable(true)
+                    .isHidden(false)
+                    .isDeleted(false)
                     .build();
             productOptionRepository.save(product1_option1);
             ProductOption product1_option2 = ProductOption.builder()
@@ -230,7 +218,9 @@ public class LoadTestData {
                     .quantity(10000L)
                     .isInputOption(false)
                     .discountRate(0.0f)
-                    .status(SalesStatus.AVAILABLE)
+                    .isAvailable(true)
+                    .isHidden(false)
+                    .isDeleted(false)
                     .build();
             productOptionRepository.save(product1_option2);
 
@@ -241,9 +231,24 @@ public class LoadTestData {
                     .quantity(3000L)
                     .isInputOption(true)
                     .discountRate(12.5f)
-                    .status(SalesStatus.AVAILABLE)
+                    .isAvailable(true)
+                    .isHidden(false)
+                    .isDeleted(false)
                     .build();
             productOptionRepository.save(product4_option1);
+
+            /**
+             * 카테고리 <-> 상품 중간테이블
+             */
+            //
+            categoryProductListRepository.save(
+                    CategoryProductList.builder()
+                            .topCategoryCode(topCategory1.getCategoryCode()) // 대 스탠리
+                            .middleCategoryCode(middleCategory1.getCategoryCode()) // 중 스탠리 스테인리스
+                            .product(product2) // 스탠리 스테인리스 텀블러
+                            .build()
+            );
+
 
             /**
              * 가획전 테스트 데이터
@@ -272,25 +277,25 @@ public class LoadTestData {
             exhibitionProductRepository.save(
                     ExhibitionProduct.builder()
                             .exhibition(summerExhibition) // 여름 기획전
-                            .product(product1) // 스탠리 텀블러 상품 연결
+                            .productId(product1.getId()) // 스탠리 텀블러 상품 연결
                             .build()
             );
             exhibitionProductRepository.save(
                     ExhibitionProduct.builder()
                             .exhibition(stanExhibition) // 스탠리 기획전
-                            .product(product2) // 스탠리 스테인리스 텀블러 상품 연결
+                            .productId(product2.getId()) // 스탠리 스테인리스 텀블러 상품 연결
                             .build()
             );
             exhibitionProductRepository.save(
                     ExhibitionProduct.builder()
                             .exhibition(summerExhibition) // 여름 기획전
-                            .product(product3) // 스탠리 고급 스테인리스 텀블러 상품 연결
+                            .productId(product3.getId()) // 스탠리 고급 스테인리스 텀블러 상품 연결
                             .build()
             );
             exhibitionProductRepository.save( // 중간 테이블 중복 데이터 생성
                     ExhibitionProduct.builder()
                             .exhibition(summerExhibition) // 여름 기획전
-                            .product(product1) // 스탠리 고급 스테인리스 텀블러 상품 연결
+                            .productId(product1.getId()) // 스탠리 고급 스테인리스 텀블러 상품 연결
                             .build()
             );
             /**
@@ -300,7 +305,7 @@ public class LoadTestData {
                     .loginID("testMemberId1")
                     .name("테스트유저1")
                     .nickname("테스트유저닉네임1")
-                    .birthdate("1998-01-01")
+                    .birthdate(LocalDate.of(1998,1,1))
                     .phone("010-1234-5678")
                     .email("test@test.com")
                     .password("test1234")
@@ -312,7 +317,7 @@ public class LoadTestData {
                     .loginID("testMemberId1")
                     .name("테스트유저2")
                     .nickname("테스트유저닉네임2")
-                    .birthdate("1998-01-02")
+                    .birthdate(LocalDate.of(1998,1,2))
                     .phone("010-1234-5678")
                     .email("test@test.com")
                     .password("test1234")
@@ -350,7 +355,7 @@ public class LoadTestData {
              */
             cartRepository.save(Cart.builder()
                     .userUid(member1.getMemberUID())
-                    .product(product1_option2.getProduct())
+                    .productId(product1_option2.getProduct().getId())
                     .productOption(product1_option1) // 스탠리 텀블러 옵션1
                     .qty(2)
                     .isChecked(false)
@@ -359,7 +364,7 @@ public class LoadTestData {
             );
             cartRepository.save(Cart.builder()
                     .userUid(member1.getMemberUID())
-                    .product(product1_option2.getProduct())
+                    .productId(product1_option2.getProduct().getId())
                     .productOption(product1_option2) // 스탠리 텀블러 옵션2
                     .qty(4)
                     .isChecked(false)
@@ -369,7 +374,7 @@ public class LoadTestData {
 
             cartRepository.save(Cart.builder()
                     .userUid(member1.getMemberUID())
-                    .product(product4_option1.getProduct()) //
+                    .productId(product4_option1.getProduct().getId()) //
                     .productOption(product4_option1) // 펭귄컵 옵션1
                     .qty(4)
                     .isChecked(false)
