@@ -3,6 +3,10 @@ package com.hummingbird.kr.starbuckslike.cart.infrastructure.search;
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
 import com.hummingbird.kr.starbuckslike.cart.domain.QCart;
 import com.hummingbird.kr.starbuckslike.cart.dto.*;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.QResponseCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.QResponseCartItemImageDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductOption;
 import com.querydsl.core.types.dsl.Expressions;
@@ -38,11 +42,11 @@ public class CartSearchImpl implements CartSearch {
          return queryFactory
                 .select(new QResponseCartItemImageDto(
                                Expressions.asNumber(cartId).as("cartId") // 조회컬럼 최소화
-                             , productImage.url
+                             , productImage.imageUrl
                         )
                 )
                 .from(productImage)
-                .join(cart).on(productImage.product.id.eq(cart.product.id))
+                .join(cart).on(productImage.product.id.eq(cart.productId))
                 .where(
                         productImage.seq.eq(0).and(cart.id.eq(cartId))
                 )
@@ -54,8 +58,8 @@ public class CartSearchImpl implements CartSearch {
         return queryFactory
                 .select(new QResponseCartItemDto(
                                 Expressions.asNumber(cartId).as("cartId"),
-                                cart.inputData, productOption.id, productOption.name, productOption.quantity,
-                                cart.qty, productOption.price, productOption.status, productOption.discountRate
+                                cart.inputData, productOption.id, productOption.name,
+                                cart.qty, productOption.price, productOption.discountRate
                         )
                 )
                 .from(productOption)

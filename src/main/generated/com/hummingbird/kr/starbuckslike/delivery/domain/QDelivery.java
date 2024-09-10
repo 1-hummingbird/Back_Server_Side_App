@@ -25,11 +25,16 @@ public class QDelivery extends EntityPathBase<Delivery> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isBasic = createBoolean("isBasic");
+
+    public final StringPath memo = createString("memo");
+
     public final StringPath name = createString("name");
 
     public final NumberPath<Integer> phone = createNumber("mainphone", Integer.class);
 
-    public final StringPath userid = createString("userid");
+
+    public final StringPath userUuid = createString("userUuid");
 
     public QDelivery(String variable) {
         super(Delivery.class, forVariable(variable));

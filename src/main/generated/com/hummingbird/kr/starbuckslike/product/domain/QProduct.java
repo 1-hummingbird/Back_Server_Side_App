@@ -7,7 +7,6 @@ import com.querydsl.core.types.dsl.*;
 import com.querydsl.core.types.PathMetadata;
 import javax.annotation.processing.Generated;
 import com.querydsl.core.types.Path;
-import com.querydsl.core.types.dsl.PathInits;
 
 
 /**
@@ -18,13 +17,9 @@ public class QProduct extends EntityPathBase<Product> {
 
     private static final long serialVersionUID = -1331236337L;
 
-    private static final PathInits INITS = PathInits.DIRECT2;
-
     public static final QProduct product = new QProduct("product");
 
     public final com.hummingbird.kr.starbuckslike.common.entity.QBaseEntity _super = new com.hummingbird.kr.starbuckslike.common.entity.QBaseEntity(this);
-
-    public final com.hummingbird.kr.starbuckslike.category.domain.QCategory category;
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
@@ -35,7 +30,13 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isAvailable = createBoolean("isAvailable");
+
+    public final BooleanPath isDeleted = createBoolean("isDeleted");
+
     public final BooleanPath isDiscounted = createBoolean("isDiscounted");
+
+    public final BooleanPath isHidden = createBoolean("isHidden");
 
     public final StringPath name = createString("name");
 
@@ -43,30 +44,19 @@ public class QProduct extends EntityPathBase<Product> {
 
     public final StringPath shortDescription = createString("shortDescription");
 
-    public final EnumPath<SalesStatus> status = createEnum("status", SalesStatus.class);
-
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
     public QProduct(String variable) {
-        this(Product.class, forVariable(variable), INITS);
+        super(Product.class, forVariable(variable));
     }
 
     public QProduct(Path<? extends Product> path) {
-        this(path.getType(), path.getMetadata(), PathInits.getFor(path.getMetadata(), INITS));
+        super(path.getType(), path.getMetadata());
     }
 
     public QProduct(PathMetadata metadata) {
-        this(metadata, PathInits.getFor(metadata, INITS));
-    }
-
-    public QProduct(PathMetadata metadata, PathInits inits) {
-        this(Product.class, metadata, inits);
-    }
-
-    public QProduct(Class<? extends Product> type, PathMetadata metadata, PathInits inits) {
-        super(type, metadata, inits);
-        this.category = inits.isInitialized("category") ? new com.hummingbird.kr.starbuckslike.category.domain.QCategory(forProperty("category"), inits.get("category")) : null;
+        super(Product.class, metadata);
     }
 
 }

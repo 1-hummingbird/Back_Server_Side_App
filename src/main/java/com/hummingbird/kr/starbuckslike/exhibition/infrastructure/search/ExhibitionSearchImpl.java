@@ -1,9 +1,9 @@
 package com.hummingbird.kr.starbuckslike.exhibition.infrastructure.search;
 
-import com.hummingbird.kr.starbuckslike.exhibition.dto.ExhibitionDetailDto;
-import com.hummingbird.kr.starbuckslike.exhibition.dto.ExhibitionListDto;
-import com.hummingbird.kr.starbuckslike.exhibition.dto.QExhibitionDetailDto;
-import com.hummingbird.kr.starbuckslike.exhibition.dto.QExhibitionListDto;
+import com.hummingbird.kr.starbuckslike.exhibition.dto.out.ExhibitionDetailResponseDto;
+import com.hummingbird.kr.starbuckslike.exhibition.dto.out.ExhibitionListResponseDto;
+import com.hummingbird.kr.starbuckslike.exhibition.dto.out.QExhibitionDetailResponseDto;
+import com.hummingbird.kr.starbuckslike.exhibition.dto.out.QExhibitionListResponseDto;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.DatePath;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -29,9 +29,9 @@ public class ExhibitionSearchImpl implements ExhibitionSearch {
 
 
     @Override
-    public List<ExhibitionListDto> findAllExhibitionNames() {
+    public List<ExhibitionListResponseDto> findAllExhibitionNames() {
         return queryFactory
-                .select(new QExhibitionListDto(exhibition.id, exhibition.name)) // 전시회 이름 선택
+                .select(new QExhibitionListResponseDto(exhibition.id, exhibition.name)) // 전시회 이름 선택
                 .from(exhibition)
                 // 현재 날짜가 시작일과 종료일 사이에 있는지 확인
                 .where(isCurrentDateBetween(exhibition.startDate, exhibition.endDate))
@@ -40,10 +40,9 @@ public class ExhibitionSearchImpl implements ExhibitionSearch {
     }
 
     @Override
-    public ExhibitionDetailDto findExhibitionDetail(Long id) {
-        //return null;
+    public ExhibitionDetailResponseDto findExhibitionDetail(Long id) {
         return queryFactory
-                .select(new QExhibitionDetailDto(exhibition.fullDescription))
+                .select(new QExhibitionDetailResponseDto(exhibition.fullDescription))
                 .from(exhibition)
                 .where(
                         exhibition.id.eq(id)
@@ -60,7 +59,6 @@ public class ExhibitionSearchImpl implements ExhibitionSearch {
     // 현재 날짜가 주어진 시작일과 종료일 사이에 있는지 확인하는 조건
     private BooleanExpression isCurrentDateBetween(DatePath<LocalDate> startDate, DatePath<LocalDate> endDate) {
         LocalDate currentDate = LocalDate.now();
-        LocalDate futureDate = currentDate.plusDays(90);  // 30일 뒤의 날짜
         return startDate.loe(currentDate).and(endDate.goe(currentDate));
     }
 }

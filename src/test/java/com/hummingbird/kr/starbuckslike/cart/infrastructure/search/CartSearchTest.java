@@ -1,7 +1,7 @@
 package com.hummingbird.kr.starbuckslike.cart.infrastructure.search;
 
-import com.hummingbird.kr.starbuckslike.cart.dto.ResponseCartItemDto;
-import com.hummingbird.kr.starbuckslike.cart.dto.ResponseCartItemImageDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
 import lombok.extern.log4j.Log4j2;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;

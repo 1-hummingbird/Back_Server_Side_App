@@ -1,6 +1,10 @@
 package com.hummingbird.kr.starbuckslike.cart.application;
 
 import com.hummingbird.kr.starbuckslike.cart.dto.*;
+import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAddCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAdjustCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
@@ -31,14 +35,15 @@ public interface CartService {
     @Transactional
     public void selectCartItem(Long cartId);
 
-    // 장바구니 전체 선택(활성,비활성)
+    // 장바구니 전체 선택
     @Transactional
-    public void selectCartItems(RequestSelectCartItemDto requestSelectCartItemDto);
-
+    public void selectAllCartItems(List<Long> cartIds);
 
     /**
      * Select
      */
+
+
     // 장바구니 ID 리스트 조회
     public List<Long> findAllCartIdByUserUid(String userUid);
 
