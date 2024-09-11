@@ -8,6 +8,10 @@ import com.hummingbird.kr.starbuckslike.auth.infrastructure.AuthRepository;
 import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
 import com.hummingbird.kr.starbuckslike.auth.util.JwtTokenProvider;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
+import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
+import org.springframework.context.annotation.Lazy;
+import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -19,7 +23,7 @@ import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 
-@Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private final AuthRepository memberRepository;
@@ -33,15 +37,6 @@ public class AuthServiceImpl implements AuthService {
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
 
-    public AuthServiceImpl(AuthRepository memberRepository, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, TokenService tokenService, PasswordEncoder passwordEncoder) {
-        this.memberRepository = memberRepository;
-        this.jwtTokenProvider = jwtTokenProvider;
-        this.authenticationManager = authenticationManager;
-        this.tokenService = tokenService;
-        this.passwordEncoder = passwordEncoder;
-
-        tokenService.saveToken("a",new Date());
-    }
 
 //    @Override
 //    public EmailAuthJob sendAuthChallenge(String email) {

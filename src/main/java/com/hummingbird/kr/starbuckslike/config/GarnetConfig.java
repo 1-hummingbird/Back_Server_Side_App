@@ -10,15 +10,17 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.serializer.GenericJackson2JsonRedisSerializer;
+import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.Date;
 
 @Configuration
 public class GarnetConfig {
-    @Value("${garnet.host}")
+    @Value("${spring.data.redis.host}")
     private String redisHost;
 
-    @Value("${garnet.port}")
+    @Value("${spring.data.redis.port}")
     private int redisPort;
     
     //Redis Connection Factory 객체 생성 : Redis - Spring App 연결 생성기입니다.
@@ -37,6 +39,10 @@ public class GarnetConfig {
     public RedisTemplate<String, Date> redisTemplate(RedisConnectionFactory connectionFactory) {
         RedisTemplate<String, Date> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
+        // Set the key serializer
+        template.setKeySerializer(new StringRedisSerializer());
+        // Set the value serializer
+        template.setValueSerializer(new GenericJackson2JsonRedisSerializer());
         return template;
     }
 }

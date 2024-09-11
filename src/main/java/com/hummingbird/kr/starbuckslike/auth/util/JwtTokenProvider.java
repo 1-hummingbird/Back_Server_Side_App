@@ -44,7 +44,6 @@ public class JwtTokenProvider {
 
     public JwtTokenProvider(TokenService tokenService) {
         this.tokenService = tokenService;
-        tokenService.saveToken("b",new Date());
     }
 
     // todo: refresh token system

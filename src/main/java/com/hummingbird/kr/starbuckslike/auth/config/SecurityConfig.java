@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.auth.config;
 
 
+import com.hummingbird.kr.starbuckslike.auth.application.AuthService;
 import com.hummingbird.kr.starbuckslike.auth.application.CustomUserDetailService;
 import com.hummingbird.kr.starbuckslike.auth.application.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
@@ -40,7 +41,8 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
         config.addAllowedOriginPattern("*");
         config.addAllowedHeader("*");
-        config.addAllowedMethod("*");
+        config.addAllowedMethod("GET");
+        config.addAllowedMethod("POST");
         config.setExposedHeaders(List.of("Authorization"));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
