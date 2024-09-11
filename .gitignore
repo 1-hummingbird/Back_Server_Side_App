@@ -8,7 +8,7 @@
 # HJH
 build.gradle
 
-# User-specific stuff
+# User-specific stu
 .idea/**/workspace.xml
 .idea/**/tasks.xml
 .idea/**/usage.statistics.xml
@@ -154,7 +154,7 @@ replay_pid*
 
 # next.js
 /.next/
-/out/
+#/out/
 
 # production
 /build
