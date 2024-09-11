@@ -1,4 +1,4 @@
-package com.hummingbird.kr.starbuckslike.auth.dto;
+package com.hummingbird.kr.starbuckslike.auth.dto.in;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;

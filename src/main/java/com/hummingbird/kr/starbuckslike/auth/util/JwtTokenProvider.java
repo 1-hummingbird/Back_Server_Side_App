@@ -1,5 +1,7 @@
 package com.hummingbird.kr.starbuckslike.auth.util;
 
+import com.hummingbird.kr.starbuckslike.common.Exception.*;
+import com.hummingbird.kr.starbuckslike.common.entity.*;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import lombok.RequiredArgsConstructor;
