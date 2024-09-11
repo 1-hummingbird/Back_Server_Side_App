@@ -32,16 +32,8 @@ public class CartController {
     @Operation(summary = "장바구니 추가", description = "처음 담으면 insert , 기존 상품은 수량 update")
     @PostMapping("")
     public CommonResponseEntity<Void> addCartItemV1(@RequestBody RequestAddCartItemVo requestAddCartItemVo){
-        RequestAddCartItemDto requestAddCartItemDto =
-                                                        RequestAddCartItemDto.builder()
-                                                            .memberUID(requestAddCartItemVo.getMemberUID())
-                                                            .productId(requestAddCartItemVo.getProductId())
-                                                            .optionId(requestAddCartItemVo.getOptionId())
-                                                            .qty(requestAddCartItemVo.getQty())
-                                                            .inputData(requestAddCartItemVo.getInputData())
-                                                            .build();
 
-        cartService.addCartItem(requestAddCartItemDto);
+        cartService.addCartItem(RequestAddCartItemDto.toDto(requestAddCartItemVo));
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),
