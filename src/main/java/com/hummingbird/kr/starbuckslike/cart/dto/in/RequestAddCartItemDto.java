@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.cart.dto.in;
 
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
+import com.hummingbird.kr.starbuckslike.cart.vo.RequestAddCartItemVo;
 import com.hummingbird.kr.starbuckslike.product.domain.ProductOption;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -37,6 +38,16 @@ public class RequestAddCartItemDto {
                 .inputData(inputData)
                 .isChecked(false)
                 .isDeleted(false)
+                .build();
+    }
+
+    public static RequestAddCartItemDto toDto (RequestAddCartItemVo requestAddCartItemVo){
+        return  RequestAddCartItemDto.builder()
+                .memberUID(requestAddCartItemVo.getMemberUID())
+                .productId(requestAddCartItemVo.getProductId())
+                .optionId(requestAddCartItemVo.getOptionId())
+                .qty(requestAddCartItemVo.getQty())
+                .inputData(requestAddCartItemVo.getInputData())
                 .build();
     }
 

@@ -4,10 +4,7 @@ import com.hummingbird.kr.starbuckslike.category.application.CategoryService;
 import com.hummingbird.kr.starbuckslike.category.dto.in.BottomCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.in.MiddleCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.in.TopCategoryRequestDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.BottomCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.MainCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.MiddleCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.TopCategoryResponseDto;
+import com.hummingbird.kr.starbuckslike.category.dto.out.*;
 import com.hummingbird.kr.starbuckslike.category.vo.*;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
@@ -44,11 +41,9 @@ public class CategoryController {
         );
     }
 
-
-
-
     // 대 카테고리 생성
     @PostMapping("/top-category")
+    @Operation(summary = "대 카테고리 생성", description = "대 카테고리 생성 카테고리명, 소개 입력")
     public CommonResponseEntity<Void> createTopCategory(
             @RequestBody TopCategoryRequestVo topCategoryRequestVo) {
 
@@ -64,6 +59,7 @@ public class CategoryController {
                 null);
     }
 
+    @Operation(summary = "대 카테고리 조회", description = "카테고리 코드로 대 카테고리 단건 조회")
     @GetMapping("/top-category/{topCategoryCode}")
     public CommonResponseEntity<TopCategoryResponseVo> getTopCategory(
             @PathVariable("topCategoryCode") String topCategoryCode) {
@@ -74,6 +70,7 @@ public class CategoryController {
                 categoryService.getTopCategoryByCategoryCode(topCategoryCode).toVo());
     }
 
+    @Operation(summary = "중 카테고리 생성", description = "중 카테고리 생성 카테고리명, 소개 , 대 카테고리 코드 입력")
     @PostMapping("/middle-category")
     public CommonResponseEntity<Void> createMiddleCategory(
             @RequestBody MiddleCategoryRequestVo middleCategoryRequestVo) {
@@ -170,5 +167,18 @@ public class CategoryController {
                         .collect(Collectors.toList()));
     }
 
+    @Operation(summary = "대 카테고리의 자식 카테고리 조회", description = "중 카테고리의 자식까지만 조회됨. 하 카테고리는 조회안됨")
+    @GetMapping("/top-category/child/{categoryCode}")
+    public CommonResponseEntity<List<ChildCategoryResponseVo>> findChildCategoriesByTopCategoryV1(
+            @PathVariable("categoryCode") String categoryCode) {
+
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                categoryService.findChildCategoriesByTopCategory(categoryCode)
+                        .stream()
+                        .map(ChildCategoryResponseDto::toVo)
+                        .collect(Collectors.toList()));
+    }
 
 }

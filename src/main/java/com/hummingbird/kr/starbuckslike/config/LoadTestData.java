@@ -63,145 +63,169 @@ public class LoadTestData {
              */
             // 상 카테고리
             TopCategory topCategory1 = TopCategory.builder()
-                    .categoryName("대 스탠리")
-                    .categoryDescription("대 스탠리 카테고리 입니다")
+                    .categoryName("대 텀블러/보온병")
+                    .categoryDescription("대 텀블러/보온병 카테고리 입니다")
                     .categoryCode(CategoryCodeGenerator.generateCategoryCode("tc-"))
                     .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2022/02/[9300000003591]_20220222165515109.jpg")
                     .build();
             topCategoryRepository.save(topCategory1);
             TopCategory topCategory2 = TopCategory.builder()
-                    .categoryName("대 펭귄")
-                    .categoryDescription("대 펭귄 카테고리 입니다")
+                    .categoryName("대 머그/컵")
+                    .categoryDescription("대 머그/컵 카테고리 입니다")
                     .categoryCode(CategoryCodeGenerator.generateCategoryCode("tc-"))
-                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2024/08/[9300000005250]_20240822105816009.jpg")
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2023/04/[9300000004628]_20230425125117122.jpg")
                     .build();
-            topCategoryRepository.save(topCategory2);;
+            topCategoryRepository.save(topCategory2);
+            TopCategory topCategory3 = TopCategory.builder()
+                    .categoryName("대 라이프스타일")
+                    .categoryDescription("대 라이프스타일 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("tc-"))
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004606]_20230905081551720.jpg")
+                    .build();
+            topCategoryRepository.save(topCategory3);
+            TopCategory topCategory4 = TopCategory.builder()
+                    .categoryName("대 티/커피용품")
+                    .categoryDescription("대 티/커피용품 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("tc-"))
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2021/06/[9300000000393]_20210618110316466.jpg")
+                    .build();
+            topCategoryRepository.save(topCategory4);
+            TopCategory topCategory5 = TopCategory.builder()
+                    .categoryName("대 케이크")
+                    .categoryDescription("대 케이크 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("tc-"))
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2021/04/[9300000000132]_20210422112714121.jpg")
+                    .build();
+            topCategoryRepository.save(topCategory5);
             // 중 카테고리
-            MiddleCategory middleCategory1 = MiddleCategory.builder()
-                    .categoryName("중 스탠리 스테인리스")
-                    .categoryDescription("중 스탠리 스테인리스 카테고리 입니다")
+            MiddleCategory top1_middle1 = MiddleCategory.builder()
+                    .categoryName("중 플라스틱 텀블러")
+                    .categoryDescription("중 플라스틱 텀블러 카테고리 입니다")
                     .categoryCode(CategoryCodeGenerator.generateCategoryCode("bc-"))
-                    .topCategory(topCategory1) // 대 스탠리
+                    .topCategory(topCategory1) //대 텀블러/보온병
                     .build();
-            middleCategoryRepository.save(middleCategory1);
-            MiddleCategory middleCategory2 = MiddleCategory.builder()
-                    .categoryName("중 펭귄 유리컵")
-                    .categoryDescription("중 펭귄 유리컵 카테고리 입니다")
+            middleCategoryRepository.save(top1_middle1);
+            MiddleCategory top1_middle2 = MiddleCategory.builder()
+                    .categoryName("중 스테인리스 텀블러")
+                    .categoryDescription("중 스테인리스 텀블러 카테고리 입니다")
                     .categoryCode(CategoryCodeGenerator.generateCategoryCode("bc-"))
-                    .topCategory(topCategory2) // 대 스탠리
+                    .topCategory(topCategory1) //대 텀블러/보온병
                     .build();
-            middleCategoryRepository.save(middleCategory2);
+            middleCategoryRepository.save(top1_middle2);
+            MiddleCategory top1_middle3 = MiddleCategory.builder()
+                    .categoryName("중 보온병")
+                    .categoryDescription("중 보온병 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("bc-"))
+                    .topCategory(topCategory1) //대 텀블러/보온병
+                    .build();
+            middleCategoryRepository.save(top1_middle3);
+            MiddleCategory top1_middle4 = MiddleCategory.builder()
+                    .categoryName("중 콜드컵")
+                    .categoryDescription("중 콜드컵 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("bc-"))
+                    .topCategory(topCategory1) //대 텀블러/보온병
+                    .build();
+            middleCategoryRepository.save(top1_middle4);
+            MiddleCategory top2_middle1 = MiddleCategory.builder()
+                    .categoryName("중 머그")
+                    .categoryDescription("중 머그 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("bc-"))
+                    .topCategory(topCategory2) //대 머그/컵
+                    .build();
+            middleCategoryRepository.save(top2_middle1);
+            MiddleCategory top2_middle2 = MiddleCategory.builder()
+                    .categoryName("중 글라스")
+                    .categoryDescription("중 글라스 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("bc-"))
+                    .topCategory(topCategory2) //대 머그/컵
+                    .build();
+            middleCategoryRepository.save(top2_middle2);
+            // 상 카테고리 [라이프스타일, 티/커피용품] 건너뜀
+            MiddleCategory top5_middle1 = MiddleCategory.builder()
+                    .categoryName("중 롤케이크")
+                    .categoryDescription("중 롤케이크 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("bc-"))
+                    .topCategory(topCategory5) // 대 케이크
+                    .build();
+            middleCategoryRepository.save(top5_middle1);
+            MiddleCategory top5_middle2 = MiddleCategory.builder()
+                    .categoryName("중 홀케이크")
+                    .categoryDescription("중 홀케이크 카테고리 입니다")
+                    .categoryCode(CategoryCodeGenerator.generateCategoryCode("bc-"))
+                    .topCategory(topCategory5) // 대 케이크
+                    .build();
+            middleCategoryRepository.save(top5_middle2);
+
             // 하 카테고리
 
             /**
              * 테스트용 임시 상품 데이터 추가
              */
-            Product product1 = productRepository.save(Product.builder()
-                    .name("스탠리 텀블러")
+            Product top1_middle1_product1 = productRepository.save(Product.builder()
+                    .name("크레이브 하우스 워터보틀 500ml")
                     .price(30000)
                     .isDiscounted(false)
                     .discountRate(0.0f)
-                    .shortDescription("스탠리 텀블러입니다.")
-                    .fullDescription("<p>스탠리 텀블러 상품 상세</p>")
+                    .shortDescription("크레이브 하우스 워터보틀")
+                    .fullDescription("<p>크레이브 하우스 워터보틀 상품 상세</p>")
                     .isAvailable(true)
                     .isHidden(false)
-                    //.maxOrder(5)
-                    //.maxPeriod(30)
-                    //.category(tumbler)
                     .isDeleted(false)
                     .build()
             );
 
-            Product product2 = productRepository.save(Product.builder()
-                    .name("스탠리 스테인리스 텀블러")
+            Product top1_middle2_product2 = productRepository.save(Product.builder()
+                    .name("SS 뉴에라 다알라 텀블러 473ml")
                     .price(40000)
                     .isDiscounted(true)
                     .discountRate(10.0f)
-                    .shortDescription("스탠리 스테인리스 텀블러 압나더.")
-                    .fullDescription("<p>스탠리 스테인리스 텀블러 상품 상세</p>")
+                    .shortDescription("SS 뉴에라 다알라 텀블러 473ml 압나더.")
+                    .fullDescription("<p>SS 뉴에라 다알라 텀블러 473ml</p>")
                     .isAvailable(true)
                     .isHidden(false)
-                    //.category(stainlessTumbler)
                     .isDeleted(false)
                     .build()
             );
 
-            Product product3 =productRepository.save(Product.builder()
-                    .name("스탠리 고급 스테인리스 텀블러")
+            Product top2_middle1_product1 =productRepository.save(Product.builder()
+                    .name("(c)애니버서리 스케일 머그 89ml")
                     .price(50000)
                     .isDiscounted(true)
                     .discountRate(15.0f)
-                    .shortDescription("스탠리 고급 스테인리스 텀블러 입니다")
-                    .fullDescription("<p>스탠리 고급 스테인리스 텀블러 상품 상세</p>")
+                    .shortDescription("(c)애니버서리 스케일 머그 89ml 입니다")
+                    .fullDescription("<p>(c)애니버서리 스케일 머그 89ml 상품 상세</p>")
                     .isAvailable(true)
                     .isHidden(false)
                     .isDeleted(false)
-                    //.category(highStainlessTumbler)
                     .build()
             );
-            Product product4 =productRepository.save(Product.builder()
-                    .name("펭귄 컵")
-                    .price(10000)
-                    .isDiscounted(true)
-                    .discountRate(15.0f)
-                    .shortDescription("펭귄 컵 입니다")
-                    .fullDescription("<p>펭귄 컵 상품 상세</p>")
-                    .isAvailable(true)
-                    .isHidden(false)
-                    .isDeleted(false)
-                    //.category(cup)
-                    .build()
-            );
-            Product product5 =productRepository.save(Product.builder()
-                    .name("펭귄 유리 컵")
-                    .price(10000)
-                    .isDiscounted(true)
-                    .discountRate(15.0f)
-                    .shortDescription("펭귄 유리 컵 입니다")
-                    .fullDescription("<p>펭귄 유리 컵 상품 상세</p>")
-                    .isAvailable(true)
-                    .isHidden(false)
-                    .isDeleted(false)
-                    //.category(glassCup)
-                    .build()
-            );
+
+
             // 상품 이미지
             productImageRepository.save(ProductImage.builder()
-                    .product(product1)
-                    .imageUrl("test/path/스탠리 텀블러 이미지0.jpg")
+                    .product(top1_middle1_product1)
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004617]_20230905083145871.jpg")
                     .seq(0)
                     .build()
             );
             productImageRepository.save(ProductImage.builder()
-                    .product(product1)
-                    .imageUrl("test/path/스탠리 텀블러 이미지1.jpg")
+                    .product(top1_middle1_product1)
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004617]_20230905083215032.jpg")
                     .seq(1)
                     .build()
             );
             productImageRepository.save(ProductImage.builder()
-                    .product(product1)
-                    .imageUrl("test/path/스탠리 텀블러 이미지2.jpg")
+                    .product(top1_middle1_product1)
+                    .imageUrl("https://image.istarbucks.co.kr/upload/store/skuimg/2023/09/[9300000004617]_20230905083229280.jpg")
                     .seq(2)
-                    .build()
-            );
-            productImageRepository.save(ProductImage.builder()
-                    .product(product4)
-                    .imageUrl("test/path/펭귄컵 이미지0.jpg")
-                    .seq(0)
-                    .build()
-            );
-            productImageRepository.save(ProductImage.builder()
-                    .product(product4)
-                    .imageUrl("test/path/펭귄컵 이미지1.jpg")
-                    .seq(1)
                     .build()
             );
 
 
             // 상품 옵션
-            ProductOption product1_option1 = ProductOption.builder()
-                    .product(product1) // 스탠리 텀블러의 옵션
-                    .name("스탠리 텀블러 옵션1")
+            ProductOption top1_middle1_product1_op1 = ProductOption.builder()
+                    .product(top1_middle1_product1) // 크레이브 하우스 워터보틀 500ml 옵션
+                    .name("크레이브 하우스 워터보틀 500ml 옵션1")
                     .price(30000)
                     .quantity(20000L)
                     .isInputOption(false)
@@ -210,10 +234,10 @@ public class LoadTestData {
                     .isHidden(false)
                     .isDeleted(false)
                     .build();
-            productOptionRepository.save(product1_option1);
-            ProductOption product1_option2 = ProductOption.builder()
-                    .product(product1) // 스탠리 텀블러의 옵션
-                    .name("스탠리 텀블러 옵션2")
+            productOptionRepository.save(top1_middle1_product1_op1);
+            ProductOption top1_middle1_product1_op2 = ProductOption.builder()
+                    .product(top1_middle1_product1) // 크레이브 하우스 워터보틀 500ml 옵션
+                    .name("크레이브 하우스 워터보틀 500ml 옵션2")
                     .price(29000)
                     .quantity(10000L)
                     .isInputOption(false)
@@ -222,20 +246,33 @@ public class LoadTestData {
                     .isHidden(false)
                     .isDeleted(false)
                     .build();
-            productOptionRepository.save(product1_option2);
-
-            ProductOption product4_option1 = ProductOption.builder()
-                    .product(product4) // 펭퀸컵의 옵션
-                    .name("펭퀸컵 옵션1")
-                    .price(10000)
-                    .quantity(3000L)
-                    .isInputOption(true)
-                    .discountRate(12.5f)
+            productOptionRepository.save(top1_middle1_product1_op2);
+            ProductOption top1_middle2_product2_op1 = ProductOption.builder()
+                    .product(top1_middle2_product2) // SS 뉴에라 다알라 텀블러 473ml 옵션
+                    .name("SS 뉴에라 다알라 텀블러 473ml 옵션1")
+                    .price(29000)
+                    .quantity(10000L)
+                    .isInputOption(false)
+                    .discountRate(0.0f)
                     .isAvailable(true)
                     .isHidden(false)
                     .isDeleted(false)
                     .build();
-            productOptionRepository.save(product4_option1);
+            productOptionRepository.save(top1_middle2_product2_op1);
+            ProductOption top2_middle1_product1_op1 = ProductOption.builder()
+                    .product(top2_middle1_product1) // (c)애니버서리 스케일 머그 89ml 옵션1
+                    .name("(c)애니버서리 스케일 머그 89ml 옵션1")
+                    .price(29000)
+                    .quantity(15000L)
+                    .isInputOption(false)
+                    .discountRate(0.0f)
+                    .isAvailable(true)
+                    .isHidden(false)
+                    .isDeleted(false)
+                    .build();
+            productOptionRepository.save(top2_middle1_product1_op1);
+
+
 
             /**
              * 카테고리 <-> 상품 중간테이블
@@ -243,12 +280,32 @@ public class LoadTestData {
             //
             categoryProductListRepository.save(
                     CategoryProductList.builder()
-                            .topCategoryCode(topCategory1.getCategoryCode()) // 대 스탠리
-                            .middleCategoryCode(middleCategory1.getCategoryCode()) // 중 스탠리 스테인리스
-                            .product(product2) // 스탠리 스테인리스 텀블러
+                            .topCategoryCode(topCategory1.getCategoryCode()) // 대 텀블러/보온병
+                            .middleCategoryCode(top1_middle1.getCategoryCode()) // 중 플라스틱 텀블러
+                            .product(top1_middle1_product1) // 크레이브 하우스 워터보틀 500ml
                             .build()
             );
-
+            categoryProductListRepository.save(
+                    CategoryProductList.builder()
+                            .topCategoryCode(topCategory1.getCategoryCode()) // 대 텀블러/보온병
+                            .middleCategoryCode(top1_middle2.getCategoryCode()) // 중 스테인리스 텀블러
+                            .product(top1_middle2_product2) // SS 뉴에라 다알라 텀블러 473ml
+                            .build()
+            );
+            categoryProductListRepository.save(
+                    CategoryProductList.builder()
+                            .topCategoryCode(topCategory2.getCategoryCode()) // 대 텀블러/보온병
+                            .middleCategoryCode(top2_middle1.getCategoryCode()) // 중 머그
+                            .product(top2_middle1_product1) // (c)애니버서리 스케일 머그 89ml
+                            .build()
+            );
+//            categoryProductListRepository.save(
+//                    CategoryProductList.builder()
+//                            .topCategoryCode(topCategory5.getCategoryCode()) // 대 케이크
+//                            .middleCategoryCode(top5_middle1.getCategoryCode()) // 중 롤 케이크
+//                            .product(top1_middle1_product1) // 크레이브 하우스 워터보틀 500ml
+//                            .build()
+//            );
 
             /**
              * 가획전 테스트 데이터
@@ -263,11 +320,11 @@ public class LoadTestData {
                             .isDeleted(false)
                             .build()
             );
-            Exhibition stanExhibition = exhibitionRepository.save(
+            Exhibition tumblerExhibition = exhibitionRepository.save(
                     Exhibition.builder()
-                            .name("스탠리 기획전")
-                            .title("스탠리 기획전 타이틀")
-                            .fullDescription("<p>스탠리 기획전 상세</p>")
+                            .name("텀블러 기획전")
+                            .title("텀블러 기획전 타이틀")
+                            .fullDescription("<p>텀블러 기획전 상세</p>")
                             .startDate(LocalDate.of(2024,7,1))
                             .endDate(LocalDate.of(2024,12,25))
                             .isDeleted(false)
@@ -277,27 +334,22 @@ public class LoadTestData {
             exhibitionProductRepository.save(
                     ExhibitionProduct.builder()
                             .exhibition(summerExhibition) // 여름 기획전
-                            .productId(product1.getId()) // 스탠리 텀블러 상품 연결
+                            .productId(top1_middle1_product1.getId()) // 크레이브 하우스 워터보틀 500ml
                             .build()
             );
             exhibitionProductRepository.save(
                     ExhibitionProduct.builder()
-                            .exhibition(stanExhibition) // 스탠리 기획전
-                            .productId(product2.getId()) // 스탠리 스테인리스 텀블러 상품 연결
+                            .exhibition(tumblerExhibition) // 텀블러 기획전
+                            .productId(top1_middle2_product2.getId()) // SS 뉴에라 다알라 텀블러 473ml 상품 연결
                             .build()
             );
             exhibitionProductRepository.save(
                     ExhibitionProduct.builder()
                             .exhibition(summerExhibition) // 여름 기획전
-                            .productId(product3.getId()) // 스탠리 고급 스테인리스 텀블러 상품 연결
+                            .productId(top1_middle2_product2.getId()) // SS 뉴에라 다알라 텀블러 473ml
                             .build()
             );
-            exhibitionProductRepository.save( // 중간 테이블 중복 데이터 생성
-                    ExhibitionProduct.builder()
-                            .exhibition(summerExhibition) // 여름 기획전
-                            .productId(product1.getId()) // 스탠리 고급 스테인리스 텀블러 상품 연결
-                            .build()
-            );
+
             /**
              * 회원 테스트 데이터
              */
@@ -355,8 +407,8 @@ public class LoadTestData {
              */
             cartRepository.save(Cart.builder()
                     .userUid(member1.getMemberUID())
-                    .productId(product1_option2.getProduct().getId())
-                    .productOption(product1_option1) // 스탠리 텀블러 옵션1
+                    .productId(top1_middle1_product1.getId())
+                    .productOption(top1_middle1_product1_op1) // 크레이브 하우스 워터보틀 500ml 옵션1
                     .qty(2)
                     .isChecked(false)
                     .isDeleted(false)
@@ -364,23 +416,23 @@ public class LoadTestData {
             );
             cartRepository.save(Cart.builder()
                     .userUid(member1.getMemberUID())
-                    .productId(product1_option2.getProduct().getId())
-                    .productOption(product1_option2) // 스탠리 텀블러 옵션2
-                    .qty(4)
+                    .productId(top1_middle1_product1.getId())
+                    .productOption(top1_middle1_product1_op2) // 크레이브 하우스 워터보틀 500ml 옵션2
+                    .qty(2)
+                    .isChecked(false)
+                    .isDeleted(false)
+                    .build()
+            );
+            cartRepository.save(Cart.builder()
+                    .userUid(member1.getMemberUID())
+                    .productId(top1_middle2_product2.getId())
+                    .productOption(top1_middle2_product2_op1) //SS 뉴에라 다알라 텀블러 473ml 옵션1
+                    .qty(2)
                     .isChecked(false)
                     .isDeleted(false)
                     .build()
             );
 
-            cartRepository.save(Cart.builder()
-                    .userUid(member1.getMemberUID())
-                    .productId(product4_option1.getProduct().getId()) //
-                    .productOption(product4_option1) // 펭귄컵 옵션1
-                    .qty(4)
-                    .isChecked(false)
-                    .isDeleted(false)
-                    .build()
-            );
 
 
 
