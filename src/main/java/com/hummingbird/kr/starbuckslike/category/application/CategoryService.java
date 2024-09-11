@@ -3,11 +3,11 @@ package com.hummingbird.kr.starbuckslike.category.application;
 
 import com.hummingbird.kr.starbuckslike.category.dto.in.BottomCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.in.MiddleCategoryRequestDto;
-import com.hummingbird.kr.starbuckslike.category.dto.in.TopCategoryRequestDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.BottomCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.MainCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.MiddleCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.TopCategoryResponseDto;
+//import com.hummingbird.kr.starbuckslike.category.dto.in.TopCategoryRequestDto;
+//import com.hummingbird.kr.starbuckslike.category.dto.out.BottomCategoryResponseDto;
+//import com.hummingbird.kr.starbuckslike.category.dto.out.MainCategoryResponseDto;
+//import com.hummingbird.kr.starbuckslike.category.dto.out.MiddleCategoryResponseDto;
+//import com.hummingbird.kr.starbuckslike.category.dto.out.TopCategoryResponseDto;
 
 import java.util.List;
 
