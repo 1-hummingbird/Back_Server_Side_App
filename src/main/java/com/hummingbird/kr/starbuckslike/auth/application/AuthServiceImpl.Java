@@ -20,6 +20,8 @@ import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 
+@Service
+@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
     private AuthRepository authRepository;
