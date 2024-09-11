@@ -1,14 +1,10 @@
 package com.hummingbird.kr.starbuckslike.cart.infrastructure.search;
 
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
-import com.hummingbird.kr.starbuckslike.cart.domain.QCart;
-import com.hummingbird.kr.starbuckslike.cart.dto.*;
 import com.hummingbird.kr.starbuckslike.cart.dto.out.QResponseCartItemDto;
 import com.hummingbird.kr.starbuckslike.cart.dto.out.QResponseCartItemImageDto;
 import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
 import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
-import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
-import com.hummingbird.kr.starbuckslike.product.domain.QProductOption;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
