@@ -2,6 +2,7 @@ package com.hummingbird.kr.starbuckslike.shipping.dto.in;
 
 
 import com.hummingbird.kr.starbuckslike.shipping.domain.ShippingAddress;
+import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
@@ -18,6 +19,7 @@ public class ShippingAddressRequestDTo {
     private String memo;
     private Boolean defaultAddress;
 
+    @Builder
     public ShippingAddressRequestDTo(String userUuid,
                                      String addressNickname,
                                      String name, String address,
@@ -36,7 +38,7 @@ public class ShippingAddressRequestDTo {
         this.defaultAddress = defaultAddress;
     }
 
-    public ShippingAddress toEnity(ShippingAddressRequestDTo shippingAddressRequestDTo){
+    public ShippingAddress toEntity(ShippingAddressRequestDTo shippingAddressRequestDTo){
         return ShippingAddress.builder()
                 .addressNickname(shippingAddressRequestDTo.getAddressNickname())
                 .name(shippingAddressRequestDTo.getName())
@@ -48,4 +50,6 @@ public class ShippingAddressRequestDTo {
                 .defaultAddress(shippingAddressRequestDTo.getDefaultAddress())
                 .build();
     }
+
+
 }

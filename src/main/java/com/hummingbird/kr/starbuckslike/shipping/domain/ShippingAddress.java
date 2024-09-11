@@ -42,7 +42,7 @@ public class ShippingAddress {
     private Boolean defaultAddress = false;
 
     @Builder
-    public ShippingAddress(Long id,
+    public ShippingAddress(
                            String addressNickname,
                            String name,
                            String address,
@@ -52,7 +52,7 @@ public class ShippingAddress {
                            String memo,
                            Boolean defaultAddress
     ) {
-        this.id = id;
+
         this.addressNickname = addressNickname;
         this.name = name;
         this.address = address;
