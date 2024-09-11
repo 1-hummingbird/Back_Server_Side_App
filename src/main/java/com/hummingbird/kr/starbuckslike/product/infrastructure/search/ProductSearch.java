@@ -1,6 +1,12 @@
 package com.hummingbird.kr.starbuckslike.product.infrastructure.search;
 
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
+import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
+import com.hummingbird.kr.starbuckslike.product.vo.ProductListImageResponseVo;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+
 import java.util.List;
 
 public interface ProductSearch {
@@ -19,8 +25,14 @@ public interface ProductSearch {
      * 필터링 조건[카테고리,가격,기획전] , 정렬 조건(최신순, 높은 가격, 낮은 가격)
      * offset based
      */
-    //Page<ProductListDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable);
-    // 정렬만 적용
+     // 몽땅 DTO로  가져옴 V1
+     Page<ProductListResponseDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable);
+     // api 단건으로 분리
+     Slice<Long> searchProductIdsV1(ProductCondition productCondition, Pageable pageable);
+     // 상품아이디로 상품 리스트 이미지 단건 조회
+     ProductListImageResponseDto findProductListImageResponseDtoById(Long productId);
+     // 상품아이디로 상품 리스트 정보 단건 조회
+     ProductListInfoResponseDto findProductListInfoResponseDtoById(Long productId);
 
     /**
      *  상품 디테일 정보 (상품상세 , 상품의 이미지)

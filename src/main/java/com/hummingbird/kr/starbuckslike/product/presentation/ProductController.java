@@ -6,13 +6,12 @@ import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
 import com.hummingbird.kr.starbuckslike.product.application.ProductService;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
-import com.hummingbird.kr.starbuckslike.product.infrastructure.search.ProductSearch;
 import com.hummingbird.kr.starbuckslike.product.vo.*;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
-import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -28,11 +27,37 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/product")
 public class ProductController {
     private final ProductService productService;
+
+    /**
+     * 상품 리스트 단건 조회
+     */
+    @Operation(summary = "상품 리스트 단건 조회(이미지)", description = "상품 id로 상품리스트 이미지 단건 조회")
+    @GetMapping("/list/image/{productId}")
+    public CommonResponseEntity<ProductListImageResponseVo> findProductListImageResponseDtoByIdV1(
+            @PathVariable("productId") Long productId){
+
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                productService.findProductListImageResponseDtoById(productId).toVo()
+        );
+    }
+
+    @Operation(summary = "상품 리스트 단건 정보 조회(이름,가격 등)", description = "상품 id로 상품리스트 정보(이름,가격 등) 단건 조회")
+    @GetMapping("/list/info/{productId}")
+    public CommonResponseEntity<ProductListInfoResponseVo> findProductListInfoResponseDtoByIdV1(
+            @PathVariable("productId") Long productId){
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                productService.findProductListInfoResponseDtoById(productId).toVo()
+        );
+    }
     /**
      * 상품 디테일
      */
     // 상품 디테일 상품 상품명 가격 등 조회
-    @Operation(summary = "상품 디테일 조회", description = "상품 id로 상품 디테일(상품명,가격,할인 등) 조회")
+    @Operation(summary = "상품 디테일(상품명,가격,할인 등) 조회", description = "상품 id로 상품 디테일(상품명,가격,할인 등) 조회")
     @GetMapping("/info/{productId}")
     public CommonResponseEntity<ProductInfoResponseVo> findProductInfoByIdV1(
             @PathVariable("productId") Long productId){
@@ -43,7 +68,7 @@ public class ProductController {
         );
     }
     // 상품 디테일 상세정보(에티터 html) 조회
-    @Operation(summary = "상품 상세정보 조회", description = "상품 상세정보(에디터) 조회")
+    @Operation(summary = "상품 디테일 상세정보 조회", description = "상품 상세정보(에디터) 조회")
     @GetMapping("/detail/{productId}")
     public CommonResponseEntity<ProductDetailResponseVo> findProductDetailDtoByIdV1(
             @PathVariable("productId") Long productId){
@@ -54,7 +79,7 @@ public class ProductController {
         );
     }
     // 상품의 이미지 조회
-    @Operation(summary = "상품 이미지 조회", description = "상품 id로 상품 이미지 조회")
+    @Operation(summary = "상품 디테일 이미지 조회", description = "상품 id로 상품 이미지 조회")
     @GetMapping("/images/{productId}")
     public CommonResponseEntity<List<ProductImageResponseVo>> findProductImageDtoByIdV1(
             @PathVariable("productId") Long productId){
@@ -72,7 +97,7 @@ public class ProductController {
         );
     }
     // 상품 옵션 조회
-    @Operation(summary = "상품 옵션 조회", description = "상품 id로 상품 옵션 조회")
+    @Operation(summary = "상품 디테일 옵션 조회", description = "상품 id로 상품 옵션 조회")
     @GetMapping("/options/{productId}")
     public CommonResponseEntity<List<ProductOptionResponseVo>> findProductOptionDtoByIdV1(
             @PathVariable("productId") Long productId){
@@ -103,24 +128,49 @@ public class ProductController {
                 productService.findProductIdListByExhibitionId(exhibitionId)
         );
     }
-    // 기획전에 해당하는 상품 id로 단건 조회
-    // todo 이미지 없으면 디폴트 이미지
-    @Operation(summary = "기획전 상품 단건 조회", description = "기획전에 해당하는 상품 id로 단건 조회")
-    @GetMapping("/{productId}")
-    public CommonResponseEntity<ProductListResponseVo> findProductListDtoByProductIdV1(
-            @PathVariable("productId") Long productId){
+
+    /**
+     *  메인 상품 리스트 필터링[카테고리,가격] , 정렬 조건 적용
+     */
+    // 몽땅 가져오는 코드
+//    @Operation(summary = "상품 리스트 조회 [필터링, 정렬]",
+//            description = "필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격]")
+//    @GetMapping("/list")
+//    public CommonResponseEntity<Page<ProductListResponseVo>> searchProductListPageV1(
+//            ProductCondition productCondition, Pageable pageable ){
+//
+//        Page<ProductListResponseDto> productPage = productService.searchProductListPageV1(productCondition, pageable);
+//        // to Vo
+//        Page<ProductListResponseVo> res = productPage.map(ProductListResponseDto::toVo);
+//
+//        return new CommonResponseEntity<>(
+//                HttpStatus.OK,
+//                CommonResponseMessage.SUCCESS.getMessage(),
+//                res
+//        );
+//    }
+
+    @Operation(summary = "상품 리스트 조회 [필터링, 정렬] ",
+            description = "[Slice] 필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격] 해당 상품들의 id만 가져옴")
+    @GetMapping("/list")
+    public CommonResponseEntity<Slice<Long>> searchProductIdsV1(
+            ProductCondition productCondition, Pageable pageable ){
+
+        Slice<Long> productIds =
+                productService.searchProductIdsV1(productCondition, pageable);
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),
-                productService.findProductListDtoByProductId(productId).toVo()
+                productIds
         );
     }
 
-    /**
-     * 상품 리스트 조회
-     * 우선 정렬만 적용 ()
-     * 추후에 상황보고 필터링은 조인 많이 일어나서 최소한으로 [카테고리, 가격]만 적용해볼까 함
-     */
+
+
+
+
+
+
 
 
 

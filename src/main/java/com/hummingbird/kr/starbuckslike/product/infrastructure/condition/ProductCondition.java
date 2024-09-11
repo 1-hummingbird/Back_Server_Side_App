@@ -7,13 +7,10 @@ import java.util.List;
 @Data
 public class ProductCondition {
 
-    private String path; // 카테고리 path
-    private List<Long> childCategoryIds; // 카테고리 자식 Ids
+    private String topCode; // 상 카테고리 코드
+    private List<String> middleCode; // 카테고리 자식 code
 
     private PriceType priceType; // 상품 가격대
-
-
-    private List<Long> exhibitionIds; // 기획전 Ids
 
     private OrderCondition orderCondition;  // 정렬 조건
 

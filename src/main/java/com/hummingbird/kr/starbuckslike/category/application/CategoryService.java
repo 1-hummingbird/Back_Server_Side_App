@@ -4,10 +4,7 @@ package com.hummingbird.kr.starbuckslike.category.application;
 import com.hummingbird.kr.starbuckslike.category.dto.in.BottomCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.in.MiddleCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.in.TopCategoryRequestDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.BottomCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.MainCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.MiddleCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.TopCategoryResponseDto;
+import com.hummingbird.kr.starbuckslike.category.dto.out.*;
 
 import java.util.List;
 
@@ -42,4 +39,6 @@ public interface CategoryService {
     List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryCode);
     List<BottomCategoryResponseDto> getBottomCategories(String middleCategoryCode);
 
+    // 대 카테고리의 자식 카테고리(중) 조회
+    List<ChildCategoryResponseDto> findChildCategoriesByTopCategory (String categoryCode);
 }
