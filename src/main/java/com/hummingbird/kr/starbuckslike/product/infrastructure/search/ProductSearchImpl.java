@@ -1,18 +1,28 @@
 package com.hummingbird.kr.starbuckslike.product.infrastructure.search;
 
+import com.hummingbird.kr.starbuckslike.category.domain.QCategoryProductList;
 import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
+import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductOption;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.OrderCondition;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.PriceType;
+import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
+import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
+import org.springframework.data.support.PageableExecutionUtils;
 import org.springframework.stereotype.Repository;
 
 import java.time.LocalDateTime;
@@ -20,6 +30,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.hummingbird.kr.starbuckslike.category.domain.QCategoryProductList.categoryProductList;
 import static com.hummingbird.kr.starbuckslike.exhibition.domain.QExhibitionProduct.exhibitionProduct;
 import static com.hummingbird.kr.starbuckslike.product.domain.QProduct.product;
 import static com.hummingbird.kr.starbuckslike.product.domain.QProductImage.productImage;
@@ -32,6 +43,7 @@ import static com.hummingbird.kr.starbuckslike.product.domain.QProductOption.pro
  */
 @Repository
 @RequiredArgsConstructor
+@Log4j2
 public class ProductSearchImpl implements ProductSearch {
 
     private final JPAQueryFactory queryFactory;
@@ -72,49 +84,107 @@ public class ProductSearchImpl implements ProductSearch {
                 .fetchOne();
     }
 
-//    @Override
-//    public Page<ProductListDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable) {
-//        List<ProductListDto> fetch = queryFactory
-//                .select(
-//                        new QProductListDto(product.id, product.name, product.price,
-//                                new CaseBuilder() // sql case문
-//                                        .when(isNewCondition).then(true)
-//                                        .otherwise(false),
-//                                product.isDiscounted, product.discountRate
-//                        )
-//                )
-//                .from(product)
-//                .leftJoin(category).on(product.category.id.eq(category.id))
-//                .leftJoin(exhibitionProduct).on(product.id.eq(exhibitionProduct.id))
-//                .where(
-//                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
-//                        categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
-//                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
-//                        isExhibitionCondition(productCondition.getExhibitionIds()), // 여러 기획전 상품 필터링
-//                        product.isDeleted.eq(false)
-//                )
-//                .orderBy(
-//                        getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
-//                )
-//                .offset(pageable.getOffset())
-//                .limit(pageable.getPageSize())
-//                .fetch();
-//        // 카운트 쿼리
-//        JPAQuery<Long> countQuery = queryFactory
-//                .select(product.count())
-//                .from(product)
-//                .leftJoin(category).on(product.category.id.eq(category.id))
-//                .leftJoin(exhibitionProduct).on(product.id.eq(exhibitionProduct.id))
-//                .where(
-//                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
-//                        categoryPathStartsWith(productCondition.getPath()),  // 상품 카테고리 필터링
-//                        isChildCategoryCondition(productCondition.getChildCategoryIds()) , // 자식 카테고리 필터링
-//                        isExhibitionCondition(productCondition.getExhibitionIds()), // 여러 기획전 상품 필터링
-//                        product.isDeleted.eq(false)
-//                );
-//
-//        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
-//    }
+    @Override
+    public Page<ProductListResponseDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable) {
+        List<ProductListResponseDto> fetch = queryFactory
+                .select(
+                        new QProductListResponseDto(product.id, productImage.imageUrl, product.name, product.price,
+                                new CaseBuilder() // sql case문
+                                        .when(isNewCondition).then(true)
+                                        .otherwise(false),
+                                product.isDiscounted, product.discountRate, product.isAvailable
+                        )
+                )
+                .from(product)
+                .leftJoin(productImage)
+                .on(product.id.eq(productImage.id)
+                        .and(productImage.seq.eq(0))) // 메인 이미지만 가져옴
+                .leftJoin(categoryProductList).on(product.id.eq(categoryProductList.id))
+                .where(
+                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
+                        topCategoryCodeCondition(productCondition.getTopCode()),  // 상 카테고리 필터링
+                        middleCategoryCodeCondition(productCondition.getMiddleCode()), // 중 카테고리 필터링
+                        product.isDeleted.eq(false)
+                )
+                .orderBy(
+                        getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+        // 카운트 쿼리
+        JPAQuery<Long> countQuery = queryFactory
+                .select(product.count())
+                .from(product)
+                .leftJoin(categoryProductList).on(product.id.eq(categoryProductList.id))
+                .where(
+                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
+                        topCategoryCodeCondition(productCondition.getTopCode()),  // 상 카테고리 필터링
+                        middleCategoryCodeCondition(productCondition.getMiddleCode()) , // 중 카테고리 필터링
+                        product.isDeleted.eq(false)
+                );
+
+        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
+    }
+
+    @Override
+    public Slice<Long> searchProductIdsV1(ProductCondition productCondition, Pageable pageable) {
+        List<Long> fetch = queryFactory
+                .select(categoryProductList.id)
+                .from(categoryProductList)
+                .join(categoryProductList).on(categoryProductList.product.id.eq(product.id))
+                .where(
+                        topCategoryCodeCondition(productCondition.getTopCode()),  // 상 카테고리 필터링
+                        middleCategoryCodeCondition(productCondition.getMiddleCode()), // 중 카테고리 필터링
+                        product.isDeleted.eq(false)
+                )
+                .orderBy(
+                        getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
+                )
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1) // 다음 페이지가 있는지 확인하기 위해 1개 더 가져옴
+                .fetch();
+
+        // 다음 페이지 여부 확인
+        boolean hasNext = fetch.size() > pageable.getPageSize();
+        // Slice 크기에 맞게 자르기
+        if (hasNext) {
+            fetch.remove(fetch.size() - 1); // 페이징 사이즈 + 1 만큼 가져왔으므로 마지막 한 개 제거
+        }
+
+        return new SliceImpl<>(fetch, pageable, hasNext);
+    }
+
+    @Override
+    public ProductListImageResponseDto findProductListImageResponseDtoById(Long productId) {
+        return queryFactory
+                .select(new QProductListImageResponseDto(
+                                Expressions.asNumber(productId).as("productId"), productImage.imageUrl )
+                )
+                .from(productImage)
+                .where(
+                        productImage.product.id.eq(productId)
+                        .and(productImage.seq.eq(0))
+                )
+                .fetchOne();
+    }
+
+    @Override
+    public ProductListInfoResponseDto findProductListInfoResponseDtoById(Long productId) {
+        return queryFactory
+                .select(new QProductListInfoResponseDto(
+                        product.name,
+                        new CaseBuilder() // sql case문
+                                .when(isNewCondition).then(true)
+                                .otherwise(false),
+                        product.isDiscounted, product.discountRate
+                        )
+                )
+                .from(product)
+                .where(product.id.eq(productId))
+                .fetchOne();
+    }
+
 
     @Override
     public ProductInfoResponseDto findProductInfoById(Long productId) {
@@ -197,12 +267,28 @@ public class ProductSearchImpl implements ProductSearch {
         return product.price.between(priceType.getMinPrice(), priceType.getMaxPrice());
     }
 
+    // 상 카테고리 검색 조건
+    private BooleanExpression topCategoryCodeCondition(String topCode) {
+        if (topCode == null || topCode.isEmpty()) {
+            return null; // 상 카테고리 없으면 무시
+        }
+        // 상 카테고리 코드
+        return categoryProductList.topCategoryCode.eq(topCode);
+    }
+    // 중 카테고리 검색 조건
+    private BooleanExpression middleCategoryCodeCondition(List<String> middleCode) {
+        if (middleCode == null || middleCode.isEmpty()) {
+            return null; // 상 카테고리 없으면 무시
+        }
+        // 중 카테고리 코드
+        return categoryProductList.middleCategoryCode.in(middleCode);
+    }
 
     // 기획전으로 검색 (여러개 선택 가능)
-    private BooleanExpression isExhibitionCondition(List<Long> exhibitionIds) {
-        return (exhibitionIds == null || exhibitionIds.isEmpty()) ? null :
-                exhibitionProduct.exhibition.id.in(exhibitionIds);
-    }
+//    private BooleanExpression isExhibitionCondition(List<Long> exhibitionIds) {
+//        return (exhibitionIds == null || exhibitionIds.isEmpty()) ? null :
+//                exhibitionProduct.exhibition.id.in(exhibitionIds);
+//    }
     // 상품 대표이미지 조건
     private final BooleanExpression  isMainCondition = productImage.seq.eq(0);
     // 정렬 조건

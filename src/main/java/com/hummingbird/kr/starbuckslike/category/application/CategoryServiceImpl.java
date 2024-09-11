@@ -6,10 +6,7 @@ import com.hummingbird.kr.starbuckslike.category.domain.TopCategory;
 import com.hummingbird.kr.starbuckslike.category.dto.in.BottomCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.in.MiddleCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.in.TopCategoryRequestDto;
-//import com.hummingbird.kr.starbuckslike.category.dto.out.BottomCategoryResponseDto;
-//import com.hummingbird.kr.starbuckslike.category.dto.out.MainCategoryResponseDto;
-//import com.hummingbird.kr.starbuckslike.category.dto.out.MiddleCategoryResponseDto;
-//import com.hummingbird.kr.starbuckslike.category.dto.out.TopCategoryResponseDto;
+import com.hummingbird.kr.starbuckslike.category.dto.out.*;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.BottomCategoryRepository;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.MiddleCategoryRepository;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.TopCategoryRepository;
@@ -17,6 +14,7 @@ import com.hummingbird.kr.starbuckslike.category.infrastructure.search.CategoryS
 import com.hummingbird.kr.starbuckslike.common.utils.CategoryCodeGenerator;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.convert.DtoInstantiatingConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -304,6 +302,11 @@ public class CategoryServiceImpl implements CategoryService{
             throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
         }
 
+    }
+
+    @Override
+    public List<ChildCategoryResponseDto> findChildCategoriesByTopCategory(String categoryCode) {
+        return categorySearch.findChildCategoriesByTopCategory(categoryCode);
     }
 
     private String generateUniqueCategoryCode(String prefix) {
