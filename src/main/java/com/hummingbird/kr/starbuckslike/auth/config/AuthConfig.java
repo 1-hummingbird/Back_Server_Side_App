@@ -10,17 +10,19 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.stereotype.Service;
 
 @Configuration
 @RequiredArgsConstructor
 public class AuthConfig {
-    private final AuthRepository memberRepository;
+    private final AuthRepository authRepository;
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+
     @Bean
     public AuthService authService() {
-        return new AuthServiceImpl(memberRepository, jwtTokenProvider, authenticationManager, tokenService, passwordEncoder);
+        return new AuthServiceImpl(authRepository, jwtTokenProvider, authenticationManager, tokenService, passwordEncoder);
     }
 }

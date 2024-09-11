@@ -8,10 +8,7 @@ import com.hummingbird.kr.starbuckslike.auth.infrastructure.AuthRepository;
 import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
 import com.hummingbird.kr.starbuckslike.auth.util.JwtTokenProvider;
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
-import lombok.NoArgsConstructor;
 import lombok.RequiredArgsConstructor;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.context.annotation.Primary;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
@@ -23,10 +20,9 @@ import java.time.LocalDate;
 import java.util.Base64;
 import java.util.Date;
 
-@RequiredArgsConstructor
 public class AuthServiceImpl implements AuthService {
 
-    private final AuthRepository memberRepository;
+    private AuthRepository authRepository;
 
     // todo : get service Mail and PW from env file
     private final String serviceMail = "";
@@ -36,6 +32,14 @@ public class AuthServiceImpl implements AuthService {
     private final AuthenticationManager authenticationManager;
     private final TokenService tokenService;
     private final PasswordEncoder passwordEncoder;
+
+    public AuthServiceImpl(AuthRepository authRepository, JwtTokenProvider jwtTokenProvider, AuthenticationManager authenticationManager, TokenService tokenService, PasswordEncoder passwordEncoder) {
+        this.authRepository = authRepository;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.authenticationManager = authenticationManager;
+        this.tokenService = tokenService;
+        this.passwordEncoder = passwordEncoder;
+    }
 
 
 //    @Override
@@ -83,7 +87,7 @@ public class AuthServiceImpl implements AuthService {
         String password = loginreqDTO.getPassword();
 
         try {
-            String token = createToken(authenticate(memberRepository.findByid(loginid), password));
+            String token = createToken(authenticate(authRepository.findByid(loginid), password));
             return new LoginResponseDTO(token);
         } catch (Exception e) {
             throw new RuntimeException(e);
@@ -108,8 +112,7 @@ public class AuthServiceImpl implements AuthService {
 
     @Override
     public void updatePassword(String uuid, String newPassword) {
-        newPassword = passwordEncoder.encode(newPassword);
-        memberRepository.updatePasswordByUuid(uuid, newPassword);
+        authRepository.updatePasswordByUuid(uuid, passwordEncoder.encode(newPassword));
     }
 
     private String createToken(Authentication authentication) {
