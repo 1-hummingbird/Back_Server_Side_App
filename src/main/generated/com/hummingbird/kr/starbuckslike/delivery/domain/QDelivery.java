@@ -21,18 +21,19 @@ public class QDelivery extends EntityPathBase<Delivery> {
 
     public final StringPath address = createString("address");
 
-    public final StringPath alias = createString("alias");
+    public final StringPath addressnickname = createString("addressnickname");
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final BooleanPath isBasic = createBoolean("isBasic");
 
+    public final StringPath mainphone = createString("mainphone");
+
     public final StringPath memo = createString("memo");
 
     public final StringPath name = createString("name");
 
-    public final NumberPath<Integer> phone = createNumber("mainphone", Integer.class);
-
+    public final StringPath secphone = createString("secphone");
 
     public final StringPath userUuid = createString("userUuid");
 

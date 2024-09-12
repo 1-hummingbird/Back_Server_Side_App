@@ -27,6 +27,10 @@ import com.hummingbird.kr.starbuckslike.product.domain.ProductOption;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductImageRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductOptionRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
+import com.hummingbird.kr.starbuckslike.purchase.domain.Purchase;
+import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseProduct;
+import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseProductRepository;
+import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -55,7 +59,9 @@ public class LoadTestData {
             ExhibitionRepository exhibitionRepository,
             ExhibitionProductRepository exhibitionProductRepository,
             MemberRepository memberRepository,
-            BannerRepository bannerRepository
+            BannerRepository bannerRepository,
+            PurchaseRepository purchaseRepository,
+            PurchaseProductRepository purchaseProductRepository
                                    ) {
         return args -> {
             /**
@@ -260,7 +266,7 @@ public class LoadTestData {
                     .build();
             productOptionRepository.save(top1_middle2_product2_op1);
             ProductOption top2_middle1_product1_op1 = ProductOption.builder()
-                    .product(top2_middle1_product1) // (c)애니버서리 스케일 머그 89ml 옵션1
+                    .product(top2_middle1_product1) // (c)애니버서리 스케일 머그 89ml
                     .name("(c)애니버서리 스케일 머그 89ml 옵션1")
                     .price(29000)
                     .quantity(15000L)
@@ -433,7 +439,76 @@ public class LoadTestData {
                     .build()
             );
 
+            /**
+             * 주문, 주문상품
+             */
 
+            Purchase purchase1 = purchaseRepository.save(
+                    Purchase.builder()
+                            .address("주소 주소 주소")
+                            .primaryPhone(member1.getPhone())
+                            .userName(member1.getName())
+                            .userUuid(member1.getMemberUID())
+                            .memo("현관문 앞에 배송해주세요")
+                            .build()
+            );
+            purchaseProductRepository.save(
+                    PurchaseProduct.builder()
+                            .purchase(purchase1)
+                            .qty(2)
+                            .price( (long) (top1_middle1_product1_op1.getPrice()* 2) )
+                            .discountPrice(2000L)
+                            //.inputData()
+                            .optionId(top1_middle1_product1_op1.getId())
+                            .optionName(top1_middle1_product1_op1.getName()) //크레이브 하우스 워터보틀 500ml 옵션1
+                            .productId(top1_middle1_product1_op1.getProduct().getId())
+                            .productName(top1_middle1_product1_op1.getProduct().getName())
+                            .isShipped(false)
+                            .isDelivered(false)
+                            .isConfirmed(false)
+                            .build()
+            );
+            purchaseProductRepository.save(
+                    PurchaseProduct.builder()
+                            .purchase(purchase1)
+                            .qty(3)
+                            .price((long) (top2_middle1_product1_op1.getPrice()* 3) )
+                            .discountPrice(1000L)
+                            //.inputData()
+                            .optionId(top2_middle1_product1_op1.getId())
+                            .optionName(top2_middle1_product1_op1.getName()) // 애니버서리 스케일 머그 89ml 옵션1
+                            .productId(top2_middle1_product1_op1.getProduct().getId())
+                            .productName(top2_middle1_product1_op1.getProduct().getName())
+                            .isShipped(false)
+                            .isDelivered(false)
+                            .isConfirmed(false)
+                            .build()
+            );
+            Purchase purchase2 = purchaseRepository.save(
+                    Purchase.builder()
+                            .address("주소 주소 주소2")
+                            .primaryPhone(member1.getPhone())
+                            .userName(member1.getName())
+                            .userUuid(member1.getMemberUID())
+                            .memo("현관문 앞에 배송해주세요2")
+                            .build()
+            );
+            purchaseProductRepository.save(
+                    PurchaseProduct.builder()
+                            .purchase(purchase2)
+                            .qty(4)
+                            .price((long) (top1_middle1_product1_op2.getPrice() * 4))
+                            .discountPrice(3000L)
+                            //.inputData()
+                            .optionId(top1_middle1_product1_op2.getId())
+                            .optionName(top1_middle1_product1_op2.getName()) //크레이브 하우스 워터보틀 500ml 옵션1
+                            .productId(top1_middle1_product1_op2.getProduct().getId())
+                            .productName(top1_middle1_product1_op2.getProduct().getName())
+                            .isShipped(false)
+                            .isDelivered(false)
+                            .isConfirmed(false)
+                            .build()
+            );
 
 
 
