@@ -62,10 +62,12 @@ jobs:
 
     - name: Save Docker image to file
       run: docker save our-springapp:latest -o our-springapp.tar
-
-    - name: Copy Docker image to EC2
+    
+    - name: make EC2 private key from secret to file
       run:
         echo ${{ secrets.EC2_SSH_KEY }} > private_key && chmod 600 private_key
+    - name: Copy Docker image to EC2
+      run:
         scp -i private_key our-springapp.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/our-springapp.tar
 
   deploy:
