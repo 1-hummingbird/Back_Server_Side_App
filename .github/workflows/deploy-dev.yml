@@ -64,16 +64,14 @@ jobs:
       run: docker save our-springapp:latest -o our-springapp.tar
 
     - name: Copy Docker image to EC2
-      run: scp -i ${{ secrets.EC2_SSH_KEY }} our-springapp.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/our-springapp.tar
+      run:
+        echo ${{ secrets.EC2_SSH_KEY }} > private_key && chmod 600 private_key
+        scp -i private_key our-springapp.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/our-springapp.tar
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
-
     steps:
-    - name: Copy Docker image to EC2
-      run: scp -i ${{ secrets.EC2_SSH_KEY }} our-springapp.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/our-springapp.tar
-
     - name: SSH into EC2 and load Docker image
       uses: appleboy/ssh-action@v0.1.0
       with:
