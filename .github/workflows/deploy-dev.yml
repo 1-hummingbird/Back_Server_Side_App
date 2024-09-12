@@ -100,18 +100,27 @@ jobs:
         chmod 600 key.pem
 
     ## deploy to EC2
-    - name: Deploy to EC2
-      uses: appleboy/ssh-action@master
-      id: deploy-prod
-      with:
-        host: ${{ secrets.EC2_HOST }} # EC2 퍼블릭 IPv4 DNS
-        username: ubuntu
-        key: ${{ secrets.EC2_SSH_KEY }}
-        envs: GITHUB_SHA
-        script: |
-          sudo docker ps
-          sudo docker stop 1st-spring-spharos5th-6
-          sudo docker rm 1st-spring-spharos5th-6
+    - name: SSH into EC2 and load Docker image
+      run: |
+        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           sudo docker load -i /home/${{ secrets.EC2_USER }}/our-springapp.tar
-          sudo docker run -d --name 1st-spring-spharos5th-6 -p 80:8080
+    
+    - name: SSH into EC2 and stop docker image
+      run: |
+        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          sudo docker stop ourspring
+
+    - name: SSH into EC2 and rm docker image
+      run: |
+        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          sudo docker rm ourspring
+    
+    - name: SSH into EC2 and run docker image
+      run: |
+        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+          sudo docker run -d --name ourspring -p 80:8080 -p 433:8083 our-springapp:latest
+
+    - name: SSH into EC2 and clean docker image
+      run: |
+        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           sudo docker image prune -f
