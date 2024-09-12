@@ -102,5 +102,5 @@ jobs:
     - name: SSH into EC2 and load Docker image
       run: |
         ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          docker load -i /home/${{ secrets.EC2_USER }}/our-springapp.tar
-          docker run -d -p 80:8080 -p 433:8080 our-springapp:latest
+          sudo docker load -i /home/${{ secrets.EC2_USER }}/our-springapp.tar
+          sudo docker run -d -p 80:8080 -p 433:8080 our-springapp:latest
