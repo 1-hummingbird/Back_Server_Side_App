@@ -106,7 +106,7 @@ jobs:
       with:
         host: ${{ secrets.EC2_HOST }} # EC2 퍼블릭 IPv4 DNS
         username: ubuntu
-        key: ${{ secrets.PRIVATE_KEY }}
+        key: ${{ secrets.EC2_SSH_KEY }}
         envs: GITHUB_SHA
         script: |
           sudo docker ps
