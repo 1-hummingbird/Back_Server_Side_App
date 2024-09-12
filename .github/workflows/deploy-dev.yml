@@ -63,23 +63,35 @@ jobs:
     - name: Save Docker image to file
       run: docker save our-springapp:latest -o our-springapp.tar
     
-    - name: make EC2 private key from secret to file
-      run:
-        echo ${{ secrets.EC2_SSH_KEY }} > private_key && chmod 600 private_key
+    - name: Copy SSH key
+      run: |
+        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+        chmod 600 key.pem
+
     - name: Copy Docker image to EC2
-      run:
-        scp -i private_key our-springapp.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/our-springapp.tar
+      run: scp -i key.pem our-springapp.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/our-springapp.tar
+
 
   deploy:
     runs-on: ubuntu-latest
     needs: build
+
     steps:
-    - name: SSH into EC2 and load Docker image
-      uses: appleboy/ssh-action@v0.1.0
+    - name: Checkout code
+      uses: actions/checkout@v4
       with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
+        ref: main
+
+    - name: Copy SSH key
+      run: |
+        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+        chmod 600 key.pem
+
+    - name: Copy Docker image to EC2
+      run: scp -i key.pem our-springapp.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/our-springapp.tar
+
+    - name: SSH into EC2 and load Docker image
+      run: |
+        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
           docker load -i /home/${{ secrets.EC2_USER }}/our-springapp.tar
-          docker run -d --name our-springapp -p 80:8080 -p 433:8081 our-springapp:latest
+          docker run -d -p 80:8080 -p 433:8080 our-springapp:latest
