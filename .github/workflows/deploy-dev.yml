@@ -56,23 +56,15 @@ jobs:
     
     - name: Build with Gradle 8.9
       run: gradle build -x test
-      
-## gradle caching - 빌드 시간 향상
-    - name: Gradle Caching
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-  
-          
+
     - name: Build Docker image
       run: docker build -t our-springapp:latest .
 
     - name: Save Docker image to file
       run: docker save our-springapp:latest -o our-springapp.tar
+
+    - name: Create .ssh directory
+      run: mkdir -p ~/.ssh
 
     - name: Add EC2 host to known_hosts
       run: ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
