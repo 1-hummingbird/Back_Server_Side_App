@@ -38,13 +38,8 @@ public class CartServiceImpl implements CartService{
      */
     @Override
     public void addCartItem(RequestAddCartItemDto requestAddCartItemDto) {
-        // 회원이 담을 수 있는 장바구니 아이템은 20개 까지다
-        Long totalCount = cartSearch.findCartItemCountByMember(requestAddCartItemDto.getMemberUID());
-        if(totalCount >= 20)
-            throw new IllegalStateException("장바구니에는 최대 20종류의 상품까지 담을 수 있습니다.");
-        // 최소 수량 검증
-        if(requestAddCartItemDto.getQty() < 1)
-            throw new IllegalStateException("장바구니에 담길 상품의 최소 수량은 1개 이상이어야 합니다.");
+        canAddToCart(requestAddCartItemDto); // 장바구니에 넣을 수 있는지 체크
+
         // 이미 장바구니에 있는 상품인지 확인
         Long cartOptionCount =
                 cartSearch.findCartOptionCount(requestAddCartItemDto.getMemberUID(), requestAddCartItemDto.getOptionId());
@@ -65,6 +60,17 @@ public class CartServiceImpl implements CartService{
             // 같은 사람의 장바구니에 같은 상품이 2개가 담겼다. 문제있음 에러처리
             throw new IllegalStateException("동일한 상품이 장바구니에 담길 수 없습니다.");
         }
+    }
+
+    // 최대 장바구니 개수 제한 로직
+    private void canAddToCart(RequestAddCartItemDto requestAddCartItemDto) {
+        // 회원이 담을 수 있는 장바구니 아이템은 20개 까지다
+        Long totalCount = cartSearch.findCartItemCountByMember(requestAddCartItemDto.getMemberUID());
+        if(totalCount >= 20)
+            throw new IllegalStateException("장바구니에는 최대 20종류의 상품까지 담을 수 있습니다.");
+        // 최소 수량 검증
+        if(requestAddCartItemDto.getQty() < 1)
+            throw new IllegalStateException("장바구니에 담길 상품의 최소 수량은 1개 이상이어야 합니다.");
     }
 
 

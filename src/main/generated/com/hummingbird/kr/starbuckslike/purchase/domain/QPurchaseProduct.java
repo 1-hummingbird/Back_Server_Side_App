@@ -27,6 +27,8 @@ public class QPurchaseProduct extends EntityPathBase<PurchaseProduct> {
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 
+    public final NumberPath<Long> discountPrice = createNumber("discountPrice", Long.class);
+
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
     public final StringPath inputData = createString("inputData");
@@ -49,7 +51,7 @@ public class QPurchaseProduct extends EntityPathBase<PurchaseProduct> {
 
     public final QPurchase purchase;
 
-    public final StringPath qty = createString("qty");
+    public final NumberPath<Integer> qty = createNumber("qty", Integer.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
