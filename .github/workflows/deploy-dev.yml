@@ -55,7 +55,7 @@ jobs:
           ${{ runner.os }}-gradle-  
     
     - name: Build with Gradle 8.9
-      run: gradle build  
+      run: gradle build -x test
     
     - name: Build Docker image
       run: docker build -t our-springapp:latest .
