@@ -34,6 +34,8 @@ public class QPurchase extends EntityPathBase<Purchase> {
 
     public final StringPath secondaryPhone = createString("secondaryPhone");
 
+    public final NumberPath<Long> totalPrice = createNumber("totalPrice", Long.class);
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 

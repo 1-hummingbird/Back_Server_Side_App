@@ -18,15 +18,5 @@ public class ProductRepositoryTest {
     @Autowired
     private ProductSearch productSearch;
 
-    @Test
-    public void testFindProductsByCategoryOrParents() {
 
-        String path = "1/3";
-        List<Product> products = productSearch.findProductsByPath(path);
-
-        // 결과 출력
-        products.forEach(
-                product -> log.info("Product Name: " + product.getName())
-        );
-    }
 }

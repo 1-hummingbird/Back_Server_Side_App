@@ -33,12 +33,6 @@ public class QPurchaseProduct extends EntityPathBase<PurchaseProduct> {
 
     public final StringPath inputData = createString("inputData");
 
-    public final BooleanPath isConfirmed = createBoolean("isConfirmed");
-
-    public final BooleanPath isDelivered = createBoolean("isDelivered");
-
-    public final BooleanPath isShipped = createBoolean("isShipped");
-
     public final NumberPath<Long> optionId = createNumber("optionId", Long.class);
 
     public final StringPath optionName = createString("optionName");
@@ -50,6 +44,8 @@ public class QPurchaseProduct extends EntityPathBase<PurchaseProduct> {
     public final StringPath productName = createString("productName");
 
     public final QPurchase purchase;
+
+    public final EnumPath<PurchaseStatus> purchaseStatus = createEnum("purchaseStatus", PurchaseStatus.class);
 
     public final NumberPath<Integer> qty = createNumber("qty", Integer.class);
 
