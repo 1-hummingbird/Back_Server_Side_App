@@ -29,6 +29,7 @@ import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductOptionRepo
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
 import com.hummingbird.kr.starbuckslike.purchase.domain.Purchase;
 import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseProduct;
+import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseStatus;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseProductRepository;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -463,9 +464,10 @@ public class LoadTestData {
                             .optionName(top1_middle1_product1_op1.getName()) //크레이브 하우스 워터보틀 500ml 옵션1
                             .productId(top1_middle1_product1_op1.getProduct().getId())
                             .productName(top1_middle1_product1_op1.getProduct().getName())
-                            .isShipped(false)
-                            .isDelivered(false)
-                            .isConfirmed(false)
+                            .purchaseStatus(PurchaseStatus.PENDING)
+//                            .isShipped(false)
+//                            .isDelivered(false)
+//                            .isConfirmed(false)
                             .build()
             );
             purchaseProductRepository.save(
@@ -479,9 +481,10 @@ public class LoadTestData {
                             .optionName(top2_middle1_product1_op1.getName()) // 애니버서리 스케일 머그 89ml 옵션1
                             .productId(top2_middle1_product1_op1.getProduct().getId())
                             .productName(top2_middle1_product1_op1.getProduct().getName())
-                            .isShipped(false)
-                            .isDelivered(false)
-                            .isConfirmed(false)
+                            .purchaseStatus(PurchaseStatus.PENDING)
+//                            .isShipped(false)
+//                            .isDelivered(false)
+//                            .isConfirmed(false)
                             .build()
             );
             Purchase purchase2 = purchaseRepository.save(
@@ -504,9 +507,8 @@ public class LoadTestData {
                             .optionName(top1_middle1_product1_op2.getName()) //크레이브 하우스 워터보틀 500ml 옵션1
                             .productId(top1_middle1_product1_op2.getProduct().getId())
                             .productName(top1_middle1_product1_op2.getProduct().getName())
-                            .isShipped(false)
-                            .isDelivered(false)
-                            .isConfirmed(false)
+                            .purchaseStatus(PurchaseStatus.PENDING)
+
                             .build()
             );
 

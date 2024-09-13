@@ -52,15 +52,20 @@ public class PurchaseProduct extends BaseEntity { // 주문 상품
     private String optionName;
 
     // orderStatus
-    @Comment("배송시작 여부")
-    @Column(name="is_shipped" , nullable = false)
-	private Boolean isShipped;
-    @Comment("배송완료 여부")
-    @Column(name="is_delivered" , nullable = false)
-    private Boolean isDelivered;
-    @Comment("구매확정 여부")
-    @Column(name="is_confirmed" , nullable = false)
-    private Boolean isConfirmed;
+    @Enumerated(EnumType.STRING)
+    @Comment("주문상태")
+    @Column(name="purchase_status" , nullable = false)
+    private PurchaseStatus purchaseStatus;
+
+//    @Comment("배송시작 여부")
+//    @Column(name="is_shipped" , nullable = false)
+//	private Boolean isShipped;
+//    @Comment("배송완료 여부")
+//    @Column(name="is_delivered" , nullable = false)
+//    private Boolean isDelivered;
+//    @Comment("구매확정 여부")
+//    @Column(name="is_confirmed" , nullable = false)
+//    private Boolean isConfirmed;
 
     // 택배사 구분번호
     // 운송장 번호
@@ -70,7 +75,7 @@ public class PurchaseProduct extends BaseEntity { // 주문 상품
 
     public PurchaseProduct(Purchase purchase, Integer qty, Long price, Long discountPrice, String inputData,
                            Long productId, String productName, Long optionId, String optionName,
-                           Boolean isShipped, Boolean isDelivered, Boolean isConfirmed) {
+                           PurchaseStatus purchaseStatus) {
         this.purchase = purchase;
         this.qty = qty;
         this.price = price;
@@ -80,8 +85,9 @@ public class PurchaseProduct extends BaseEntity { // 주문 상품
         this.productName = productName;
         this.optionId = optionId;
         this.optionName = optionName;
-        this.isShipped = isShipped;
-        this.isDelivered = isDelivered;
-        this.isConfirmed = isConfirmed;
+        this.purchaseStatus = purchaseStatus;
+//        this.isShipped = isShipped;
+//        this.isDelivered = isDelivered;
+//        this.isConfirmed = isConfirmed;
     }
 }
