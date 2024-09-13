@@ -67,10 +67,15 @@ dependencies {
 	testAnnotationProcessor'org.projectlombok:lombok'
 }
 
-tasks.named('test') {t
+tasks.named('test') {
 	useJUnitPlatform()
 }
-
+//build gradle의 jar 파일 생성 관련 지원
+bootRun {
+	environment 'SPRING_DATASOURCE_URL', 'jdbc:mysql://localhost:3306/test'
+	environment 'SPRING_DATASOURCE_USERNAME', 'root'
+	environment 'SPRING_DATASOURCE_PASSWORD', '1234'
+}
 //Querydsl 추가 clean
 clean {
 	delete file('src/main/generated')
