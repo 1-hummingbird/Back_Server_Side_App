@@ -24,14 +24,14 @@ public class CustomCartRepositoryImpl implements  CustomCartRepository{
     }
 
     @Override
-    public void selectAllCartItems(List<Long> cartIds) {
-        List<Cart> carts = queryFactory
+    public  List<Cart> findCartItemsByCartIds(List<Long> cartIds) {
+        return queryFactory
                 .selectFrom(cart)
                 .where(
                         cart.id.in(cartIds).and(cart.isDeleted.eq(false))
                 )
                 .fetch();
-        carts.forEach(Cart::toggleSelect); //
+
     }
 
     @Override

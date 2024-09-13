@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.purchase.dto.out;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseDetailResponseVo;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,7 +10,6 @@ import lombok.Data;
 @Data
 @Builder
 public class PurchaseDetailResponseDto {
-    @JsonIgnore
     private Long purchaseId; // 구매 id
     private Long optionId; // 상품 옵션 Id
     private String productImage; // 상품 대표이미지
@@ -26,5 +26,15 @@ public class PurchaseDetailResponseDto {
         this.optionName = optionName;
         this.price = price;
         this.qty = qty;
+    }
+    public PurchaseDetailResponseVo toVo() {
+        return PurchaseDetailResponseVo.builder()
+                .purchaseId(purchaseId)
+                .optionId(optionId)
+                .productImage(productImage)
+                .optionName(optionName)
+                .price(price)
+                .qty(qty)
+                .build();
     }
 }

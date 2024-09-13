@@ -39,7 +39,6 @@ public class CartServiceImpl implements CartService{
     @Override
     public void addCartItem(RequestAddCartItemDto requestAddCartItemDto) {
         canAddToCart(requestAddCartItemDto); // 장바구니에 넣을 수 있는지 체크
-
         // 이미 장바구니에 있는 상품인지 확인
         Long cartOptionCount =
                 cartSearch.findCartOptionCount(requestAddCartItemDto.getMemberUID(), requestAddCartItemDto.getOptionId());
@@ -55,6 +54,7 @@ public class CartServiceImpl implements CartService{
             Cart findCart =
                     cartSearch.findCartOption(requestAddCartItemDto.getMemberUID(), requestAddCartItemDto.getOptionId());
             findCart.changeQty(findCart.getQty() + requestAddCartItemDto.getQty()); // 수량 더해줌
+            cartRepository.save(findCart);
         }
         else{
             // 같은 사람의 장바구니에 같은 상품이 2개가 담겼다. 문제있음 에러처리
@@ -112,7 +112,8 @@ public class CartServiceImpl implements CartService{
 
     @Override
     public void selectAllCartItems(List<Long> cartIds) {
-        customCartRepository.selectAllCartItems(cartIds);
+        List<Cart> carts = customCartRepository.findCartItemsByCartIds(cartIds);
+        carts.forEach(Cart::toggleSelect); // 전체 선택 처리
     }
 
 

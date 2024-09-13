@@ -7,7 +7,6 @@ import org.hibernate.annotations.Comment;
 
 @Entity
 @Getter
-@AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 public class Purchase extends BaseEntity {
     @Id

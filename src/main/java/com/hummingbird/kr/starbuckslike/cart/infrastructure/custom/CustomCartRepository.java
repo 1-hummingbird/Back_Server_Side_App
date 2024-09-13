@@ -1,5 +1,7 @@
 package com.hummingbird.kr.starbuckslike.cart.infrastructure.custom;
 
+import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
+
 import java.util.List;
 
 /**
@@ -11,8 +13,8 @@ public interface CustomCartRepository {
     // todo 장바구니 단건 선택 처리
     public void selectCartItem(Long cartId);
 
-    // 장바구니 전체 선택(활성,비활성)
-    public void selectAllCartItems(List<Long> cartIds);
+    // 장바구니 id 리스트로 장바구니 엔티티 조회
+    public List<Cart> findCartItemsByCartIds(List<Long> cartIds);
 
 
 

@@ -40,8 +40,8 @@ public class CartSearchImpl implements CartSearch {
     public ResponseCartItemImageDto findCartMainImageDtoById(Long cartId) {
          return queryFactory
                 .select(new QResponseCartItemImageDto(
-                               Expressions.asNumber(cartId).as("cartId") // 조회컬럼 최소화
-                             , productImage.imageUrl
+                              Expressions.asNumber(cartId).as("cartId") ,// 조회컬럼 최소화
+                              productImage.imageUrl
                         )
                 )
                 .from(productImage)
