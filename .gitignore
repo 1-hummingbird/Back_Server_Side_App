@@ -747,3 +747,4 @@ caches/
 /native
 /wrapper
 src/main/resources/application.yml
+/src/main/generated
