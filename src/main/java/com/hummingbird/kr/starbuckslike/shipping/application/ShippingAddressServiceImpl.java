@@ -1,8 +1,7 @@
 package com.hummingbird.kr.starbuckslike.shipping.application;
 
-import com.hummingbird.kr.starbuckslike.shipping.domain.ShippingAddress;
 import com.hummingbird.kr.starbuckslike.shipping.dto.in.ShippingAddressDefaultChangeDto;
-import com.hummingbird.kr.starbuckslike.shipping.dto.in.ShippingAddressRequestDTo;
+import com.hummingbird.kr.starbuckslike.shipping.dto.in.ShippingAddressRequestDto;
 import com.hummingbird.kr.starbuckslike.shipping.dto.in.ShippingAddressUpdateDto;
 import com.hummingbird.kr.starbuckslike.shipping.infrastructure.ShippingAddressRepository;
 import lombok.RequiredArgsConstructor;
@@ -14,7 +13,7 @@ public class ShippingAddressServiceImpl implements ShippingAddressService{
     private final ShippingAddressRepository shippingAddressRepository;
 
     @Override   //생성하는 부분 add address 트랜적션..
-    public void addShippingAddress(ShippingAddressRequestDTo shippingAddressRequestDTo) {
+    public void addShippingAddress(ShippingAddressRequestDto shippingAddressRequestDTo) {
         shippingAddressRepository.save(shippingAddressRequestDTo.toEntity(shippingAddressRequestDTo));
     }
 
