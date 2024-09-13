@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 
 @Getter
 @NoArgsConstructor
-public class ShippingAddressRequestDTo {
+public class ShippingAddressRequestDto {
 
     private String userUuid;
     private String addressNickname;
@@ -20,7 +20,7 @@ public class ShippingAddressRequestDTo {
     private Boolean defaultAddress;
 
     @Builder
-    public ShippingAddressRequestDTo(String userUuid,
+    public ShippingAddressRequestDto(String userUuid,
                                      String addressNickname,
                                      String name, String address,
                                      String primaryPhone,
@@ -38,7 +38,7 @@ public class ShippingAddressRequestDTo {
         this.defaultAddress = defaultAddress;
     }
 
-    public ShippingAddress toEntity(ShippingAddressRequestDTo shippingAddressRequestDTo){
+    public ShippingAddress toEntity(ShippingAddressRequestDto shippingAddressRequestDTo){
         return ShippingAddress.builder()
                 .addressNickname(shippingAddressRequestDTo.getAddressNickname())
                 .name(shippingAddressRequestDTo.getName())

@@ -3,7 +3,7 @@ package com.hummingbird.kr.starbuckslike.shipping.presentation;
 
 
 import com.hummingbird.kr.starbuckslike.shipping.application.ShippingAddressService;
-import com.hummingbird.kr.starbuckslike.shipping.dto.in.ShippingAddressRequestDTo;
+import com.hummingbird.kr.starbuckslike.shipping.dto.in.ShippingAddressRequestDto;
 import com.hummingbird.kr.starbuckslike.shipping.vo.in.ShippingAddressRequestVo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -20,7 +20,7 @@ public class ShippingAddressController {
     @PostMapping
     public void addShippingAddress(@RequestBody ShippingAddressRequestVo shippingAddressRequestVo){
         shippingAddressService.addShippingAddress(
-                ShippingAddressRequestDTo.builder()
+                ShippingAddressRequestDto.builder()
                         .defaultAddress(shippingAddressRequestVo.getDefaultAddress())
                         .address(shippingAddressRequestVo.getAddress())
                         .name(shippingAddressRequestVo.getName())
