@@ -1,9 +1,12 @@
 package com.hummingbird.kr.starbuckslike.purchase.presentation;
 
+import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAddCartItemDto;
+import com.hummingbird.kr.starbuckslike.cart.vo.RequestAddCartItemVo;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
 import com.hummingbird.kr.starbuckslike.product.vo.ProductDetailResponseVo;
 import com.hummingbird.kr.starbuckslike.purchase.application.PurchaseService;
+import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseListResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -41,6 +44,19 @@ public class PurchaseController {
                 res
         );
     }
+
+    @Operation(summary = "회원 주문생성", description = "주문 생성")
+    @PostMapping("")
+    public CommonResponseEntity<Void> addPurchaseV1(@RequestBody AddPurchaseRequestDto addPurchaseRequestDto){
+
+        purchaseService.addPurchase(addPurchaseRequestDto);
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                null
+        );
+    }
+
 
 
 

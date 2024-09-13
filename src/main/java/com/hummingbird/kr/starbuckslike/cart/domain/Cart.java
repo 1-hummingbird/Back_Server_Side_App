@@ -8,6 +8,7 @@ import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
 import com.hummingbird.kr.starbuckslike.product.domain.ProductOption;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.DynamicUpdate;
 
 import static jakarta.persistence.FetchType.LAZY;
 
@@ -15,6 +16,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate //
 @Table(name = "cart")
 public class Cart extends BaseEntity {
     @Id

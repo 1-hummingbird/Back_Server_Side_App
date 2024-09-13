@@ -113,7 +113,9 @@ public class CartServiceImpl implements CartService{
     @Override
     public void selectAllCartItems(List<Long> cartIds) {
         List<Cart> carts = customCartRepository.findCartItemsByCartIds(cartIds);
+        // todo 이것도 dto로 처리한다면 carts 가 아니라 DTO 리스트를 받은 다음 장바구니 객체를 생성해 바꿔주면 되는거죠??
         carts.forEach(Cart::toggleSelect); // 전체 선택 처리
+        cartRepository.saveAll(carts);
     }
 
 

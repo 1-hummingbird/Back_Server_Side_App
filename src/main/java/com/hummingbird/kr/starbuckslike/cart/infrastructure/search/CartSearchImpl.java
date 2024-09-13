@@ -6,6 +6,7 @@ import com.hummingbird.kr.starbuckslike.cart.dto.out.QResponseCartItemDto;
 import com.hummingbird.kr.starbuckslike.cart.dto.out.QResponseCartItemImageDto;
 import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
 import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
+import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductOption;
 import com.querydsl.core.types.dsl.Expressions;
@@ -57,7 +58,8 @@ public class CartSearchImpl implements CartSearch {
         return queryFactory
                 .select(new QResponseCartItemDto(
                                 Expressions.asNumber(cartId).as("cartId"),
-                                cart.inputData, productOption.id, productOption.name,
+                                cart.inputData, productOption.product.id, productOption.product.name,
+                                productOption.id, productOption.name,
                                 cart.qty, productOption.price, productOption.discountRate
                         )
                 )

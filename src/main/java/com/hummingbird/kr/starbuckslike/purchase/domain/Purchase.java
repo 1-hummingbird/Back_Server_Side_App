@@ -42,6 +42,7 @@ public class Purchase extends BaseEntity {
     @Column(name = "memo" , length = 150)
     private String memo;
 
+
     @Builder
     public Purchase(Long totalPrice, String address, String primaryPhone, String secondaryPhone,
                     String userName, String userUuid, String memo) {
