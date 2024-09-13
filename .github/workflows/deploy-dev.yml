@@ -118,7 +118,7 @@ jobs:
     - name: SSH into EC2 and run docker image
       run: |
         ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          sudo docker run -d --name ourspring -p 80:8080 -p 433:8083 our-springapp:latest
+          sudo docker run -d --name ourspring --net host our-springapp:latest
 
     - name: SSH into EC2 and clean docker image
       run: |
