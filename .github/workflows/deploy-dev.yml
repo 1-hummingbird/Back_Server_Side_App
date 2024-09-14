@@ -1,5 +1,3 @@
-#written in 2024-09-12
-
 name: Build and Deploy
 
 on:
@@ -8,7 +6,7 @@ on:
     branches: [ "dev" ]
   workflow_dispatch:
 
-permissions:  
+permissions:
   contents: read
 
 jobs:
@@ -16,66 +14,71 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        ref: dev
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: dev
 
-    - name: Set up JDK 17
-      uses: actions/setup-java@v4
-      with:
-        distribution: 'temurin'
-        java-version: '17'
-        
-    ## create application-prod.yml
-    - name: make application-prod.yml
-      run: |
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'temurin'
+          java-version: '17'
+
+      ## create application-prod.yml
+      - name: make application-prod.yml
+        run: |
           mkdir -p ./src/main/resources
           cd ./src/main/resources
           touch ./application.yaml
           echo '${{ secrets.PROPERTIES_PROD }}' > ./application.yaml
-      shell: bash
-      
-    # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
-    # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
-    - name: Setup Gradle
-      uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
-      with:
-        gradle-version: '8.9'
+        shell: bash
 
-    ## gradle caching - 빌드 시간 향상
-    - name: Gradle Caching
-      uses: actions/cache@v4
-      with:
-        path: |
-          ~/.gradle/caches
-          ~/.gradle/wrapper
-        key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
-        restore-keys: |
-          ${{ runner.os }}-gradle-  
-    
-    - name: Build with Gradle 8.9
-      run: gradle build -x test
+      # Configure Gradle for optimal use in GitHub Actions, including caching of downloaded dependencies.
+      # See: https://github.com/gradle/actions/blob/main/setup-gradle/README.md
+      - name: Setup Gradle
+        uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
+        with:
+          gradle-version: '8.9'
 
-    - name: Build Docker image
-      run: docker build -t our-springapp:latest .
+      ## gradle caching - 빌드 시간 향상
+      - name: Gradle Caching
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle*', '**/gradle-wrapper.properties') }}
+          restore-keys: |
+            ${{ runner.os }}-gradle-
 
-    - name: Save Docker image to file
-      run: docker save our-springapp:latest -o our-springapp.tar
+      - name: Create .ssh directory
+        run: mkdir -p ~/.ssh
 
-    - name: Create .ssh directory
-      run: mkdir -p ~/.ssh
+      - name: Add EC2 host to known_hosts
+        run: ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-    - name: Add EC2 host to known_hosts
-      run: ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-    
-    - name: Copy SSH key
-      run: |
-        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-        chmod 600 key.pem
+      - name: Copy SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
 
-    - name: Copy Docker image to EC2
-      run: scp -i key.pem our-springapp.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/our-springapp.tar
+      - name: Download file from EC2
+        run: |
+          scp -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/etc/letsencrypt/live/api.team-hummingbird.shop/keystore.p12 /src/main/resources/ssl/keystore.p12
+        id: download
+
+      - name: Build with Gradle 8.9
+        run: gradle build -x test
+
+      - name: Build Docker image
+        run: docker build -t our-springapp:latest .
+
+      - name: Save Docker image to file
+        run: docker save our-springapp:latest -o our-springapp.tar
+
+      - name: Copy Docker image to EC2
+        run: scp -i key.pem our-springapp.tar ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }}:/home/${{ secrets.EC2_USER }}/our-springapp.tar
 
 
   deploy:
@@ -83,44 +86,44 @@ jobs:
     needs: build
 
     steps:
-    - name: Checkout code
-      uses: actions/checkout@v4
-      with:
-        ref: main
-        
-    - name: Create .ssh directory
-      run: mkdir -p ~/.ssh
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          ref: main
 
-    - name: Add EC2 host to known_hosts
-      run: ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
-    
-    - name: Copy SSH key
-      run: |
-        echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
-        chmod 600 key.pem
+      - name: Create .ssh directory
+        run: mkdir -p ~/.ssh
 
-    ## deploy to EC2
-    - name: SSH into EC2 and load Docker image
-      run: |
-        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          sudo docker load -i /home/${{ secrets.EC2_USER }}/our-springapp.tar
-    
-    - name: SSH into EC2 and stop docker image
-      run: |
-        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          sudo docker stop ourspring
+      - name: Add EC2 host to known_hosts
+        run: ssh-keyscan -H ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
 
-    - name: SSH into EC2 and rm docker image
-      run: |
-        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          sudo docker rm ourspring
-    
-    - name: SSH into EC2 and run docker image
-      run: |
-        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          sudo docker run -d --name ourspring --net host our-springapp:latest
+      - name: Copy SSH key
+        run: |
+          echo "${{ secrets.EC2_SSH_KEY }}" > key.pem
+          chmod 600 key.pem
 
-    - name: SSH into EC2 and clean docker image
-      run: |
-        ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
-          sudo docker image prune -f
+      ## deploy to EC2
+      - name: SSH into EC2 and load Docker image
+        run: |
+          ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            sudo docker load -i /home/${{ secrets.EC2_USER }}/our-springapp.tar
+
+      - name: SSH into EC2 and stop docker image
+        run: |
+          ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            sudo docker stop ourspring
+
+      - name: SSH into EC2 and rm docker image
+        run: |
+          ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            sudo docker rm ourspring
+
+      - name: SSH into EC2 and run docker image
+        run: |
+          ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            sudo docker run -d --name ourspring --net host our-springapp:latest
+
+      - name: SSH into EC2 and clean docker image
+        run: |
+          ssh -i key.pem ${{ secrets.EC2_USER }}@${{ secrets.EC2_HOST }} << 'EOF'
+            sudo docker image prune -f
