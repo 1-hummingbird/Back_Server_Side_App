@@ -29,7 +29,7 @@ public class EmailSender {
         try {
             // Compose the email message
             Message message = new MimeMessage(session);
-            message.setFrom(new InternetAddress(email)); // Replace with your email
+            message.setFrom(new InternetAddress(email)); // Replace with your email≤
             message.setRecipients(Message.RecipientType.TO, InternetAddress.parse(to));
             message.setSubject(subject);
             message.setText(content);
