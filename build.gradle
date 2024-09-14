@@ -76,13 +76,7 @@ bootRun {
 	environment 'SPRING_DATASOURCE_USERNAME', 'root'
 	environment 'SPRING_DATASOURCE_PASSWORD', '1234'
 }
-//build gradle의 ssl 인증서 불러오기를 보증하기 위한 코드
-processResources {
-    from('src/main/resources/ssl') {
-        include 'keystore.p12'
-        into 'ssl'
-    }
-}
+
 //Querydsl 추가 clean
 clean {
 	delete file('src/main/generated')
