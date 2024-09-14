@@ -66,8 +66,6 @@ jobs:
       - name: make keystore.p12
         run: |
           mkdir -p ./src/main/resources/ssl
-          cd ./src/main/resources/ssl
-          touch ./keystore.p12
         shell: bash
       
       - name: Download file from EC2
