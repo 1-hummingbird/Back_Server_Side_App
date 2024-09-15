@@ -34,6 +34,7 @@ public class CartSearchImpl implements CartSearch {
                     .select(cart.id)
                     .from(cart)
                     .where(cart.userUid.eq(userUid))
+                    .orderBy(cart.updatedAt.desc())
                     .fetch();
     }
 

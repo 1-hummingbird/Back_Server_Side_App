@@ -1,19 +1,21 @@
 package com.hummingbird.kr.starbuckslike.purchase.vo.out;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
-import lombok.NoArgsConstructor;
+
+import java.time.LocalDateTime;
 
 @Getter
 @Builder
 public class PurchaseDetailResponseVo {
-    @JsonIgnore
-    private Long purchaseId; // 구매 id
-    private Long optionId; // 상품 옵션 Id
-    private String productImage; // 상품 대표이미지
-    private String optionName;//상품옵션명
-    private Long price; //주문 가격
-    private Integer qty; //주문 수량
+    private LocalDateTime purchaseDate; // 주문일
+    // todo 주문 코드
+    private Long totalPrice; // 총 금액
+    private Long totalDiscount; // 총 할인 금액
+
+    private String userName; // 주문자 이름
+    private String address; // 주소
+    private String primaryPhone; // 전화번호 1 (필수)
+    private String secondaryPhone; // 전화번호 2
+    private String memo; // 요청사항
 }

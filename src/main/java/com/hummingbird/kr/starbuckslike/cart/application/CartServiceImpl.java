@@ -36,6 +36,7 @@ public class CartServiceImpl implements CartService{
      * @param requestAddCartItemDto
      * @author 허정현
      */
+
     @Override
     public void addCartItem(RequestAddCartItemDto requestAddCartItemDto) {
         canAddToCart(requestAddCartItemDto); // 장바구니에 넣을 수 있는지 체크
@@ -109,6 +110,7 @@ public class CartServiceImpl implements CartService{
     public void selectCartItem(Long cartId) {
         customCartRepository.selectCartItem(cartId);
     }
+
 
     @Override
     public void selectAllCartItems(List<Long> cartIds) {

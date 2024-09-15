@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.exhibition.infrastructure.search;
 
+import com.hummingbird.kr.starbuckslike.exhibition.domain.QExhibition;
 import com.hummingbird.kr.starbuckslike.exhibition.dto.out.ExhibitionDetailResponseDto;
 import com.hummingbird.kr.starbuckslike.exhibition.dto.out.ExhibitionListResponseDto;
 import com.hummingbird.kr.starbuckslike.exhibition.dto.out.QExhibitionDetailResponseDto;
@@ -37,6 +38,7 @@ public class ExhibitionSearchImpl implements ExhibitionSearch {
                 .where(isCurrentDateBetween(exhibition.startDate, exhibition.endDate))
                 .orderBy(exhibition.id.asc()) // 이름을 기준으로 오름차순 정렬
                 .fetch();
+        
     }
 
     @Override

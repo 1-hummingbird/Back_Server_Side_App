@@ -28,11 +28,15 @@ public class QPurchase extends EntityPathBase<Purchase> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
+    public final BooleanPath isDelete = createBoolean("isDelete");
+
     public final StringPath memo = createString("memo");
 
     public final StringPath primaryPhone = createString("primaryPhone");
 
     public final StringPath secondaryPhone = createString("secondaryPhone");
+
+    public final NumberPath<Long> totalDiscount = createNumber("totalDiscount", Long.class);
 
     public final NumberPath<Long> totalPrice = createNumber("totalPrice", Long.class);
 

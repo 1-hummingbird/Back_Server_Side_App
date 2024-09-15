@@ -21,6 +21,8 @@ import java.util.stream.Collectors;
 @NoArgsConstructor
 public class AddPurchaseRequestDto {
     private Long totalPrice; // 총 구매금액
+    private Long totalDiscount; // 총 할인금액
+
     private String address; // 주소
     private String primaryPhone;
     private String secondaryPhone;
@@ -33,30 +35,32 @@ public class AddPurchaseRequestDto {
     public Purchase toPurchase() {
         return Purchase.builder()
                 .totalPrice(totalPrice)
+                .totalDiscount(totalDiscount)
                 .address(address)
                 .primaryPhone(primaryPhone)
                 .secondaryPhone(secondaryPhone)
                 .userName(userName)
                 .userUuid(userUuid)
                 .memo(memo)
+                .isDelete(false)
                 .build();
     }
     // 주문 상품 엔티티들 생성
     public List<PurchaseProduct> toPurchaseProduct(Purchase purchase) {
         // 각각의 주문 상품을 PurchaseProduct 로 변환
         return addPurchaseItemRequestVos.stream()
-                .map(itemDto -> PurchaseProduct.builder()
-                                    .purchase(purchase) // 어떤 주문인지 매핑
-                                    .qty(itemDto.getQty())
-                                    .price(itemDto.getPrice())
-                                    .discountPrice(itemDto.getDiscountPrice())
-                                    .inputData(itemDto.getInputData())
-                                    .productId(itemDto.getProductId())
-                                    .productName(itemDto.getProductName())
-                                    .optionId(itemDto.getOptionId())
-                                    .optionName(itemDto.getOptionName())
-                                    .purchaseStatus(PurchaseStatus.PENDING)
-                                    .build())
-                .collect(Collectors.toList());
+                                        .map(itemDto -> PurchaseProduct.builder()
+                                                            .purchase(purchase) // 어떤 주문인지 매핑
+                                                            .qty(itemDto.getQty())
+                                                            .price(itemDto.getPrice())
+                                                            .discountPrice(itemDto.getDiscountPrice())
+                                                            .inputData(itemDto.getInputData())
+                                                            .productId(itemDto.getProductId())
+                                                            .productName(itemDto.getProductName())
+                                                            .optionId(itemDto.getOptionId())
+                                                            .optionName(itemDto.getOptionName())
+                                                            .purchaseStatus(PurchaseStatus.PENDING)
+                                                            .build())
+                                        .collect(Collectors.toList());
     }
 }

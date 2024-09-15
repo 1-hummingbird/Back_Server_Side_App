@@ -3,6 +3,7 @@ package com.hummingbird.kr.starbuckslike.purchase.application;
 import com.hummingbird.kr.starbuckslike.purchase.domain.Purchase;
 import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseProduct;
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
+import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseDetailResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseListResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseProductRepository;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseRepository;
@@ -30,6 +31,11 @@ public class PurchaseServiceImpl implements PurchaseService{
     @Override
     public Slice<PurchaseListResponseDto> searchPurchaseByUuid(Pageable pageable, String memberUuid, Integer year) {
         return purchaseSearch.searchPurchaseByUuid(pageable, memberUuid, year);
+    }
+
+    @Override
+    public PurchaseDetailResponseDto findPurchaseDetailById(Long purchaseId) {
+        return purchaseSearch.findPurchaseDetailById(purchaseId);
     }
 
     @Override

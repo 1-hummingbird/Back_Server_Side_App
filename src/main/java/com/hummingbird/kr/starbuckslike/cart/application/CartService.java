@@ -10,7 +10,6 @@ import java.util.List;
 
 @Transactional(readOnly = true)
 public interface CartService {
-
     /**
      * Create , Update, Delete
      */
@@ -41,8 +40,6 @@ public interface CartService {
     /**
      * Select
      */
-
-
     // 장바구니 ID 리스트 조회
     public List<Long> findAllCartIdByUserUid(String userUid);
 

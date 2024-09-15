@@ -12,5 +12,5 @@ public class PurchaseListResponseVo {
     private Long purchaseId; // 구매 id
     private LocalDateTime purchaseDate; // 구매 날짜
     private Long totalPrice; // 총 주문 금액
-    private List<PurchaseDetailResponseVo> purchaseItems; // 주문 상품들
+    private List<PurchaseItemResponseVo> purchaseItems; // 주문 상품들
 }

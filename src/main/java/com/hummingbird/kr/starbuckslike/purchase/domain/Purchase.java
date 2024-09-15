@@ -18,6 +18,10 @@ public class Purchase extends BaseEntity {
     @Column
     private Long totalPrice;
 
+    @Comment("총 할인 금액")
+    @Column
+    private Long totalDiscount;
+
     @Comment("받는 주소지")
     @Column(name = "address" , length = 200 , nullable = false)
     private String address;
@@ -42,16 +46,22 @@ public class Purchase extends BaseEntity {
     @Column(name = "memo" , length = 150)
     private String memo;
 
+    @Comment("삭제 여부")
+    @Column(nullable = false)
+    private Boolean isDelete;
+
 
     @Builder
-    public Purchase(Long totalPrice, String address, String primaryPhone, String secondaryPhone,
-                    String userName, String userUuid, String memo) {
+    public Purchase(Long totalPrice, Long totalDiscount, String address, String primaryPhone, String secondaryPhone,
+                    String userName, String userUuid, String memo, Boolean isDelete) {
         this.totalPrice = totalPrice;
+        this.totalDiscount = totalDiscount;
         this.address = address;
         this.primaryPhone = primaryPhone;
         this.secondaryPhone = secondaryPhone;
         this.userName = userName;
         this.userUuid = userUuid;
         this.memo = memo;
+        this.isDelete = isDelete;
     }
 }

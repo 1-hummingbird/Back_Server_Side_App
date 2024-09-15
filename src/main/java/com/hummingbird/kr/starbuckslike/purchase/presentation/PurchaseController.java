@@ -7,9 +7,12 @@ import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
 import com.hummingbird.kr.starbuckslike.product.vo.ProductDetailResponseVo;
 import com.hummingbird.kr.starbuckslike.purchase.application.PurchaseService;
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
+import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseDetailResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseListResponseDto;
+import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseDetailResponseVo;
 import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
@@ -21,6 +24,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 import java.util.stream.Collectors;
 
+//@Tag()
 @RestController
 @Log4j2
 @RequiredArgsConstructor
@@ -57,7 +61,17 @@ public class PurchaseController {
         );
     }
 
-
+    @Operation(summary = "회원 주문목록 디테일", description = "주문목록 디테일 조회")
+    @GetMapping("/{purchaseId}")
+    public CommonResponseEntity<PurchaseDetailResponseVo> findPurchaseDetailByV1(
+            @PathVariable("purchaseId") Long purchaseId
+    ){
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                purchaseService.findPurchaseDetailById(purchaseId).toVo()
+        );
+    }
 
 
 }

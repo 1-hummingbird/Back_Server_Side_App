@@ -13,8 +13,8 @@ public class QPurchaseDetailResponseDto extends ConstructorExpression<PurchaseDe
 
     private static final long serialVersionUID = 691820443L;
 
-    public QPurchaseDetailResponseDto(com.querydsl.core.types.Expression<Long> purchaseId, com.querydsl.core.types.Expression<Long> optionId, com.querydsl.core.types.Expression<String> productImage, com.querydsl.core.types.Expression<String> optionName, com.querydsl.core.types.Expression<Long> price, com.querydsl.core.types.Expression<Integer> qty) {
-        super(PurchaseDetailResponseDto.class, new Class<?>[]{long.class, long.class, String.class, String.class, long.class, int.class}, purchaseId, optionId, productImage, optionName, price, qty);
+    public QPurchaseDetailResponseDto(com.querydsl.core.types.Expression<java.time.LocalDateTime> purchaseDate, com.querydsl.core.types.Expression<Long> totalPrice, com.querydsl.core.types.Expression<Long> totalDiscount, com.querydsl.core.types.Expression<String> userName, com.querydsl.core.types.Expression<String> address, com.querydsl.core.types.Expression<String> primaryPhone, com.querydsl.core.types.Expression<String> secondaryPhone, com.querydsl.core.types.Expression<String> memo) {
+        super(PurchaseDetailResponseDto.class, new Class<?>[]{java.time.LocalDateTime.class, long.class, long.class, String.class, String.class, String.class, String.class, String.class}, purchaseDate, totalPrice, totalDiscount, userName, address, primaryPhone, secondaryPhone, memo);
     }
 
 }

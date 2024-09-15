@@ -447,10 +447,13 @@ public class LoadTestData {
             Purchase purchase1 = purchaseRepository.save(
                     Purchase.builder()
                             .address("주소 주소 주소")
+                            .totalPrice(147000L)
+                            .totalDiscount(3000L)
                             .primaryPhone(member1.getPhone())
                             .userName(member1.getName())
                             .userUuid(member1.getMemberUID())
                             .memo("현관문 앞에 배송해주세요")
+                            .isDelete(false)
                             .build()
             );
             purchaseProductRepository.save(
@@ -490,10 +493,13 @@ public class LoadTestData {
             Purchase purchase2 = purchaseRepository.save(
                     Purchase.builder()
                             .address("주소 주소 주소2")
+                            .totalPrice(87000L)
+                            .totalDiscount(3000L)
                             .primaryPhone(member1.getPhone())
                             .userName(member1.getName())
                             .userUuid(member1.getMemberUID())
                             .memo("현관문 앞에 배송해주세요2")
+                            .isDelete(false)
                             .build()
             );
             purchaseProductRepository.save(

@@ -17,7 +17,7 @@ public class QPurchaseListResponseDto extends ConstructorExpression<PurchaseList
         super(PurchaseListResponseDto.class, new Class<?>[]{long.class, java.time.LocalDateTime.class, long.class}, purchaseId, purchaseDate, totalPrice);
     }
 
-    public QPurchaseListResponseDto(com.querydsl.core.types.Expression<Long> purchaseId, com.querydsl.core.types.Expression<java.time.LocalDateTime> purchaseDate, com.querydsl.core.types.Expression<Long> totalPrice, com.querydsl.core.types.Expression<? extends java.util.List<PurchaseDetailResponseDto>> purchaseItems) {
+    public QPurchaseListResponseDto(com.querydsl.core.types.Expression<Long> purchaseId, com.querydsl.core.types.Expression<java.time.LocalDateTime> purchaseDate, com.querydsl.core.types.Expression<Long> totalPrice, com.querydsl.core.types.Expression<? extends java.util.List<PurchaseItemResponseDto>> purchaseItems) {
         super(PurchaseListResponseDto.class, new Class<?>[]{long.class, java.time.LocalDateTime.class, long.class, java.util.List.class}, purchaseId, purchaseDate, totalPrice, purchaseItems);
     }
 

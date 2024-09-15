@@ -1,10 +1,8 @@
 package com.hummingbird.kr.starbuckslike.purchase.infrastructure.search;
 
-import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseDetailResponseDto;
-import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseListResponseDto;
-import com.hummingbird.kr.starbuckslike.purchase.dto.out.QPurchaseDetailResponseDto;
-import com.hummingbird.kr.starbuckslike.purchase.dto.out.QPurchaseListResponseDto;
+import com.hummingbird.kr.starbuckslike.purchase.dto.out.*;
 import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.DatePath;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -50,12 +48,12 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                                     .map(PurchaseListResponseDto::getPurchaseId)
                                     .toList();
         // 구매번호에 맞는 상품들을 가져옴
-        List<PurchaseDetailResponseDto> purchaseItems = getPurchaseItems(purchaseIds);
+        List<PurchaseItemResponseDto> purchaseItems = getPurchaseItems(purchaseIds);
         // 구매번호 : 구매한상품들 그룹핑
-        Map<Long, List<PurchaseDetailResponseDto>>
+        Map<Long, List<PurchaseItemResponseDto>>
                        purchaseItemMap = purchaseItems
                                             .stream()
-                                            .collect(Collectors.groupingBy(PurchaseDetailResponseDto::getPurchaseId));
+                                            .collect(Collectors.groupingBy(PurchaseItemResponseDto::getPurchaseId));
         // 주문 <-> 주문상품들 조립
         purchaseData.forEach(plist-> plist.setPurchaseItems(purchaseItemMap.get(plist.getPurchaseId())));
         return purchaseData;
@@ -69,8 +67,9 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                         .select(new QPurchaseListResponseDto(purchase.id, purchase.createdAt, purchase.totalPrice))
                         .from(purchase)
                         .where(
-                                purchase.userUuid.eq(memberUuid),
+                                purchase.userUuid.eq(memberUuid).and(purchase.isDelete.isFalse()),
                                 searchYearCondition(year)
+
                         )
                         .orderBy(purchase.createdAt.desc())
                         .offset(pageable.getOffset())
@@ -82,12 +81,12 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                 .map(PurchaseListResponseDto::getPurchaseId)
                 .toList();
         // 구매번호에 맞는 상품들을 가져옴
-        List<PurchaseDetailResponseDto> purchaseItems = getPurchaseItems(purchaseIds);
+        List<PurchaseItemResponseDto> purchaseItems = getPurchaseItems(purchaseIds);
         // 구매번호 : 구매한상품들 그룹핑
-        Map<Long, List<PurchaseDetailResponseDto>>
+        Map<Long, List<PurchaseItemResponseDto>>
                 purchaseItemMap = purchaseItems
                 .stream()
-                .collect(Collectors.groupingBy(PurchaseDetailResponseDto::getPurchaseId));
+                .collect(Collectors.groupingBy(PurchaseItemResponseDto::getPurchaseId));
         // 주문 <-> 주문상품들 조립
         purchaseList.forEach(plist-> plist.setPurchaseItems(purchaseItemMap.get(plist.getPurchaseId())));
 
@@ -100,10 +99,28 @@ public class PurchaseSearchImpl implements PurchaseSearch{
 
     }
 
+    @Override
+    public PurchaseDetailResponseDto findPurchaseDetailById(Long purchaseId) {
+        return queryFactory
+                .select(new QPurchaseDetailResponseDto(purchase.createdAt, purchase.totalPrice, purchase.totalDiscount,
+                                purchase.userName, purchase.address, purchase.primaryPhone,
+                                new CaseBuilder()
+                                    .when(purchase.secondaryPhone.isNull())
+                                        .then("없음") // null 이면 "없음" 출력
+                                        .otherwise(purchase.secondaryPhone),
+                                purchase.memo))
+                .from(purchase)
+                .where(
+                        purchase.id.eq(purchaseId)
+                        .and(purchase.isDelete.eq(false))
+                )
+                .fetchOne();
+    }
+
     // 구매번호에 해당하는 상품들을 조회
-    public List<PurchaseDetailResponseDto> getPurchaseItems(List<Long> purchaseIds){
+    public List<PurchaseItemResponseDto> getPurchaseItems(List<Long> purchaseIds){
         return  queryFactory
-                    .select(new QPurchaseDetailResponseDto(
+                    .select(new QPurchaseItemResponseDto(
                                 purchaseProduct.purchase.id, purchaseProduct.optionId,
                                 productImage.imageUrl, purchaseProduct.optionName,
                                 purchaseProduct.price, purchaseProduct.qty
