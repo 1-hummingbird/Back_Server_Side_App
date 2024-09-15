@@ -9,7 +9,7 @@ import org.springframework.http.HttpStatusCode;
 
 @Getter
 @AllArgsConstructor
-public enum BaseResponseStatus {
+public enum     BaseResponseStatus {
 
     /**
      * 2XX: Success(성공)

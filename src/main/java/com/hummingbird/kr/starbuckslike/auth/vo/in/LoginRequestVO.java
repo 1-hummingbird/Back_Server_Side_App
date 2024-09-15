@@ -13,17 +13,8 @@ import javax.crypto.SecretKey;
 @AllArgsConstructor
 public class LoginRequestVO {
     private String loginID;
-    private String RecivedPassword;
-    private SecretKey SendedKey;
-
     private String Password;
-    {
-        try {
-            Password = Cryptor.decrypt(RecivedPassword, SendedKey);
-        } catch (Exception e) {
-            throw new RuntimeException(e);
-        }
-    }
+
 
     public LoginRequestDTO toDTO(){
         LoginRequestDTO tempDTO = new LoginRequestDTO();

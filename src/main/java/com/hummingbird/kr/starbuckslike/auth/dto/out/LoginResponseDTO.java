@@ -1,14 +1,18 @@
 package com.hummingbird.kr.starbuckslike.auth.dto.out;
 
+import com.hummingbird.kr.starbuckslike.auth.vo.out.LoginResponseVO;
+import lombok.AllArgsConstructor;
 import lombok.Getter;
-import lombok.Setter;
 
 @Getter
-@Setter
+@AllArgsConstructor
 public class LoginResponseDTO {
     private String accessToken;
     //    private String refreshToken;
     private String name;
     private String uuid;
 
+    public LoginResponseVO toVO(){
+        return new LoginResponseVO(this.accessToken, this.name, this.uuid);
+    }
 }

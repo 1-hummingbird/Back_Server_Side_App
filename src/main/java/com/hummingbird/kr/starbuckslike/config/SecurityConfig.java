@@ -1,8 +1,10 @@
 package com.hummingbird.kr.starbuckslike.config;
 
+import com.hummingbird.kr.starbuckslike.auth.util.JwtAuthenticationFilter;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.security.authentication.AuthenticationProvider;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
@@ -19,6 +21,7 @@ import java.util.List;
 @Configuration
 @EnableWebSecurity
 @RequiredArgsConstructor
+@ComponentScan(basePackages = "com.hummingbird.kr.starbuckslike")
 public class SecurityConfig {
 
     private final AuthenticationProvider authenticationProvider;

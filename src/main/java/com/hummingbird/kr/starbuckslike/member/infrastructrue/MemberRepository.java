@@ -14,12 +14,4 @@ import java.util.Optional;
 @Repository
 public interface MemberRepository extends JpaRepository<Member, Long> {
     Optional<Member> findByMemberUID(String uuid);
-
-    @Query("select m.password from Member m where m.loginID = :loginId")
-    Optional<String> findByid(@Param("loginId")String loginId);
-
-    @Modifying
-    @Transactional
-    @Query("UPDATE Member m SET m.password = :password WHERE m.memberUID = :uuid")
-    void updatePasswordByUuid(@Param("uuid") String uuid, @Param("password") String password);
 }

@@ -10,13 +10,12 @@ import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import java.time.LocalDate;
+import java.util.Date;
 
 @Getter
 @Slf4j
 @Entity
 @Table(name = "member")
-@Builder
-@AllArgsConstructor
 public class Member extends BaseEntity {
 
     @Id
@@ -34,7 +33,7 @@ public class Member extends BaseEntity {
     private String nickname;
 
     @Comment("회원 생년월일")
-    private LocalDate birthdate;
+    private Date birthdate;
 
     @Comment("회원 전화번호")
     @Column(nullable = false, length = 20)
@@ -57,18 +56,18 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String memberUID;
 
-
-//    public Member(Long id, String loginId, String mainphone, String email, String password, String name, String nickName, String birth, Boolean isDeleted) {
-//        this.id = id;
-//        this.loginID = loginId;
-//        this.mainphone = mainphone;
-//        this.email = email;
-//        this.password = password;
-//        this.name = name;
-//        this.nickname = nickName;
-//        this.birthdate = birth;
-//        this.isDeleted = isDeleted;
-//    }
+    @Builder
+    public Member(String loginID, String name, String nickname, Date birthdate, String phone, String email, String password, String memberUID) {
+        this.loginID = loginID;
+        this.name = name;
+        this.nickname = nickname;
+        this.birthdate = birthdate;
+        this.phone = phone;
+        this.email = email;
+        this.password = password;
+        this.memberUID = memberUID;
+        this.isDeleted = false;
+    }
 
     protected Member() {
     }

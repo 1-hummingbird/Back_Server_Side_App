@@ -1,7 +1,7 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
 import com.hummingbird.kr.starbuckslike.auth.dto.in.*;
-import com.hummingbird.kr.starbuckslike.auth.dto.out.LoginResponseDTO;
+import com.hummingbird.kr.starbuckslike.auth.dto.out.*;
 
 
 public interface AuthService {

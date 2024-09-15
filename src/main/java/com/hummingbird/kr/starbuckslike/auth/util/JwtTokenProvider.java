@@ -13,6 +13,7 @@ import org.springframework.stereotype.Service;
 import javax.crypto.SecretKey;
 import java.security.Key;
 import java.util.Date;
+import java.util.Objects;
 import java.util.function.Function;
 
 @Slf4j
@@ -106,7 +107,7 @@ public class JwtTokenProvider {
     public String generateAccessToken(Authentication authentication) {
         Claims claims = Jwts.claims().subject(authentication.getName()).build();
         Date now = new Date();
-        Date expiration = new Date(now.getTime() + env.getProperty("JWT.token.access-expire-time", Long.class).longValue());
+        Date expiration = new Date(now.getTime() + Objects.requireNonNull(env.getProperty("JWT.token.access-expire-time", Long.class)));
 
         return Jwts.builder()
                 .signWith(getSignKey())
@@ -116,7 +117,7 @@ public class JwtTokenProvider {
     }
 
     public Key getSignKey() {
-        return Keys.hmacShaKeyFor( env.getProperty("JWT.secret-key").getBytes() );
+        return Keys.hmacShaKeyFor( Objects.requireNonNull(env.getProperty("JWT.secret-key")).getBytes() );
     }
 
 }
