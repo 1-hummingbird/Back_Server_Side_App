@@ -14,7 +14,7 @@ public class ShippingAddressServiceImpl implements ShippingAddressService{
 
     @Override   //생성하는 부분 add address 트랜적션..
     public void addShippingAddress(ShippingAddressRequestDto shippingAddressRequestDTo) {
-        shippingAddressRepository.save(shippingAddressRequestDTo.toEntity(shippingAddressRequestDTo));
+        shippingAddressRepository.save(shippingAddressRequestDTo.toEntity());
     }
 
     @Override
