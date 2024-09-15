@@ -2,6 +2,7 @@ package com.hummingbird.kr.starbuckslike.shipping.dto.in;
 
 
 import com.hummingbird.kr.starbuckslike.shipping.domain.ShippingAddress;
+import com.hummingbird.kr.starbuckslike.shipping.vo.in.ShippingAddressRequestVo;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -38,16 +39,29 @@ public class ShippingAddressRequestDto {
         this.defaultAddress = defaultAddress;
     }
 
-    public ShippingAddress toEntity(ShippingAddressRequestDto shippingAddressRequestDTo){
+    public ShippingAddress toEntity(){
         return ShippingAddress.builder()
-                .addressNickname(shippingAddressRequestDTo.getAddressNickname())
-                .name(shippingAddressRequestDTo.getName())
-                .address(shippingAddressRequestDTo.getAddress())
-                .primaryPhone(shippingAddressRequestDTo.getPrimaryPhone())
-                .secondaryPhone(shippingAddressRequestDTo.getSecondaryPhone())
-                .userUuid(shippingAddressRequestDTo.getUserUuid())
-                .memo(shippingAddressRequestDTo.getMemo())
-                .defaultAddress(shippingAddressRequestDTo.getDefaultAddress())
+                .address(address)
+                .name(name)
+                .addressNickname(addressNickname)
+                .memo(memo)
+                .defaultAddress(defaultAddress)
+                .primaryPhone(primaryPhone)
+                .secondaryPhone(secondaryPhone)
+                .userUuid(userUuid)
+                .build();
+    }
+
+    public static ShippingAddressRequestDto of(ShippingAddressRequestVo shippingAddressRequestVo){
+        return ShippingAddressRequestDto.builder()
+                .address(shippingAddressRequestVo.getAddress())
+                .memo(shippingAddressRequestVo.getMemo())
+                .defaultAddress(shippingAddressRequestVo.getDefaultAddress())
+                .name(shippingAddressRequestVo.getName())
+                .addressNickname(shippingAddressRequestVo.getAddressNickname())
+                .primaryPhone(shippingAddressRequestVo.getPrimaryPhone())
+                .secondaryPhone(shippingAddressRequestVo.getSecondaryPhone())
+                .userUuid("userUuid")
                 .build();
     }
 
