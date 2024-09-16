@@ -11,7 +11,6 @@ import io.swagger.v3.oas.annotations.Operation;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -61,4 +60,68 @@ public class AuthController {
         FindIDResponseDTO responseDTO = authService.findID(findIDRequestVO.toDTO());
         return new BaseResponse<>(responseDTO.toVO());
     }
+
+    @Operation(summary = "Find Duplication of Email API", description = "Find Duplication of Email API", tags = {"Auth"})
+    @PostMapping("checkEmail")
+    public BaseResponse<Void> checkEmail(@RequestBody CheckEmailRequestVO checkEmailRequestVO) {
+        authService.checkEmail(checkEmailRequestVO.toDTO());
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @Operation(summary = "Find Duplication of LoginID API", description = "Find Duplication of LoginID API", tags = {"Auth"})
+    @PostMapping("checkLoginID")
+    public BaseResponse<Void> checkLoginID(@RequestBody CheckLoginIDRequestVO checkLoginIDRequestVO) {
+        authService.checkLoginID(checkLoginIDRequestVO.toDTO());
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @Operation(summary = "Find Duplication of Phone API", description = "Find Duplication of Phone API", tags = {"Auth"})
+    @PostMapping("checkPhone")
+    public BaseResponse<Void> checkPhone(@RequestBody CheckPhoneRequestVO checkPhoneRequestVO) {
+        authService.checkPhone(checkPhoneRequestVO.toDTO());
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @Operation(summary = "Send Email Verification Code API", description = "Send Email Verification Code API", tags = {"Auth"})
+    @PostMapping("email/request")
+    public BaseResponse<Void> sendEmailVerificationCode(@RequestBody EmailVerificationRequestVO emailVerificationRequestVO) {
+        authService.sendEmailVerificationCode(emailVerificationRequestVO.toDTO());
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @Operation(summary = "Check Email Verification Code API", description = "Check Email Verification Code API", tags = {"Auth"})
+    @PostMapping("email/check")
+    public BaseResponse<Void> checkEmailVerificationCode(@RequestBody EmailVerificationCheckRequestVO emailVerificationCheckRequestVO) {
+        authService.checkEmailVerificationCode(emailVerificationCheckRequestVO.toDTO());
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @Operation(summary = "Send Phone Verification Code API", description = "Send Phone Verification Code API", tags = {"Auth"})
+    @PostMapping("phone/request")
+    public BaseResponse<Void> sendPhoneVerificationCode(@RequestBody PhoneVerificationRequestVO phoneVerificationRequestVO) {
+        authService.sendPhoneVerificationCode(phoneVerificationRequestVO.toDTO());
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @Operation(summary = "Check Phone Verification Code API", description = "Check Phone Verification Code API", tags = {"Auth"})
+    @PostMapping("phone/check")
+    public BaseResponse<Void> checkPhoneVerificationCode(@RequestBody PhoneVerificationCheckRequestVO phoneVerificationCheckRequestVO) {
+        authService.checkPhoneVerificationCode(phoneVerificationCheckRequestVO.toDTO());
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @Operation(summary = "OAuth Register API", description = "OAuth Register API", tags = {"Auth"})
+    @PostMapping("oauth/register")
+    public BaseResponse<Void> oauthRegister(@RequestBody OauthRegisterRequestVO oauthRegisterRequestVO) {
+        authService.oauthRegister(oauthRegisterRequestVO.toDTO());
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
+    @Operation(summary = "OAuth Login API", description = "OAuth Login API", tags = {"Auth"})
+    @PostMapping("oauth/login")
+    public BaseResponse<LoginResponseVO> oauthLogin(@RequestBody OauthLoginRequestVO oauthLoginRequestVO) {
+        LoginResponseDTO loginResponseDTO = authService.oauthLogin(oauthLoginRequestVO.toDTO());
+        return new BaseResponse<>(loginResponseDTO.toVO());
+    }
+
 }
