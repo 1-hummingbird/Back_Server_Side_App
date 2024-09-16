@@ -28,4 +28,9 @@ public interface AuthRepository extends JpaRepository<Member, Long> {
   @Transactional
   @Query("UPDATE Member m SET m.password = :password WHERE m.loginID = :loginID")
   void updatePasswordByLoginID(@Param("loginID") String loginID, @Param("password") String password);
+
+  @Modifying
+  @Transactional
+  @Query("UPDATE Member m SET m.isDeleted = true WHERE m.memberUID = :uuid")
+  void disableMember(@Param("uuid") String uuid);
 }
