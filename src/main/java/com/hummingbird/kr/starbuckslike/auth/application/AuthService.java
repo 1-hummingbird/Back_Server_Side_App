@@ -7,13 +7,6 @@ import com.hummingbird.kr.starbuckslike.auth.dto.out.*;
 public interface AuthService {
 
     /**
-     * AuthUserDetail service interface
-     * 1. register
-     * 2. login
-     * 3. logout
-     */
-
-    /**
      * 1. register
      * Save user
      * @param registerRequestDTO
@@ -49,4 +42,76 @@ public interface AuthService {
      * @return findIDResponseDTO
      */
     FindIDResponseDTO findID(FindIDRequestDTO findIDRequestDTO);
+
+    /**
+     * 6. sendPhoneVerificationCode
+     * @param phoneVerificationRequestDTO
+     * @return void
+     */
+    void sendPhoneVerificationCode(PhoneVerificationRequestDTO phoneVerificationRequestDTO);
+
+    /**
+     * 7. checkPhoneVerificationCode
+     * @param phoneVerificationCheckRequestDTO
+     * @return void
+     */
+    void checkPhoneVerificationCode(PhoneVerificationCheckRequestDTO phoneVerificationCheckRequestDTO);
+
+
+    /**
+     * 8. sendEmailVerificationCode
+     * @param emailVerificationRequestDTO
+     * @return void
+     */
+    void sendEmailVerificationCode(EmailVerificationRequestDTO emailVerificationRequestDTO);
+    
+    
+    /**
+     * 9. checkEmailVerificationCode
+     * @param emailVerificationCheckRequestDTO
+     * @return void
+     */
+    void checkEmailVerificationCode(EmailVerificationCheckRequestDTO emailVerificationCheckRequestDTO);
+
+    /**
+     * 10. oauthRegister
+     * @param oauthRegisterRequestDTO
+     * @return void
+     */
+    void oauthRegister(OauthRegisterRequestDTO oauthRegisterRequestDTO);
+
+    /**
+     * 11. oauthLogin
+     * @param oauthLoginRequestDTO
+     * @return LoginResponseDTO
+     */
+    LoginResponseDTO oauthLogin(OauthLoginRequestDTO oauthLoginRequestDTO);
+
+    /**
+     * 12. checkEmail
+     * @param checkEmailRequestDTO
+     * @return CheckEmailResponseDTO
+     */
+    CheckEmailResponseDTO checkEmail(CheckEmailRequestDTO checkEmailRequestDTO);
+
+    /**
+     * 13. checkPhone
+     * @param checkPhoneRequestDTO
+     * @return CheckPhoneResponseDTO
+     */
+    CheckPhoneResponseDTO checkPhone(CheckPhoneRequestDTO checkPhoneRequestDTO);
+
+    /**
+     * 14. checkLoginID
+     * @param checkLoginIDRequestDTO
+     * @return CheckLoginIDResponseDTO
+     */
+    CheckLoginIDResponseDTO checkLoginID(CheckLoginIDRequestDTO checkLoginIDRequestDTO);
+
+    /*
+     * 15. withdraw
+     * @param withdrawRequestDTO
+     * @return void
+     */
+    void withdraw(WithdrawRequestDTO withdrawRequestDTO);
 }

@@ -29,8 +29,8 @@ public class RedisConfig {
     }
 
     @Bean
-    public RedisTemplate<String, Date> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, Date> template = new RedisTemplate<>();
+    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory connectionFactory) {
+        RedisTemplate<String, String> template = new RedisTemplate<>();
         template.setConnectionFactory(connectionFactory);
         
         // Use StringRedisSerializer for keys
