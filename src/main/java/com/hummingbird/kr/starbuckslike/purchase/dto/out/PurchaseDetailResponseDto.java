@@ -12,7 +12,7 @@ import java.time.LocalDateTime;
 public class PurchaseDetailResponseDto {
 
     private LocalDateTime purchaseDate; // 주문일
-    // todo 주문 코드
+    private String purchaseCode; // 주문코드
     private Long totalPrice; // 총 금액
     private Long totalDiscount; // 총 할인 금액
 
@@ -25,6 +25,7 @@ public class PurchaseDetailResponseDto {
     public PurchaseDetailResponseVo toVo(){
         return PurchaseDetailResponseVo.builder()
                 .purchaseDate(purchaseDate)
+                .purchaseCode(purchaseCode)
                 .totalPrice(totalPrice)
                 .totalDiscount(totalDiscount)
                 .userName(userName)
@@ -36,9 +37,11 @@ public class PurchaseDetailResponseDto {
     }
 
     @QueryProjection
-    public PurchaseDetailResponseDto(LocalDateTime purchaseDate, Long totalPrice, Long totalDiscount, String userName,
-                                     String address, String primaryPhone, String secondaryPhone, String memo) {
+    public PurchaseDetailResponseDto(LocalDateTime purchaseDate, String purchaseCode, Long totalPrice,
+                                     Long totalDiscount, String userName, String address,
+                                     String primaryPhone, String secondaryPhone, String memo) {
         this.purchaseDate = purchaseDate;
+        this.purchaseCode = purchaseCode;
         this.totalPrice = totalPrice;
         this.totalDiscount = totalDiscount;
         this.userName = userName;

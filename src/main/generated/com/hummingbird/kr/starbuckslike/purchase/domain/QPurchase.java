@@ -23,6 +23,8 @@ public class QPurchase extends EntityPathBase<Purchase> {
 
     public final StringPath address = createString("address");
 
+    public final StringPath code = createString("code");
+
     //inherited
     public final DateTimePath<java.time.LocalDateTime> createdAt = _super.createdAt;
 

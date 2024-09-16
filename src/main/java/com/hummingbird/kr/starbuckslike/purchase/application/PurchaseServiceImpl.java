@@ -1,5 +1,7 @@
 package com.hummingbird.kr.starbuckslike.purchase.application;
 
+import com.hummingbird.kr.starbuckslike.common.utils.CategoryCodeGenerator;
+import com.hummingbird.kr.starbuckslike.common.utils.PurchaseCodeGenerator;
 import com.hummingbird.kr.starbuckslike.purchase.domain.Purchase;
 import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseProduct;
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
@@ -23,6 +25,9 @@ public class PurchaseServiceImpl implements PurchaseService{
     private final PurchaseSearch purchaseSearch;
     private final PurchaseRepository purchaseRepository;
     private final PurchaseProductRepository purchaseProductRepository;
+
+    private static final int MAX_CODE_TRIES = 10;  // 최대 재시도 횟수
+
     @Override
     public List<PurchaseListResponseDto> findPurchaseByUuid(String memberUuid, Integer year) {
         return purchaseSearch.findPurchaseByUuid(memberUuid, year);
@@ -34,8 +39,8 @@ public class PurchaseServiceImpl implements PurchaseService{
     }
 
     @Override
-    public PurchaseDetailResponseDto findPurchaseDetailById(Long purchaseId) {
-        return purchaseSearch.findPurchaseDetailById(purchaseId);
+    public PurchaseDetailResponseDto findPurchaseDetailById(String purchaseCode) {
+        return purchaseSearch.findPurchaseDetailById(purchaseCode);
     }
 
     @Override
@@ -43,11 +48,34 @@ public class PurchaseServiceImpl implements PurchaseService{
         if(addPurchaseRequestDto.getAddPurchaseItemRequestVos().isEmpty()){
             throw new IllegalArgumentException("주문 항목이 비어 있습니다. 최소한 하나 이상의 상품을 포함해야 합니다.");
         }
+
         // 주문 생성
-        Purchase purchase = addPurchaseRequestDto.toPurchase();
+        String code = generateUniqueCategoryCode();
+        Purchase purchase = addPurchaseRequestDto.toPurchase(code);
         purchaseRepository.save(purchase);
         // 주문 상품 생성
         List<PurchaseProduct> purchaseProducts = addPurchaseRequestDto.toPurchaseProduct(purchase);
         purchaseProductRepository.saveAll(purchaseProducts); // 주문 상품들을 저장
+    }
+
+    @Override
+    public void deletePurchase(Long purchaseId) {
+        // 기존의 purchase 엔티티를 조회
+        Purchase purchase = purchaseRepository.findById(purchaseId)
+                .orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
+
+        purchaseRepository.softDeletePurchase(purchaseId);
+
+
+    }
+
+    private String generateUniqueCategoryCode() {
+        for (int i = 0; i < MAX_CODE_TRIES; i++) {
+            String code = PurchaseCodeGenerator.generateOrderCode();
+            if(!purchaseRepository.existsByCode(code)){
+                return code;
+            }
+        }
+        throw new IllegalStateException("고유한 주문코드를 생성하는 데 실패했습니다.");
     }
 }

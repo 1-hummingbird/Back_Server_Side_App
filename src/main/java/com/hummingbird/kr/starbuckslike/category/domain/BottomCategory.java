@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Builder
 @NoArgsConstructor
 @AllArgsConstructor
-@Table(name = "bottom_category", uniqueConstraints = {@UniqueConstraint(columnNames = "categoryCode, categoryName")})
+@Table(name = "bottom_category", uniqueConstraints = {@UniqueConstraint(columnNames = {"category_code", "category_name"} )})
 @Entity
 public class BottomCategory extends BaseEntity {
 

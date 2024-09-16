@@ -32,8 +32,9 @@ public class AddPurchaseRequestDto {
     private List<AddPurchaseItemRequestDto> addPurchaseItemRequestVos; // 주문 상품옵션
 
     // 주문 엔티티 생성
-    public Purchase toPurchase() {
+    public Purchase toPurchase(String purchaseCode) {
         return Purchase.builder()
+                .code(purchaseCode)
                 .totalPrice(totalPrice)
                 .totalDiscount(totalDiscount)
                 .address(address)

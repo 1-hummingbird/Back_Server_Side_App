@@ -15,6 +15,8 @@ public interface PurchaseSearch {
     Slice<PurchaseListResponseDto> searchPurchaseByUuid(Pageable pageable, String memberUuid, Integer year);
 
     // 주문 디테일 조회 (총가격 , 총 할인금액, 배송지)
-    PurchaseDetailResponseDto findPurchaseDetailById(Long purchaseId);
+    PurchaseDetailResponseDto findPurchaseDetailById(String purchaseCode);
+
+
 
 }

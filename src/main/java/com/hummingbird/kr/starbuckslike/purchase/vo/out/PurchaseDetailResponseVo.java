@@ -9,7 +9,7 @@ import java.time.LocalDateTime;
 @Builder
 public class PurchaseDetailResponseVo {
     private LocalDateTime purchaseDate; // 주문일
-    // todo 주문 코드
+    private String purchaseCode; // 주문코드
     private Long totalPrice; // 총 금액
     private Long totalDiscount; // 총 할인 금액
 

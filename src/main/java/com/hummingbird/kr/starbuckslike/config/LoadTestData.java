@@ -15,6 +15,7 @@ import com.hummingbird.kr.starbuckslike.category.infrastructure.CategoryProductL
 import com.hummingbird.kr.starbuckslike.category.infrastructure.MiddleCategoryRepository;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.TopCategoryRepository;
 import com.hummingbird.kr.starbuckslike.common.utils.CategoryCodeGenerator;
+import com.hummingbird.kr.starbuckslike.common.utils.PurchaseCodeGenerator;
 import com.hummingbird.kr.starbuckslike.exhibition.domain.Exhibition;
 import com.hummingbird.kr.starbuckslike.exhibition.domain.ExhibitionProduct;
 import com.hummingbird.kr.starbuckslike.exhibition.infrastructure.ExhibitionProductRepository;
@@ -446,6 +447,7 @@ public class LoadTestData {
 
             Purchase purchase1 = purchaseRepository.save(
                     Purchase.builder()
+                            .code(PurchaseCodeGenerator.generateOrderCode())
                             .address("주소 주소 주소")
                             .totalPrice(147000L)
                             .totalDiscount(3000L)
@@ -492,6 +494,7 @@ public class LoadTestData {
             );
             Purchase purchase2 = purchaseRepository.save(
                     Purchase.builder()
+                            .code(PurchaseCodeGenerator.generateOrderCode())
                             .address("주소 주소 주소2")
                             .totalPrice(87000L)
                             .totalDiscount(3000L)

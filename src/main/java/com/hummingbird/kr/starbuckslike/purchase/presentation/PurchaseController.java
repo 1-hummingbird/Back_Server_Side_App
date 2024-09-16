@@ -62,16 +62,25 @@ public class PurchaseController {
     }
 
     @Operation(summary = "회원 주문목록 디테일", description = "주문목록 디테일 조회")
-    @GetMapping("/{purchaseId}")
+    @GetMapping("/{purchaseCode}")
     public CommonResponseEntity<PurchaseDetailResponseVo> findPurchaseDetailByV1(
-            @PathVariable("purchaseId") Long purchaseId
+            @PathVariable("purchaseCode") String purchaseCode
     ){
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),
-                purchaseService.findPurchaseDetailById(purchaseId).toVo()
+                purchaseService.findPurchaseDetailById(purchaseCode).toVo()
         );
     }
-
+    @Operation(summary = "주문 삭제")
+    @PostMapping("/delete/{purchaseId}")
+    public CommonResponseEntity<Void> deletePurchaseV1(@PathVariable("purchaseId") Long purchaseId) {
+        purchaseService.deletePurchase(purchaseId);
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                null
+        );
+    }
 
 }

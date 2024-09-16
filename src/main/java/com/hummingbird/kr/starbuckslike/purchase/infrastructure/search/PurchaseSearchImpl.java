@@ -100,9 +100,10 @@ public class PurchaseSearchImpl implements PurchaseSearch{
     }
 
     @Override
-    public PurchaseDetailResponseDto findPurchaseDetailById(Long purchaseId) {
+    public PurchaseDetailResponseDto findPurchaseDetailById(String purchaseCode) {
         return queryFactory
-                .select(new QPurchaseDetailResponseDto(purchase.createdAt, purchase.totalPrice, purchase.totalDiscount,
+                .select(new QPurchaseDetailResponseDto(purchase.createdAt, purchase.code,
+                                purchase.totalPrice, purchase.totalDiscount,
                                 purchase.userName, purchase.address, purchase.primaryPhone,
                                 new CaseBuilder()
                                     .when(purchase.secondaryPhone.isNull())
@@ -111,7 +112,7 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                                 purchase.memo))
                 .from(purchase)
                 .where(
-                        purchase.id.eq(purchaseId)
+                        purchase.code.eq(purchaseCode)
                         .and(purchase.isDelete.eq(false))
                 )
                 .fetchOne();
