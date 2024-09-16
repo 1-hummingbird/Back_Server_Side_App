@@ -34,7 +34,7 @@ public class MemberController {
     public BaseResponse<PassageResponseVO> passage(@RequestBody PassageRequestVO passageRequestVO) {
         log.info("passage memberUID: {}", passageRequestVO.getMemberUID());
         PassageResponseDTO passageResponseDTO = memberService.passage(passageRequestVO.toDTO());
-        return new BaseResponse(passageResponseDTO.toVO());
+        return new BaseResponse<PassageResponseVO>(passageResponseDTO.toVO());
     }
 
     @PostMapping("canReview")

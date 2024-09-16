@@ -29,4 +29,29 @@ public class MemberServiceImpl implements MemberService {
         log.info("passage daysBetween: {}", daysBetween);
         return new PassageResponseDTO(member.getMemberUID(), daysBetween);
     }
+
+    @Override
+    public PurchaseResponseDTO purchase(PurchaseRequestDTO requestDTO) {
+        return null;
+    }
+
+    @Override
+    public void refund(RefundRequestDTO requestDTO) {
+
+    }
+
+    @Override
+    public CanReviewResponseDTO canReview(CanReviewRequestDTO requestDTO) {
+        return null;
+    }
+
+    @Override
+    public void update(MemberUpdateRequestDTO requestDTO) {
+
+    }
+
+    @Override
+    public MemberInfoResponseDTO info(MemberInfoRequestDTO requestDTO) {
+        return null;
+    }
 }
