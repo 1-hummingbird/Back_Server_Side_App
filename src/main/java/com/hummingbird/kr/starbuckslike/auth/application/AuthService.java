@@ -107,4 +107,11 @@ public interface AuthService {
      * @return CheckLoginIDResponseDTO
      */
     CheckLoginIDResponseDTO checkLoginID(CheckLoginIDRequestDTO checkLoginIDRequestDTO);
+
+    /*
+     * 15. withdraw
+     * @param withdrawRequestDTO
+     * @return void
+     */
+    void withdraw(WithdrawRequestDTO withdrawRequestDTO);
 }

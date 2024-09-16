@@ -130,7 +130,7 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public void sendPhoneVerificationCode(PhoneVerificationRequestDTO phoneVerificationRequestDTO) {
-        
+
     }
 
     @Override
@@ -171,6 +171,11 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public CheckLoginIDResponseDTO checkLoginID(CheckLoginIDRequestDTO checkLoginIDRequestDTO) {
         return null;
+    }
+
+    @Override
+    public void withdraw(WithdrawRequestDTO withdrawRequestDTO) {
+        
     }
 
     private String createToken(Authentication authentication) {
