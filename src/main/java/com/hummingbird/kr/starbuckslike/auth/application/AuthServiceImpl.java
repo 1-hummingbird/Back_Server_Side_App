@@ -155,27 +155,48 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public LoginResponseDTO oauthLogin(OauthLoginRequestDTO oauthLoginRequestDTO) {
+        
         return null;
     }
 
     @Override
     public CheckEmailResponseDTO checkEmail(CheckEmailRequestDTO checkEmailRequestDTO) {
-        return null;
+        Optional<Member> member = authRepository.findByEmail(checkEmailRequestDTO.getEmail());
+        if (member.isPresent()) {
+            return new CheckEmailResponseDTO(false);
+        } else {
+            return new CheckEmailResponseDTO(true);
+        }
     }
 
     @Override
     public CheckPhoneResponseDTO checkPhone(CheckPhoneRequestDTO checkPhoneRequestDTO) {
-        return null;
+        Optional<Member> member = authRepository.findByPhone(checkPhoneRequestDTO.getPhone());
+        if (member.isPresent()) {
+            return new CheckPhoneResponseDTO(false);
+        } else {
+            return new CheckPhoneResponseDTO(true);
+        }
     }
 
     @Override
     public CheckLoginIDResponseDTO checkLoginID(CheckLoginIDRequestDTO checkLoginIDRequestDTO) {
-        return null;
+        Optional<Member> member = authRepository.findByLoginID(checkLoginIDRequestDTO.getLoginID());
+        if (member.isPresent()) {
+            return new CheckLoginIDResponseDTO(false);
+        } else {
+            return new CheckLoginIDResponseDTO(true);
+        }
     }
 
     @Override
     public void withdraw(WithdrawRequestDTO withdrawRequestDTO) {
-        
+        log.info("withdrawRequestDTO : {}", withdrawRequestDTO);
+        try {
+            authRepository.disableMember(withdrawRequestDTO.getMemberUID());
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     private String createToken(Authentication authentication) {

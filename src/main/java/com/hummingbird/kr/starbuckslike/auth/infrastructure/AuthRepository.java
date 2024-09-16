@@ -19,6 +19,9 @@ public interface AuthRepository extends JpaRepository<Member, Long> {
   @Query("SELECT m FROM Member m WHERE m.email = :email")
   Optional<Member> findByEmail(@Param("email") String email);
 
+  @Query("SELECT m FROM Member m WHERE m.phone = :phone")
+  Optional<Member> findByPhone(@Param("phone") String phone);
+
   @Modifying
   @Transactional
   @Query("UPDATE Member m SET m.password = :password WHERE m.memberUID = :uuid")

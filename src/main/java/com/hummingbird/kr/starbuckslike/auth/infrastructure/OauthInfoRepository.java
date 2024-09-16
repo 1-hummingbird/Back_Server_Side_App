@@ -1,7 +1,6 @@
 package com.hummingbird.kr.starbuckslike.auth.infrastructure;
 
 import com.hummingbird.kr.starbuckslike.auth.domain.OauthInfo;
-import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
