@@ -18,7 +18,7 @@ public class RegisterRequestVO {
 
     public RegisterRequestDTO toDTO() {
         return new RegisterRequestDTO(
-            this.loginID, this.name, this.nickname, this.birthdate, this.phone, this.email, this.password
+            this.loginID, this.name, this.nickname, this.password, this.phone, this.email, this.birthdate
         );
     }
 }

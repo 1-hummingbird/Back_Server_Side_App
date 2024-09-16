@@ -43,4 +43,10 @@ public interface AuthService {
      */
     void resetPW(ResetPWRequestDTO resetPWRequestDTO);
 
+    /**
+     * 5. findID
+     * @param findIDRequestDTO
+     * @return findIDResponseDTO
+     */
+    FindIDResponseDTO findID(FindIDRequestDTO findIDRequestDTO);
 }
