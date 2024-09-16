@@ -13,7 +13,7 @@ public class PassageResponseDTO {
         this.dateDiff = dateDiff;
     }
 
-    public PasssageResponseVO toVO() {
-        return new PasssageResponseVO(memberUID, dateDiff);
+    public PassageResponseVO toVO() {
+        return new PassageResponseVO(memberUID, dateDiff);
     }
 }
