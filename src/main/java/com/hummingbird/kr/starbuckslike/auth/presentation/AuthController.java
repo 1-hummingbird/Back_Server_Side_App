@@ -63,23 +63,23 @@ public class AuthController {
 
     @Operation(summary = "Find Duplication of Email API", description = "Find Duplication of Email API", tags = {"Auth"})
     @PostMapping("checkEmail")
-    public BaseResponse<Void> checkEmail(@RequestBody CheckEmailRequestVO checkEmailRequestVO) {
-        authService.checkEmail(checkEmailRequestVO.toDTO());
-        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    public BaseResponse<CheckEmailResponseVO> checkEmail(@RequestBody CheckEmailRequestVO checkEmailRequestVO) {
+        CheckEmailResponseDTO checkEmailResponseDTO = authService.checkEmail(checkEmailRequestVO.toDTO());
+        return new BaseResponse<>(checkEmailResponseDTO.toVO());
     }
 
     @Operation(summary = "Find Duplication of LoginID API", description = "Find Duplication of LoginID API", tags = {"Auth"})
     @PostMapping("checkLoginID")
-    public BaseResponse<Void> checkLoginID(@RequestBody CheckLoginIDRequestVO checkLoginIDRequestVO) {
-        authService.checkLoginID(checkLoginIDRequestVO.toDTO());
-        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    public BaseResponse<CheckLoginIDResponseVO> checkLoginID(@RequestBody CheckLoginIDRequestVO checkLoginIDRequestVO) {
+        CheckLoginIDResponseDTO checkLoginIDResponseDTO = authService.checkLoginID(checkLoginIDRequestVO.toDTO());
+        return new BaseResponse<>(checkLoginIDResponseDTO.toVO());
     }
 
     @Operation(summary = "Find Duplication of Phone API", description = "Find Duplication of Phone API", tags = {"Auth"})
     @PostMapping("checkPhone")
-    public BaseResponse<Void> checkPhone(@RequestBody CheckPhoneRequestVO checkPhoneRequestVO) {
-        authService.checkPhone(checkPhoneRequestVO.toDTO());
-        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    public BaseResponse<CheckPhoneResponseVO> checkPhone(@RequestBody CheckPhoneRequestVO checkPhoneRequestVO) {
+        CheckPhoneResponseDTO checkPhoneResponseDTO = authService.checkPhone(checkPhoneRequestVO.toDTO());
+        return new BaseResponse<>(checkPhoneResponseDTO.toVO());
     }
 
     @Operation(summary = "Send Email Verification Code API", description = "Send Email Verification Code API", tags = {"Auth"})

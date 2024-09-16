@@ -128,6 +128,51 @@ public class AuthServiceImpl implements AuthService{
         }
     }
 
+    @Override
+    public void sendPhoneVerificationCode(PhoneVerificationRequestDTO phoneVerificationRequestDTO) {
+        
+    }
+
+    @Override
+    public void checkPhoneVerificationCode(PhoneVerificationCheckRequestDTO phoneVerificationCheckRequestDTO) {
+
+    }
+
+    @Override
+    public void sendEmailVerificationCode(EmailVerificationRequestDTO emailVerificationRequestDTO) {
+
+    }
+
+    @Override
+    public void checkEmailVerificationCode(EmailVerificationCheckRequestDTO emailVerificationCheckRequestDTO) {
+
+    }
+
+    @Override
+    public void oauthRegister(OauthRegisterRequestDTO oauthRegisterRequestDTO) {
+
+    }
+
+    @Override
+    public LoginResponseDTO oauthLogin(OauthLoginRequestDTO oauthLoginRequestDTO) {
+        return null;
+    }
+
+    @Override
+    public CheckEmailResponseDTO checkEmail(CheckEmailRequestDTO checkEmailRequestDTO) {
+        return null;
+    }
+
+    @Override
+    public CheckPhoneResponseDTO checkPhone(CheckPhoneRequestDTO checkPhoneRequestDTO) {
+        return null;
+    }
+
+    @Override
+    public CheckLoginIDResponseDTO checkLoginID(CheckLoginIDRequestDTO checkLoginIDRequestDTO) {
+        return null;
+    }
+
     private String createToken(Authentication authentication) {
         return jwtTokenProvider.generateAccessToken(authentication);
     }
