@@ -48,10 +48,8 @@ public class PurchaseServiceImpl implements PurchaseService{
         if(addPurchaseRequestDto.getAddPurchaseItemRequestVos().isEmpty()){
             throw new IllegalArgumentException("주문 항목이 비어 있습니다. 최소한 하나 이상의 상품을 포함해야 합니다.");
         }
-
         // 주문 생성
-        String code = generateUniqueCategoryCode();
-        Purchase purchase = addPurchaseRequestDto.toPurchase(code);
+        Purchase purchase = addPurchaseRequestDto.toPurchase(generateUniquePurchaseCode());
         purchaseRepository.save(purchase);
         // 주문 상품 생성
         List<PurchaseProduct> purchaseProducts = addPurchaseRequestDto.toPurchaseProduct(purchase);
@@ -69,7 +67,7 @@ public class PurchaseServiceImpl implements PurchaseService{
 
     }
 
-    private String generateUniqueCategoryCode() {
+    private String generateUniquePurchaseCode() {
         for (int i = 0; i < MAX_CODE_TRIES; i++) {
             String code = PurchaseCodeGenerator.generateOrderCode();
             if(!purchaseRepository.existsByCode(code)){

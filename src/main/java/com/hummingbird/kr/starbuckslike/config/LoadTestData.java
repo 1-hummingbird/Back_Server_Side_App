@@ -33,6 +33,10 @@ import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseProduct;
 import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseStatus;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseProductRepository;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseRepository;
+import com.hummingbird.kr.starbuckslike.review.domain.Review;
+import com.hummingbird.kr.starbuckslike.review.domain.ReviewImage;
+import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewImageRepository;
+import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -63,7 +67,9 @@ public class LoadTestData {
             MemberRepository memberRepository,
             BannerRepository bannerRepository,
             PurchaseRepository purchaseRepository,
-            PurchaseProductRepository purchaseProductRepository
+            PurchaseProductRepository purchaseProductRepository,
+            ReviewRepository reviewRepository,
+            ReviewImageRepository reviewImageRepository
                                    ) {
         return args -> {
             /**
@@ -520,8 +526,46 @@ public class LoadTestData {
 
                             .build()
             );
-
-
+            /**
+             * 리뷰
+             */
+            Review top1_middle1_product1_op1_review = Review.builder()
+                    .purchaseCode(purchase1.getCode())
+                    .nickname(member1.getNickname())
+                    .memberUID(member1.getMemberUID())
+                    .productId(top1_middle1_product1.getId())
+                    .optionId(top1_middle1_product1_op1.getId())
+                    .content("리뷰 내용입니다")
+                    .star(4)
+                    .isDelete(false)
+                    .build();
+            reviewRepository.save(top1_middle1_product1_op1_review);
+            reviewImageRepository.save(ReviewImage.builder()
+                    .seq(0)
+                    .review(top1_middle1_product1_op1_review)
+                    .imageUrl("/test/test")
+                    .build());
+            reviewImageRepository.save(ReviewImage.builder()
+                    .seq(1)
+                    .review(top1_middle1_product1_op1_review)
+                    .imageUrl("/test/test")
+                    .build());
+            Review top1_middle1_product1_op2_review = Review.builder()
+                    .purchaseCode(purchase1.getCode())
+                    .nickname(member1.getNickname())
+                    .memberUID(member1.getMemberUID())
+                    .productId(top1_middle1_product1.getId())
+                    .optionId(top1_middle1_product1_op2.getId())
+                    .content("리뷰 내용입니다")
+                    .star(5)
+                    .isDelete(false)
+                    .build();
+            reviewRepository.save(top1_middle1_product1_op2_review);
+            reviewImageRepository.save(ReviewImage.builder()
+                    .seq(0)
+                    .review(top1_middle1_product1_op2_review)
+                    .imageUrl("/test/test")
+                    .build());
 
         };
     }
