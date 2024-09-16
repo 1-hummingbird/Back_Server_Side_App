@@ -14,7 +14,7 @@ public interface AuthService {
      */
 
     /**
-     * 1. Sign up
+     * 1. register
      * Save user
      * @param registerRequestDTO
      * return void
@@ -22,11 +22,25 @@ public interface AuthService {
     void register(RegisterRequestDTO registerRequestDTO);
 
     /**
-     * 2. Sign in
+     * 2. login
      * Authenticate user
      * @param loginRequestDTO
      * return SignInResponseDto
      */
     LoginResponseDTO login(LoginRequestDTO loginRequestDTO);
+
+    /**
+     * 3. logout
+     * @param logoutRequestDTO
+     * @return void
+     */
+    void logout(LogoutRequestDTO logoutRequestDTO);
+
+    /**
+     * 4. resetPW
+     * @param resetPWRequestDTO
+     * @return void
+     */
+    void resetPW(ResetPWRequestDTO resetPWRequestDTO);
 
 }

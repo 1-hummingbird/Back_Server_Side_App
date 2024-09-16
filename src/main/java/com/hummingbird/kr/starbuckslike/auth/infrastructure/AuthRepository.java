@@ -16,8 +16,16 @@ public interface AuthRepository extends JpaRepository<Member, Long> {
   @Query("SELECT m FROM Member m WHERE m.loginID = :loginID")
   Optional<Member> findByLoginID(@Param("loginID") String loginID);
 
+  @Query("SELECT m FROM Member m WHERE m.email = :email")
+  Optional<Member> findByEmail(@Param("email") String email);
+
   @Modifying
   @Transactional
   @Query("UPDATE Member m SET m.password = :password WHERE m.memberUID = :uuid")
   void updatePasswordByUuid(@Param("uuid") String uuid, @Param("password") String password);
+
+  @Modifying
+  @Transactional
+  @Query("UPDATE Member m SET m.password = :password WHERE m.loginID = :loginID")
+  void updatePasswordByLoginID(@Param("loginID") String loginID, @Param("password") String password);
 }

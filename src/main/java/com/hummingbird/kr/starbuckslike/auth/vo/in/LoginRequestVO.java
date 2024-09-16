@@ -1,12 +1,10 @@
 package com.hummingbird.kr.starbuckslike.auth.vo.in;
 
-import com.hummingbird.kr.starbuckslike.auth.util.Cryptor;
 import com.hummingbird.kr.starbuckslike.auth.dto.in.LoginRequestDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
-import javax.crypto.SecretKey;
 
 @Getter
 @Setter

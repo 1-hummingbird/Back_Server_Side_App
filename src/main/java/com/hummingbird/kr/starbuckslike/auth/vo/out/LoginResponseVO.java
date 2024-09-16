@@ -1,9 +1,8 @@
 package com.hummingbird.kr.starbuckslike.auth.vo.out;
 
-import com.hummingbird.kr.starbuckslike.auth.dto.out.LoginResponseDTO;
 import lombok.*;
 
-
+@Getter
 @AllArgsConstructor
 public class LoginResponseVO {
 

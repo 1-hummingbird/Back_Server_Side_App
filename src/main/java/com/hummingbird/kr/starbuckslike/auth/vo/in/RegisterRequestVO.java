@@ -17,14 +17,8 @@ public class RegisterRequestVO {
     private String password;
 
     public RegisterRequestDTO toDTO() {
-        return RegisterRequestDTO.builder()
-                .loginID(loginID)
-                .name(name)
-                .nickname(nickname)
-                .birth(birthdate)
-                .phone(phone)
-                .email(email)
-                .password(password)
-                .build();
+        return new RegisterRequestDTO(
+            this.loginID, this.name, this.nickname, this.birthdate, this.phone, this.email, this.password
+        );
     }
 }

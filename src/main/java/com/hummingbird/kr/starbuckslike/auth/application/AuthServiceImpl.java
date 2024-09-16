@@ -12,13 +12,19 @@ import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
+import java.util.concurrent.TimeUnit;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.core.env.Environment;
+import java.util.Date;
+import java.util.Optional;
 
 @Slf4j
 @Service
@@ -28,13 +34,17 @@ public class AuthServiceImpl implements AuthService{
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
+    private final RedisTemplate<String, Date> redisTemplate;
+    private Environment env;
+
 
     @Autowired
-    public AuthServiceImpl(AuthRepository authRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder) {
+    public AuthServiceImpl(AuthRepository authRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RedisTemplate<String, Date> redisTemplate) {
         this.authRepository = authRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
+        this.redisTemplate = redisTemplate;
     }
 
     @PostConstruct
@@ -86,6 +96,38 @@ public class AuthServiceImpl implements AuthService{
 
     }
 
+    @Override
+    @Transactional
+    public void logout(LogoutRequestDTO logoutRequestDTO) {
+        log.info("logoutRequestDTO : {}", logoutRequestDTO);
+        Long accessExpireTime = Optional.ofNullable(env.getProperty("JWT.token.access-expire-time", Long.class)).orElse(0L);
+        Date expires = new Date(accessExpireTime + System.currentTimeMillis());
+        saveToken(logoutRequestDTO.getAccessToken(), expires);
+        saveToken(logoutRequestDTO.getRefreshToken(), expires);
+    }
+
+    @Override
+    @Transactional
+    public void resetPW(ResetPWRequestDTO resetPWRequestDTO) {
+        log.info("resetPWRequestDTO : {}", resetPWRequestDTO);
+        try {
+            authRepository.updatePasswordByLoginID(resetPWRequestDTO.getLoginID(), passwordEncoder.encode(resetPWRequestDTO.getPassword()));
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.NO_EXIST_USER);
+        }
+    }
+
+    @Override
+    @Transactional
+    public FindIDResponseDTO findID(FindIDRequestDTO findIDRequestDTO) {
+        log.info("findIDRequestDTO : {}", findIDRequestDTO);
+        try {
+            return new FindIDResponseDTO(authRepository.findByEmail(findIDRequestDTO.getEmail()).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER)).getLoginID());
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.NO_EXIST_USER);
+        }
+    }
+
     private String createToken(Authentication authentication) {
         return jwtTokenProvider.generateAccessToken(authentication);
     }
@@ -98,5 +140,16 @@ public class AuthServiceImpl implements AuthService{
                         inputPassword
                 )
         );
+    }
+
+
+    //for logout Request, this is black-list of Refresh, so TTL is same as expires
+    public void saveToken(String tokenUID, Date expires) {
+        long ttl = (expires.getTime() - System.currentTimeMillis()) / 1000;
+        redisTemplate.opsForValue().set(tokenUID, expires, ttl, TimeUnit.SECONDS);
+    }
+
+    public Date findTokenExp(String tokenUID) {
+        return redisTemplate.opsForValue().get(tokenUID);
     }
 }
