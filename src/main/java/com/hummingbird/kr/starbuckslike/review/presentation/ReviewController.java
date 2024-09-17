@@ -2,11 +2,8 @@ package com.hummingbird.kr.starbuckslike.review.presentation;
 
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
-import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseListResponseDto;
-import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseListResponseVo;
 import com.hummingbird.kr.starbuckslike.review.application.ReviewService;
-import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListImageResponseDto;
-import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListInfoResponseDto;
+import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewRequestDto;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewListImageResponseVo;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewListInfoResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -15,6 +12,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
 
 @RestController
@@ -60,6 +58,29 @@ public class ReviewController {
         );
     }
 
+    @Operation(summary = "리뷰 작성", description = "리뷰 작성 하기")
+    @PostMapping("")
+    public CommonResponseEntity<Void> addReviewV1(
+            @RequestBody AddReviewRequestDto addReviewRequestDto
+    ){
+        reviewService.addReview(addReviewRequestDto);
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                null
+        );
+    }
+
+    @Operation(summary = "리뷰 삭제" , description = "리뷰 작성 하기(soft delete)")
+    @PostMapping("/delete/{reviewId}")
+    public CommonResponseEntity<Void> deleteReviewV1(@PathVariable("reviewId") Long reviewId) {
+        reviewService.deleteReview(reviewId);
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                null
+        );
+    }
 
 
 }

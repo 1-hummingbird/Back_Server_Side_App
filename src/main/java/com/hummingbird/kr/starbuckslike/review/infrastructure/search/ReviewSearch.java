@@ -20,4 +20,7 @@ public interface ReviewSearch {
     // 리뷰 내용 조회
     ReviewListInfoResponseDto findReviewInfoById(Long reviewId);
 
+    // 이미 작성된 리뷰인지 확인
+    Boolean exists(String memberUuid, String purchaseCode, Long optionId);
+
 }

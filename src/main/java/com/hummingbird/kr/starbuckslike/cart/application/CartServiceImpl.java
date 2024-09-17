@@ -63,6 +63,26 @@ public class CartServiceImpl implements CartService{
         }
     }
 
+    @Override
+    public void addCartItemV2(RequestAddCartItemDto requestAddCartItemDto) {
+        canAddToCart(requestAddCartItemDto); // 장바구니에 넣을 수 있는지 체크
+        // 이미 장바구니에 있는 상품인지 확인
+        if(cartSearch.exists(requestAddCartItemDto.getMemberUID(), requestAddCartItemDto.getOptionId())){
+            // 이미 존재
+            Cart findCart =
+                    cartSearch.findCartOption(requestAddCartItemDto.getMemberUID(), requestAddCartItemDto.getOptionId());
+            findCart.changeQty(findCart.getQty() + requestAddCartItemDto.getQty()); // 수량 더해줌
+            cartRepository.save(findCart);
+        }
+        else{
+            // 처음 장바구니에 담는 상품
+            ProductOption selectOption = productOptionRepository
+                    .findById(requestAddCartItemDto.getOptionId())
+                    .orElseThrow(() -> new NoSuchElementException("상품 옵션을 찾을 수 없습니다. " ));
+            cartRepository.save(requestAddCartItemDto.toEntity(selectOption)); // 신규 장바구니 상품 저장 완료
+        }
+    }
+
     // 최대 장바구니 개수 제한 로직
     private void canAddToCart(RequestAddCartItemDto requestAddCartItemDto) {
         // 회원이 담을 수 있는 장바구니 아이템은 20개 까지다

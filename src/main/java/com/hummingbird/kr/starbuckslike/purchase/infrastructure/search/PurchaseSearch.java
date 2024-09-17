@@ -17,6 +17,8 @@ public interface PurchaseSearch {
     // 주문 디테일 조회 (총가격 , 총 할인금액, 배송지)
     PurchaseDetailResponseDto findPurchaseDetailById(String purchaseCode);
 
+    Boolean exists(String purchaseCode);
+
 
 
 }

@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.review.application;
 
+import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewRequestDto;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListImageResponseDto;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListInfoResponseDto;
 import org.springframework.data.domain.Pageable;
@@ -16,5 +17,15 @@ public interface ReviewService {
     ReviewListImageResponseDto findReviewImageById(Long reviewId);
     // 리뷰 내용 조회
     ReviewListInfoResponseDto findReviewInfoById(Long reviewId);
+
+    /**
+     * Create , Update , Delete
+     */
+    // 리뷰 작성
+    @Transactional
+    void addReview(AddReviewRequestDto addReviewRequestDto);
+
+    @Transactional
+    void deleteReview(Long reviewId);
 
 }

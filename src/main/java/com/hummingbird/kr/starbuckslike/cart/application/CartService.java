@@ -16,6 +16,8 @@ public interface CartService {
     // 장바구니 아이템 추가 [상품디테일 페이지의 장바구니 추가버튼]
     @Transactional
     public void addCartItem(RequestAddCartItemDto requestAddCartItemDto);
+    @Transactional
+    public void addCartItemV2(RequestAddCartItemDto requestAddCartItemDto);
 
     //  장바구니 아이템 (증가 또는 감소)
     @Transactional

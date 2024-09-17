@@ -96,6 +96,20 @@ public class CartSearchImpl implements CartSearch {
     }
 
     @Override
+    public Boolean exists(String userUid, Long optionId) {
+        Integer fetchOne = queryFactory
+                .selectOne()
+                .from(cart)
+                .where(cart.userUid.eq(userUid)
+                        .and(cart.productOption.id.eq(optionId))
+                        .and(cart.isDeleted.isFalse())
+                )
+                .fetchFirst();
+
+        return fetchOne != null;
+    }
+
+    @Override
     public Long findCartItemCountByMember(String userUid) {
         return queryFactory
                 .select(cart.count())

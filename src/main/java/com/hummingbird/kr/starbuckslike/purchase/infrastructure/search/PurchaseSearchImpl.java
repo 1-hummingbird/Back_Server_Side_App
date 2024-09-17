@@ -23,6 +23,7 @@ import java.util.stream.Collectors;
 import static com.hummingbird.kr.starbuckslike.product.domain.QProductImage.productImage;
 import static com.hummingbird.kr.starbuckslike.purchase.domain.QPurchase.purchase;
 import static com.hummingbird.kr.starbuckslike.purchase.domain.QPurchaseProduct.purchaseProduct;
+import static com.hummingbird.kr.starbuckslike.review.domain.QReview.review;
 
 @Repository
 @RequiredArgsConstructor
@@ -116,6 +117,17 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                         .and(purchase.isDelete.eq(false))
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public Boolean exists(String purchaseCode) {
+        Integer fetchOne = queryFactory
+                .selectOne()
+                .from(purchase)
+                .where(purchase.code.eq(purchaseCode))
+                .fetchFirst();
+        log.info("fetchOne : "+fetchOne);
+        return fetchOne != null;
     }
 
     // 구매번호에 해당하는 상품들을 조회

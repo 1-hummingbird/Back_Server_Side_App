@@ -62,4 +62,20 @@ public class ReviewSearchImpl implements ReviewSearch{
                 .where(review.id.eq(reviewId))
                 .fetchOne();
     }
+
+    @Override
+    public Boolean exists(String memberUuid, String purchaseCode, Long optionId) {
+        Integer fetchOne = queryFactory
+                            .selectOne()
+                            .from(review)
+                            .where(
+                                    review.memberUID.eq(memberUuid)
+                                    .and(review.purchaseCode.eq(purchaseCode))
+                                    .and(review.optionId.eq(optionId))
+                                    .and(review.isDelete.isFalse())
+                            )
+                            .fetchFirst();
+        log.info("fetchOne : "+fetchOne);
+        return fetchOne != null;
+    }
 }
