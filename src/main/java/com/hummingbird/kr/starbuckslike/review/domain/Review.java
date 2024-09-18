@@ -45,17 +45,30 @@ public class Review extends BaseEntity {
     private String content;
 
     @Comment("별점")
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "TINYINT CHECK (star BETWEEN 1 AND 5)")
     @Min(1) @Max(5)
     private Integer star;
 
+    @Comment("리뷰 댓글 개수")
+    @Column(nullable = false)
+    private Integer commentCount;
+
     @Comment("삭제 여부")
     @Column(nullable = false)
-    private Boolean isDelete;
+    private Boolean isDeleted;
+
+    // 댓글 수 증가
+    public void increaseCommentCount() {
+        this.commentCount += 1;
+    }
+    // 댓글 수 감소
+    public void decreaseCommentCount() {
+        this.commentCount -= 1;
+    }
 
     @Builder
     public Review(String purchaseCode, String nickname, String memberUID, Long productId, Long optionId,
-                  String content, Integer star, Boolean isDelete) {
+                  String content, Integer star, Integer commentCount, Boolean isDeleted) {
         this.purchaseCode = purchaseCode;
         this.nickname = nickname;
         this.memberUID = memberUID;
@@ -63,6 +76,7 @@ public class Review extends BaseEntity {
         this.optionId = optionId;
         this.content = content;
         this.star = star;
-        this.isDelete = isDelete;
+        this.commentCount = commentCount;
+        this.isDeleted = isDeleted;
     }
 }

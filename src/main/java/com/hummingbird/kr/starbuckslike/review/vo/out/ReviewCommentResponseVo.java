@@ -7,14 +7,8 @@ import java.time.LocalDateTime;
 
 @Getter
 @Builder
-public class ReviewListInfoResponseVo {
-    private String nickName;
-
-    private Integer star;
-
-    private LocalDateTime createAt;
-
+public class ReviewCommentResponseVo {
+    private String nickname;
     private String content;
-    private Integer commentCount;
-
+    private LocalDateTime createAt;
 }

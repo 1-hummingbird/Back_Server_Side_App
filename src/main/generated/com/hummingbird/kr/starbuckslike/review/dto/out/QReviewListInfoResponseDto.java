@@ -13,8 +13,8 @@ public class QReviewListInfoResponseDto extends ConstructorExpression<ReviewList
 
     private static final long serialVersionUID = -1958699392L;
 
-    public QReviewListInfoResponseDto(com.querydsl.core.types.Expression<String> nickName, com.querydsl.core.types.Expression<Integer> star, com.querydsl.core.types.Expression<java.time.LocalDateTime> createAt, com.querydsl.core.types.Expression<String> content) {
-        super(ReviewListInfoResponseDto.class, new Class<?>[]{String.class, int.class, java.time.LocalDateTime.class, String.class}, nickName, star, createAt, content);
+    public QReviewListInfoResponseDto(com.querydsl.core.types.Expression<String> nickName, com.querydsl.core.types.Expression<Integer> star, com.querydsl.core.types.Expression<java.time.LocalDateTime> createAt, com.querydsl.core.types.Expression<String> content, com.querydsl.core.types.Expression<Integer> commentCount) {
+        super(ReviewListInfoResponseDto.class, new Class<?>[]{String.class, int.class, java.time.LocalDateTime.class, String.class, int.class}, nickName, star, createAt, content, commentCount);
     }
 
 }

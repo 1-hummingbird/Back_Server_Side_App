@@ -8,10 +8,10 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 @Getter
-@Builder
 @AllArgsConstructor
 @NoArgsConstructor
 public class AddReviewRequestDto {
@@ -28,7 +28,7 @@ public class AddReviewRequestDto {
 
     List<AddReviewImageRequestDto> reviewImages;
 
-    // 주문 엔티티 생성
+    // 리뷰 엔티티 생성
     public Review toReview() {
         return Review.builder()
                 .purchaseCode(purchaseCode)
@@ -38,12 +38,14 @@ public class AddReviewRequestDto {
                 .optionId(optionId)
                 .content(content)
                 .star(star)
-                .isDelete(false)
+                .commentCount(0)
+                .isDeleted(false)
                 .build();
     }
-    // 주문 상품 엔티티들 생성
+    // 리뷰 이미지 엔티티들 생성
     public List<ReviewImage> toReviewImage(Review review) {
         return reviewImages.stream()
+                .filter(Objects::nonNull)  // null 이면 필터링
                 .map(imageDto -> ReviewImage.builder()
                         .review(review)
                         .seq(imageDto.getSeq())

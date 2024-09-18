@@ -10,6 +10,6 @@ public interface ReviewRepository extends JpaRepository<Review,Long> {
 
     // 리뷰 삭제
     @Modifying
-    @Query("UPDATE Review r SET r.isDelete = true WHERE r.id = :reviewId")
+    @Query("UPDATE Review r SET r.isDeleted = true WHERE r.id = :reviewId")
     void softDeleteReview(@Param("reviewId") Long reviewId);
 }

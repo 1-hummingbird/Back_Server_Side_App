@@ -100,7 +100,8 @@ public class CartSearchImpl implements CartSearch {
         Integer fetchOne = queryFactory
                 .selectOne()
                 .from(cart)
-                .where(cart.userUid.eq(userUid)
+                .where(
+                        cart.userUid.eq(userUid)
                         .and(cart.productOption.id.eq(optionId))
                         .and(cart.isDeleted.isFalse())
                 )

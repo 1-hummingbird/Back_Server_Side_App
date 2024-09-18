@@ -34,7 +34,9 @@ import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseStatus;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseProductRepository;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseRepository;
 import com.hummingbird.kr.starbuckslike.review.domain.Review;
+import com.hummingbird.kr.starbuckslike.review.domain.ReviewComment;
 import com.hummingbird.kr.starbuckslike.review.domain.ReviewImage;
+import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewCommentRepository;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewImageRepository;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewRepository;
 import org.springframework.boot.CommandLineRunner;
@@ -69,7 +71,8 @@ public class LoadTestData {
             PurchaseRepository purchaseRepository,
             PurchaseProductRepository purchaseProductRepository,
             ReviewRepository reviewRepository,
-            ReviewImageRepository reviewImageRepository
+            ReviewImageRepository reviewImageRepository,
+            ReviewCommentRepository reviewCommentRepository
                                    ) {
         return args -> {
             /**
@@ -537,7 +540,8 @@ public class LoadTestData {
                     .optionId(top1_middle1_product1_op1.getId())
                     .content("리뷰 내용입니다")
                     .star(4)
-                    .isDelete(false)
+                    .commentCount(3)
+                    .isDeleted(false)
                     .build();
             reviewRepository.save(top1_middle1_product1_op1_review);
             reviewImageRepository.save(ReviewImage.builder()
@@ -558,7 +562,8 @@ public class LoadTestData {
                     .optionId(top1_middle1_product1_op2.getId())
                     .content("리뷰 내용입니다")
                     .star(5)
-                    .isDelete(false)
+                    .commentCount(0)
+                    .isDeleted(false)
                     .build();
             reviewRepository.save(top1_middle1_product1_op2_review);
             reviewImageRepository.save(ReviewImage.builder()
@@ -566,6 +571,30 @@ public class LoadTestData {
                     .review(top1_middle1_product1_op2_review)
                     .imageUrl("/test/test")
                     .build());
+            // 댓글
+            reviewCommentRepository.save(ReviewComment.builder()
+                    .reviewId(top1_middle1_product1_op1_review.getId())
+                    .nickname("hjh")
+                    .memberUID("aaa-bbb-ccc")
+                    .content("정보 감사")
+                    .build()
+            );
+            reviewCommentRepository.save(ReviewComment.builder()
+                    .reviewId(top1_middle1_product1_op1_review.getId())
+                    .nickname("hjh")
+                    .memberUID("aaa-bbb-ccc")
+                    .content("정보 감사2")
+                    .build()
+            );
+            reviewCommentRepository.save(ReviewComment.builder()
+                    .reviewId(top1_middle1_product1_op1_review.getId())
+                    .nickname("hjh")
+                    .memberUID("aaa-bbb-ccc")
+                    .content("정보 감사3")
+                    .build()
+            );
+
+
 
         };
     }

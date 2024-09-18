@@ -3,7 +3,11 @@ package com.hummingbird.kr.starbuckslike.review.presentation;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
 import com.hummingbird.kr.starbuckslike.review.application.ReviewService;
+import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewCommentRequestDto;
 import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewRequestDto;
+import com.hummingbird.kr.starbuckslike.review.dto.in.DeleteReviewCommentRequestDto;
+import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewCommentResponseDto;
+import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewCommentResponseVo;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewListImageResponseVo;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewListInfoResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -14,6 +18,9 @@ import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
+import java.util.stream.Stream;
 
 @RestController
 @Log4j2
@@ -79,6 +86,43 @@ public class ReviewController {
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),
                 null
+        );
+    }
+    @Operation(summary = "리뷰 댓글 작성", description = "리뷰 댓글 작성 하기")
+    @PostMapping("/comment")
+    public CommonResponseEntity<Void> addReviewCommentV1(
+            @RequestBody AddReviewCommentRequestDto addReviewCommentRequestDto
+    ){
+        reviewService.addReviewComment(addReviewCommentRequestDto);
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                null
+        );
+    }
+
+    @Operation(summary = "리뷰 댓글 삭제", description = "리뷰 댓글 삭제하기")
+    @PostMapping("/delete/comment")
+    public CommonResponseEntity<Void> deleteReviewCommentV1(
+            @RequestBody DeleteReviewCommentRequestDto requestDto
+    ) {
+        reviewService.deleteReviewComment(requestDto);
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                null
+        );
+    }
+
+    @Operation(summary = "리뷰 댓글 조회", description = "리뷰 id 로 리뷰 댓글 조회 ")
+    @GetMapping("/list/comment/{reviewId}")
+    public CommonResponseEntity<List<ReviewCommentResponseVo>> findReviewCommentByIdV1(
+            @PathVariable("reviewId") Long reviewId
+    ){
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                reviewService.findReviewCommentById(reviewId).stream().map(ReviewCommentResponseDto::toVo).toList()
         );
     }
 

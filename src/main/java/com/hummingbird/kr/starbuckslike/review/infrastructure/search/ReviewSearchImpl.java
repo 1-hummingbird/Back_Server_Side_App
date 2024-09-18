@@ -1,8 +1,7 @@
 package com.hummingbird.kr.starbuckslike.review.infrastructure.search;
 
-import com.hummingbird.kr.starbuckslike.review.dto.out.QReviewListInfoResponseDto;
-import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListImageResponseDto;
-import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListInfoResponseDto;
+import com.hummingbird.kr.starbuckslike.review.domain.QReviewComment;
+import com.hummingbird.kr.starbuckslike.review.dto.out.*;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -11,9 +10,12 @@ import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.stereotype.Repository;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hummingbird.kr.starbuckslike.review.domain.QReview.review;
+import static com.hummingbird.kr.starbuckslike.review.domain.QReviewComment.reviewComment;
 import static com.hummingbird.kr.starbuckslike.review.domain.QReviewImage.reviewImage;
 
 @Repository
@@ -28,7 +30,7 @@ public class ReviewSearchImpl implements ReviewSearch{
                 .from(review)
                 .where(
                         review.productId.eq(productId)
-                        .and(review.isDelete.isFalse())
+                        .and(review.isDeleted.isFalse())
                 )
                 .orderBy(review.createdAt.desc())
                 .offset(pageable.getOffset())
@@ -57,7 +59,8 @@ public class ReviewSearchImpl implements ReviewSearch{
     @Override
     public ReviewListInfoResponseDto findReviewInfoById(Long reviewId) {
         return queryFactory
-                .select(new QReviewListInfoResponseDto(review.nickname, review.star, review.createdAt, review.content))
+                .select(new QReviewListInfoResponseDto(review.nickname, review.star,
+                            review.createdAt, review.content, review.commentCount))
                 .from(review)
                 .where(review.id.eq(reviewId))
                 .fetchOne();
@@ -72,10 +75,26 @@ public class ReviewSearchImpl implements ReviewSearch{
                                     review.memberUID.eq(memberUuid)
                                     .and(review.purchaseCode.eq(purchaseCode))
                                     .and(review.optionId.eq(optionId))
-                                    .and(review.isDelete.isFalse())
+                                    .and(review.isDeleted.isFalse())
                             )
                             .fetchFirst();
         log.info("fetchOne : "+fetchOne);
         return fetchOne != null;
+    }
+
+    @Override
+    public List<ReviewCommentResponseDto> findReviewCommentById(Long reviewId) {
+        List<ReviewCommentResponseDto> res = queryFactory
+                .select(new QReviewCommentResponseDto(reviewComment.nickname,
+                                                        reviewComment.content,
+                                                        reviewComment.createdAt)
+                )
+                .from(reviewComment)
+                .where(reviewComment.reviewId.eq(reviewId))
+                .fetch();
+        // 리뷰 댓글 특성상 데이터가 많지 않을 것으로 예상, 성능을 고려해 애플리케이션 단에서 정렬하도록 함
+        return res.stream()
+                .sorted(Comparator.comparing(ReviewCommentResponseDto::getCreateAt).reversed()) // 작성일 내림차순 정렬
+                .collect(Collectors.toList());
     }
 }

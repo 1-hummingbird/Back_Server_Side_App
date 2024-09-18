@@ -18,20 +18,25 @@ public class ReviewListInfoResponseDto {
 
     private String content;
 
+    private Integer commentCount;
+
     public ReviewListInfoResponseVo toVo(){
         return ReviewListInfoResponseVo.builder()
                 .nickName(nickName)
                 .star(star)
                 .createAt(createAt)
                 .content(content)
+                .commentCount(commentCount)
                 .build();
     }
 
     @QueryProjection
-    public ReviewListInfoResponseDto(String nickName, Integer star, LocalDateTime createAt, String content) {
+    public ReviewListInfoResponseDto(String nickName, Integer star, LocalDateTime createAt,
+                                     String content, Integer commentCount) {
         this.nickName = nickName;
         this.star = star;
         this.createAt = createAt;
         this.content = content;
+        this.commentCount = commentCount;
     }
 }

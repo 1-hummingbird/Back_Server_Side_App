@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.review.infrastructure.search;
 
+import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewCommentResponseDto;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListImageResponseDto;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListInfoResponseDto;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewListImageResponseVo;
@@ -23,4 +24,6 @@ public interface ReviewSearch {
     // 이미 작성된 리뷰인지 확인
     Boolean exists(String memberUuid, String purchaseCode, Long optionId);
 
+    // 리뷰 댓글 보기
+    List<ReviewCommentResponseDto> findReviewCommentById(Long reviewId);
 }

@@ -126,7 +126,6 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                 .from(purchase)
                 .where(purchase.code.eq(purchaseCode))
                 .fetchFirst();
-        log.info("fetchOne : "+fetchOne);
         return fetchOne != null;
     }
 

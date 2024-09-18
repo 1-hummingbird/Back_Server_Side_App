@@ -10,18 +10,16 @@ import com.querydsl.core.types.Path;
 
 
 /**
- * QReview is a Querydsl query type for Review
+ * QReviewComment is a Querydsl query type for ReviewComment
  */
 @Generated("com.querydsl.codegen.DefaultEntitySerializer")
-public class QReview extends EntityPathBase<Review> {
+public class QReviewComment extends EntityPathBase<ReviewComment> {
 
-    private static final long serialVersionUID = 1370074135L;
+    private static final long serialVersionUID = 1769366088L;
 
-    public static final QReview review = new QReview("review");
+    public static final QReviewComment reviewComment = new QReviewComment("reviewComment");
 
     public final com.hummingbird.kr.starbuckslike.common.entity.QBaseEntity _super = new com.hummingbird.kr.starbuckslike.common.entity.QBaseEntity(this);
-
-    public final NumberPath<Integer> commentCount = createNumber("commentCount", Integer.class);
 
     public final StringPath content = createString("content");
 
@@ -30,33 +28,25 @@ public class QReview extends EntityPathBase<Review> {
 
     public final NumberPath<Long> id = createNumber("id", Long.class);
 
-    public final BooleanPath isDeleted = createBoolean("isDeleted");
-
     public final StringPath memberUID = createString("memberUID");
 
     public final StringPath nickname = createString("nickname");
 
-    public final NumberPath<Long> optionId = createNumber("optionId", Long.class);
-
-    public final NumberPath<Long> productId = createNumber("productId", Long.class);
-
-    public final StringPath purchaseCode = createString("purchaseCode");
-
-    public final NumberPath<Integer> star = createNumber("star", Integer.class);
+    public final NumberPath<Long> reviewId = createNumber("reviewId", Long.class);
 
     //inherited
     public final DateTimePath<java.time.LocalDateTime> updatedAt = _super.updatedAt;
 
-    public QReview(String variable) {
-        super(Review.class, forVariable(variable));
+    public QReviewComment(String variable) {
+        super(ReviewComment.class, forVariable(variable));
     }
 
-    public QReview(Path<? extends Review> path) {
+    public QReviewComment(Path<? extends ReviewComment> path) {
         super(path.getType(), path.getMetadata());
     }
 
-    public QReview(PathMetadata metadata) {
-        super(Review.class, metadata);
+    public QReviewComment(PathMetadata metadata) {
+        super(ReviewComment.class, metadata);
     }
 
 }
