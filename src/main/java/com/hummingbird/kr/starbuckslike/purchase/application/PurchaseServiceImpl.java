@@ -61,10 +61,7 @@ public class PurchaseServiceImpl implements PurchaseService{
         // 기존의 purchase 엔티티를 조회
         Purchase purchase = purchaseRepository.findById(purchaseId)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
-
         purchaseRepository.softDeletePurchase(purchaseId);
-
-
     }
 
     private String generateUniquePurchaseCode() {

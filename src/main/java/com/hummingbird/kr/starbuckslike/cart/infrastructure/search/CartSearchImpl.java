@@ -9,12 +9,15 @@ import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
 import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductOption;
+import com.querydsl.core.Tuple;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
 import org.springframework.stereotype.Repository;
 
+import java.util.Comparator;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import static com.hummingbird.kr.starbuckslike.cart.domain.QCart.cart;
 import static com.hummingbird.kr.starbuckslike.product.domain.QProductImage.productImage;
@@ -30,12 +33,17 @@ public class CartSearchImpl implements CartSearch {
 
     @Override
     public List<Long> findAllCartIdByUserUid(String userUid) {
-        return queryFactory
-                    .select(cart.id)
-                    .from(cart)
-                    .where(cart.userUid.eq(userUid))
-                    .orderBy(cart.updatedAt.desc())
-                    .fetch();
+        List<Tuple> fetch = queryFactory
+                .select(cart.id, cart.updatedAt)
+                .from(cart)
+                .where(cart.userUid.eq(userUid))
+                //.orderBy(cart.updatedAt.desc())
+                .fetch();
+        return fetch.stream()
+                // updatedAt  내림차순 정렬
+                .sorted(Comparator.comparing(tuple -> tuple.get(cart.updatedAt), Comparator.reverseOrder()))
+                .map(tuple -> tuple.get(cart.id)) // 장바구니 id 값만 추출
+                .collect(Collectors.toList());
     }
 
     @Override
