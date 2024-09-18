@@ -9,6 +9,7 @@ import com.hummingbird.kr.starbuckslike.purchase.application.PurchaseService;
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseDetailResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseListResponseDto;
+import com.hummingbird.kr.starbuckslike.purchase.vo.in.AddPurchaseRequestVo;
 import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseDetailResponseVo;
 import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -51,9 +52,9 @@ public class PurchaseController {
 
     @Operation(summary = "회원 주문생성", description = "주문 생성")
     @PostMapping("")
-    public CommonResponseEntity<Void> addPurchaseV1(@RequestBody AddPurchaseRequestDto addPurchaseRequestDto){
+    public CommonResponseEntity<Void> addPurchaseV1(@RequestBody AddPurchaseRequestVo vo){
 
-        purchaseService.addPurchase(addPurchaseRequestDto);
+        purchaseService.addPurchase(AddPurchaseRequestDto.of(vo));
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),

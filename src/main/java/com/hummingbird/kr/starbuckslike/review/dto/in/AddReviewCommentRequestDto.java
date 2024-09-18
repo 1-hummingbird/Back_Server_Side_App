@@ -2,6 +2,7 @@ package com.hummingbird.kr.starbuckslike.review.dto.in;
 
 import com.hummingbird.kr.starbuckslike.review.domain.Review;
 import com.hummingbird.kr.starbuckslike.review.domain.ReviewComment;
+import com.hummingbird.kr.starbuckslike.review.vo.in.AddReviewCommentRequestVo;
 import jakarta.persistence.Column;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -29,6 +30,16 @@ public class AddReviewCommentRequestDto {
                 .nickname(nickname)
                 .memberUID(memberUID)
                 .content(content)
+                .build();
+    }
+
+    // vo -> dto
+    public static AddReviewCommentRequestDto of(AddReviewCommentRequestVo vo) {
+        return AddReviewCommentRequestDto.builder()
+                .reviewId(vo.getReviewId())
+                .nickname(vo.getNickname())
+                .memberUID(vo.getMemberUID())
+                .content(vo.getContent())
                 .build();
     }
 

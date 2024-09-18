@@ -45,7 +45,7 @@ public class PurchaseServiceImpl implements PurchaseService{
 
     @Override
     public void addPurchase(AddPurchaseRequestDto addPurchaseRequestDto) {
-        if(addPurchaseRequestDto.getAddPurchaseItemRequestVos().isEmpty()){
+        if(addPurchaseRequestDto.getPurchaseProducts().isEmpty()){
             throw new IllegalArgumentException("주문 항목이 비어 있습니다. 최소한 하나 이상의 상품을 포함해야 합니다.");
         }
         // 주문 생성

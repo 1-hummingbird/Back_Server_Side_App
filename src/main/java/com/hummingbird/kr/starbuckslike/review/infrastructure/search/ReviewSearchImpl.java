@@ -78,7 +78,6 @@ public class ReviewSearchImpl implements ReviewSearch{
                                     .and(review.isDeleted.isFalse())
                             )
                             .fetchFirst();
-        log.info("fetchOne : "+fetchOne);
         return fetchOne != null;
     }
 

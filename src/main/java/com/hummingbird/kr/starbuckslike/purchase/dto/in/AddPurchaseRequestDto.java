@@ -3,12 +3,17 @@ package com.hummingbird.kr.starbuckslike.purchase.dto.in;
 import com.hummingbird.kr.starbuckslike.purchase.domain.Purchase;
 import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseProduct;
 import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseStatus;
+import com.hummingbird.kr.starbuckslike.purchase.vo.in.AddPurchaseRequestVo;
+import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewImageRequestDto;
+import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewRequestDto;
+import com.hummingbird.kr.starbuckslike.review.vo.in.AddReviewRequestVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.stream.Collectors;
 
 /**
@@ -29,7 +34,7 @@ public class AddPurchaseRequestDto {
     private String userName;
     private String userUuid;
     private String memo; // 요청사항
-    private List<AddPurchaseItemRequestDto> addPurchaseItemRequestVos; // 주문 상품옵션
+    private List<AddPurchaseItemRequestDto> purchaseProducts; // 주문 상품옵션
 
     // 주문 엔티티 생성
     public Purchase toPurchase(String purchaseCode) {
@@ -49,7 +54,7 @@ public class AddPurchaseRequestDto {
     // 주문 상품 엔티티들 생성
     public List<PurchaseProduct> toPurchaseProduct(Purchase purchase) {
         // 각각의 주문 상품을 PurchaseProduct 로 변환
-        return addPurchaseItemRequestVos.stream()
+        return purchaseProducts.stream()
                                         .map(itemDto -> PurchaseProduct.builder()
                                                             .purchase(purchase) // 어떤 주문인지 매핑
                                                             .qty(itemDto.getQty())
@@ -64,4 +69,35 @@ public class AddPurchaseRequestDto {
                                                             .build())
                                         .collect(Collectors.toList());
     }
+    // vo -> dto
+    public static AddPurchaseRequestDto of(AddPurchaseRequestVo vo) {
+        return AddPurchaseRequestDto.builder()
+                .totalDiscount(vo.getTotalPrice())
+                .totalDiscount(vo.getTotalDiscount())
+                .address(vo.getAddress())
+                .primaryPhone(vo.getPrimaryPhone())
+                .secondaryPhone(vo.getSecondaryPhone())
+                .userName(vo.getUserName())
+                .userUuid(vo.getUserUuid())
+                .memo(vo.getMemo())
+                .purchaseProducts(
+                        vo.getPurchaseProducts()
+                                .stream()
+                                .filter(Objects::nonNull)
+                                .map(itemVo -> AddPurchaseItemRequestDto.builder()
+                                        .productId(itemVo.getProductId())
+                                        .productName(itemVo.getProductName())
+                                        .optionId(itemVo.getOptionId())
+                                        .optionName(itemVo.getOptionName())
+                                        .qty(itemVo.getQty())
+                                        .price(itemVo.getPrice())
+                                        .discountPrice(itemVo.getDiscountPrice())
+                                        .inputData(itemVo.getInputData())
+                                        .build()
+                                ).collect(Collectors.toList())
+                )
+                .build();
+    }
+
+
 }

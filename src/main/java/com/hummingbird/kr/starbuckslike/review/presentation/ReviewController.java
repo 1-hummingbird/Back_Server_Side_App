@@ -7,6 +7,8 @@ import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewCommentRequestDto
 import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewRequestDto;
 import com.hummingbird.kr.starbuckslike.review.dto.in.DeleteReviewCommentRequestDto;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewCommentResponseDto;
+import com.hummingbird.kr.starbuckslike.review.vo.in.AddReviewCommentRequestVo;
+import com.hummingbird.kr.starbuckslike.review.vo.in.AddReviewRequestVo;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewCommentResponseVo;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewListImageResponseVo;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewListInfoResponseVo;
@@ -68,9 +70,9 @@ public class ReviewController {
     @Operation(summary = "리뷰 작성", description = "리뷰 작성 하기")
     @PostMapping("")
     public CommonResponseEntity<Void> addReviewV1(
-            @RequestBody AddReviewRequestDto addReviewRequestDto
+            @RequestBody AddReviewRequestVo vo
     ){
-        reviewService.addReview(addReviewRequestDto);
+        reviewService.addReview(AddReviewRequestDto.of(vo));
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),
@@ -91,9 +93,9 @@ public class ReviewController {
     @Operation(summary = "리뷰 댓글 작성", description = "리뷰 댓글 작성 하기")
     @PostMapping("/comment")
     public CommonResponseEntity<Void> addReviewCommentV1(
-            @RequestBody AddReviewCommentRequestDto addReviewCommentRequestDto
+            @RequestBody AddReviewCommentRequestVo vo
     ){
-        reviewService.addReviewComment(addReviewCommentRequestDto);
+        reviewService.addReviewComment(AddReviewCommentRequestDto.of(vo));
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),

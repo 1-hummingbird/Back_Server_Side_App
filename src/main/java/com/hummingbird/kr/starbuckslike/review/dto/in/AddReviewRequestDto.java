@@ -2,6 +2,7 @@ package com.hummingbird.kr.starbuckslike.review.dto.in;
 
 import com.hummingbird.kr.starbuckslike.review.domain.Review;
 import com.hummingbird.kr.starbuckslike.review.domain.ReviewImage;
+import com.hummingbird.kr.starbuckslike.review.vo.in.AddReviewRequestVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
@@ -14,6 +15,7 @@ import java.util.stream.Collectors;
 @Getter
 @AllArgsConstructor
 @NoArgsConstructor
+@Builder
 public class AddReviewRequestDto {
     private String purchaseCode;
 
@@ -52,6 +54,28 @@ public class AddReviewRequestDto {
                         .imageUrl(imageDto.getImageUrl())
                         .build())
                 .collect(Collectors.toList());
+    }
+
+    public static AddReviewRequestDto of(AddReviewRequestVo vo) {
+        return AddReviewRequestDto.builder()
+                .purchaseCode(vo.getPurchaseCode())
+                .nickname(vo.getNickname())
+                .memberUID(vo.getMemberUID())
+                .productId(vo.getProductId())
+                .optionId(vo.getOptionId())
+                .content(vo.getContent())
+                .star(vo.getStar())
+                .reviewImages(
+                        vo.getReviewImages()
+                                .stream()
+                                .filter(Objects::nonNull)  // null 필터링
+                                .map(imageVo -> AddReviewImageRequestDto.builder()
+                                        .seq(imageVo.getSeq())
+                                        .imageUrl(imageVo.getImageUrl())
+                                        .build())
+                                .collect(Collectors.toList())
+                )
+                .build();
     }
 
 }
