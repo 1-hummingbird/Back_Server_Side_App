@@ -32,10 +32,9 @@ public class SecurityConfig {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
-        config.addAllowedOriginPattern("*");
+        config.setAllowedOrigins(Arrays.asList("https://team-hummingbird.shop", "https://www.team-hummingbird.shop","https://api.team-hummingbird.ship"));
+	    config.setAllowedMethods(Arrays.asList("GET","POST"));
         config.addAllowedHeader("*");
-        config.addAllowedMethod("GET");
-        config.addAllowedMethod("POST");
         config.setExposedHeaders(List.of("Authorization"));
         source.registerCorsConfiguration("/**", config);
         return new CorsFilter(source);
