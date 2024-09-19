@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.config;
 
 
+import com.hummingbird.kr.starbuckslike.common.utils.DateLocalDateConverter;
 import com.hummingbird.kr.starbuckslike.banner.domain.Banner;
 import com.hummingbird.kr.starbuckslike.banner.infrastructure.BannerRepository;
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
@@ -41,10 +42,16 @@ import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewImageReposit
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Date;
 import java.time.LocalDate;
 import java.util.UUID;
+
+import static com.hummingbird.kr.starbuckslike.common.utils.DateLocalDateConverter.localDateToDate;
 
 /**
  * 테스트용 데이터
@@ -52,8 +59,10 @@ import java.util.UUID;
  * @author 허정현
  */
 @Configuration
+@ComponentScan(basePackages = "com.hummingbird.kr.starbuckslike")
 public class LoadTestData {
 
+    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
     // CommandLineRunner : 애플리케이션 구동 후 코드 실행하는 인터페이스
     @Bean
     CommandLineRunner initDatabase(
@@ -374,23 +383,21 @@ public class LoadTestData {
                     .loginID("testMemberId1")
                     .name("테스트유저1")
                     .nickname("테스트유저닉네임1")
-                    .birthdate(LocalDate.of(1998,1,1))
+                    .birthdate(localDateToDate(LocalDate.of(1998,1,1)))
                     .phone("010-1234-5678")
                     .email("test@test.com")
-                    .password("test1234")
-                    .isDeleted(false)
+                    .password(passwordEncoder.encode( "test1234"))
                     .memberUID(UUID.randomUUID().toString())
                     .build();
             memberRepository.save(member1);
             Member member2 = Member.builder()
-                    .loginID("testMemberId1")
+                    .loginID("testMemberId2")
                     .name("테스트유저2")
                     .nickname("테스트유저닉네임2")
-                    .birthdate(LocalDate.of(1998,1,2))
+                    .birthdate(localDateToDate(LocalDate.of(1998,1,2)))
                     .phone("010-1234-5678")
                     .email("test@test.com")
-                    .password("test1234")
-                    .isDeleted(false)
+                    .password(passwordEncoder.encode( "test"))
                     .memberUID(UUID.randomUUID().toString())
                     .build();
             memberRepository.save(member2);

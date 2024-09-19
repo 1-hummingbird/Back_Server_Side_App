@@ -6,10 +6,13 @@ import com.hummingbird.kr.starbuckslike.cart.dto.out.QResponseCartItemDto;
 import com.hummingbird.kr.starbuckslike.cart.dto.out.QResponseCartItemImageDto;
 import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
 import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
+<<<<<<< feature/82
 import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductOption;
 import com.querydsl.core.Tuple;
+=======
+>>>>>>> dev
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import jakarta.persistence.EntityManager;
