@@ -40,6 +40,7 @@ import com.hummingbird.kr.starbuckslike.review.domain.ReviewImage;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewCommentRepository;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewImageRepository;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewRepository;
+import lombok.RequiredArgsConstructor;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -59,10 +60,11 @@ import static com.hummingbird.kr.starbuckslike.common.utils.DateLocalDateConvert
  * @author 허정현
  */
 @Configuration
+@RequiredArgsConstructor
 @ComponentScan(basePackages = "com.hummingbird.kr.starbuckslike")
 public class LoadTestData {
 
-    private final PasswordEncoder passwordEncoder = new BCryptPasswordEncoder();
+    private final PasswordEncoder passwordEncoder;
     // CommandLineRunner : 애플리케이션 구동 후 코드 실행하는 인터페이스
     @Bean
     CommandLineRunner initDatabase(
