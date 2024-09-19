@@ -33,9 +33,9 @@ public class MemberController {
     @PostMapping("passage")
     @Operation(security = @SecurityRequirement(name = "Bearer Auth"),
             summary = "Days since enrollment API", description = "Days since enrollment API", tags = {"Member"})
-    public BaseResponse<PassageResponseVO> passage(@RequestBody PassageRequestVO passageRequestVO) {
-        log.info("passage memberUID: {}", passageRequestVO.getMemberUID());
-        PassageResponseDTO passageResponseDTO = memberService.passage(passageRequestVO.toDTO());
+    public BaseResponse<PassageResponseVO> passage(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        log.info("passage memberUID: {}", authUserDetail.getUsername());
+        PassageResponseDTO passageResponseDTO = memberService.passage(authUserDetail.getUsername());
         return new BaseResponse<PassageResponseVO>(passageResponseDTO.toVO());
     }
 

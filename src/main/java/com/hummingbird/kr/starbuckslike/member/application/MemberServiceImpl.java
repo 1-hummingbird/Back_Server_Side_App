@@ -21,12 +21,11 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public PassageResponseDTO passage(PassageRequestDTO passageRequestDTO) {
-        Member member = memberRepository.findByMemberUID(passageRequestDTO.getMemberUID()).orElseThrow(() -> new RuntimeException("Member not found"));
+    public PassageResponseDTO passage(String memberUID) {
+        Member member = memberRepository.findByMemberUID(memberUID).orElseThrow(() -> new RuntimeException("Member not found"));
         LocalDateTime createdAt = member.getCreatedAt();
         LocalDateTime currentTime = LocalDateTime.now();
         long daysBetween = ChronoUnit.DAYS.between(createdAt, currentTime);
-        log.info("passage daysBetween: {}", daysBetween);
         return new PassageResponseDTO(member.getMemberUID(), daysBetween);
     }
 
