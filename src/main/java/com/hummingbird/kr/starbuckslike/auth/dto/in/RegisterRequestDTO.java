@@ -8,7 +8,6 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
-import java.util.Date;
 import java.time.LocalDate;
 import java.util.UUID;
 

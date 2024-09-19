@@ -79,8 +79,6 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
-
-        log.info("signInRequestDto : {}", loginRequestDTO);
         log.info(loginRequestDTO.getLoginID());
         Member member;
         member = authRepository.findByLoginID(loginRequestDTO.getLoginID()).orElseThrow(

@@ -11,6 +11,8 @@ import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.Date;
 
+import java.util.Arrays;
+
 @Configuration
 @ComponentScan("com.hummingbird.kr.starbuckslike")
 public class RedisConfig {
