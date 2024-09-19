@@ -43,6 +43,15 @@ public interface ProductService {
     // 상품아이디로 상품 리스트 정보 단건 조회
     ProductListInfoResponseDto findProductListInfoResponseDtoById(Long productId);
 
+    /**
+     * 상품 위시리스트
+     */
+    // 상품 위시리스트 활성,비활성
+    @Transactional
+    void updateWishStatus(String memberUid , Long productId);
+
+    // 회원의 위시리스트 상품 조회
+    Slice<Long> searchWishProductIdsV1(Pageable pageable, String memberUid);
 
 
 

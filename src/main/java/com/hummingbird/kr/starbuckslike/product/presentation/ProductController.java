@@ -7,16 +7,16 @@ import com.hummingbird.kr.starbuckslike.product.application.ProductService;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
 import com.hummingbird.kr.starbuckslike.product.vo.*;
+import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
+import com.hummingbird.kr.starbuckslike.purchase.vo.in.AddPurchaseRequestVo;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 import java.util.stream.Collectors;
@@ -165,9 +165,37 @@ public class ProductController {
         );
     }
 
+    /**
+     *  상품 위시리스트 관련
+     */
+    @Operation(summary = "상품 위시리스트 활성,비활성", description = "토글방식으로 동작")
+    @PostMapping("/wish")
+    public CommonResponseEntity<Void> updateWishStatusV1(
+            // todo 팀장님 나중에 productId만 @RequestBody로 쓰시고 memberUid는 시큐리티에서 뽑아요
+            @RequestParam("memberUid") String memberUid,
+            @RequestParam("productId") Long productId
+    )
+    {
+        productService.updateWishStatus(memberUid , productId);
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                null
+        );
+    }
 
+    @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
+            summary = "상품 위시리스트 조회", description = "[Slice] 회원이 위시리스트한 상품만 조회")
+    @GetMapping("/wish/list")
+    public CommonResponseEntity<Slice<Long>> searchWishProductIdsV1(
+                Pageable pageable, @RequestParam("memberUid") String memberUid ){
 
-
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                productService.searchWishProductIdsV1(pageable,memberUid)
+        );
+    }
 
 
 

@@ -33,6 +33,12 @@ public interface ProductSearch {
      ProductListImageResponseDto findProductListImageResponseDtoById(Long productId);
      // 상품아이디로 상품 리스트 정보 단건 조회
      ProductListInfoResponseDto findProductListInfoResponseDtoById(Long productId);
+    /**
+     * 위시리스트 상품 조회
+     * offset based
+     */
+    // 위리리스트 상품 id 조회. id로 findProductListImageResponseDtoById, findProductListInfoResponseDtoById
+    Slice<Long> searchWishProductIdsV1(Pageable pageable, String memberUid);
 
     /**
      *  상품 디테일 정보 (상품상세 , 상품의 이미지)

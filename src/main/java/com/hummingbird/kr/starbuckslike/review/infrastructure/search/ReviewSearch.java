@@ -24,6 +24,9 @@ public interface ReviewSearch {
     // 이미 작성된 리뷰인지 확인
     Boolean exists(String memberUuid, String purchaseCode, Long optionId);
 
-    // 리뷰 댓글 보기
+    // 리뷰 댓글 보기 (stream 정렬)
     List<ReviewCommentResponseDto> findReviewCommentById(Long reviewId);
+
+    // 리뷰 댓글 보기 (order by)
+    List<ReviewCommentResponseDto> findReviewCommentByIdTest(Long reviewId);
 }

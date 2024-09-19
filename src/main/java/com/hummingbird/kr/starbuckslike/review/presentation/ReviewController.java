@@ -13,6 +13,7 @@ import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewCommentResponseVo;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewListImageResponseVo;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewListInfoResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
@@ -67,7 +68,8 @@ public class ReviewController {
         );
     }
 
-    @Operation(summary = "리뷰 작성", description = "리뷰 작성 하기")
+    @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
+                summary = "리뷰 작성", description = "리뷰 작성 하기")
     @PostMapping("")
     public CommonResponseEntity<Void> addReviewV1(
             @RequestBody AddReviewRequestVo vo
