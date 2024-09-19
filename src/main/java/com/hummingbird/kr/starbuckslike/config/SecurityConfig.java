@@ -32,7 +32,7 @@ public class SecurityConfig {
     public CorsFilter corsFilter() {
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
-        config.setAllowCredentials(true)
+        config.setAllowCredentials(true);
 	config.setAllowedOrigins(Arrays.asList("https://team-hummingbird.shop", "https://www.team-hummingbird.shop","https://api.team-hummingbird.ship","http://localhost"));
 	config.setAllowedMethods(Arrays.asList("GET","POST"));
         config.addAllowedHeader("*");
