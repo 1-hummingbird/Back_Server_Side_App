@@ -30,6 +30,7 @@ public class AuthController {
     @Operation(summary = "Member Login API", description = "Member Login API", tags = {"Auth"})
     @PostMapping("/login")
     public BaseResponse<LoginResponseVO> login(@RequestBody LoginRequestVO loginRequestVO) {
+        log.info("login loginID: {}", loginRequestVO.getLoginID());
         try {
             LoginResponseDTO loginResponseDTO = authService.login((loginRequestVO.toDTO()));
             return new BaseResponse<>(loginResponseDTO.toVO());

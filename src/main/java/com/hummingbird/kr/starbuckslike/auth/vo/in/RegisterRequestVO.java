@@ -3,7 +3,7 @@ package com.hummingbird.kr.starbuckslike.auth.vo.in;
 import com.hummingbird.kr.starbuckslike.auth.dto.in.RegisterRequestDTO;
 import lombok.Getter;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 @Getter
 public class RegisterRequestVO {
@@ -11,7 +11,7 @@ public class RegisterRequestVO {
     private String loginID;
     private String name;
     private String nickname;
-    private Date birthdate;
+    private LocalDate birthdate;
     private String phone;
     private String email;
     private String password;
