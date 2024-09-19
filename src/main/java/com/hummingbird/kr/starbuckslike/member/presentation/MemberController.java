@@ -36,7 +36,7 @@ public class MemberController {
     public BaseResponse<PassageResponseVO> passage(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
         log.info("passage memberUID: {}", authUserDetail.getUsername());
         PassageResponseDTO passageResponseDTO = memberService.passage(authUserDetail.getUsername());
-        return new BaseResponse<PassageResponseVO>(passageResponseDTO.toVO());
+        return new BaseResponse<>(passageResponseDTO.toVO());
     }
 
     @PostMapping("info")
@@ -54,7 +54,7 @@ public class MemberController {
     public BaseResponse<Void> update(@RequestBody MemberUpdateRequestVO memberUpdateRequestVO) {
         log.info("update memberUID: {}", memberUpdateRequestVO.getMemberUID());
         memberService.update(memberUpdateRequestVO.toDTO());
-        return new BaseResponse<Void>(BaseResponseStatus.SUCCESS);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
     
     @PostMapping("admin/findMember")
@@ -63,7 +63,7 @@ public class MemberController {
     public BaseResponse<FindMemberResponseVO> findMember(@RequestBody FindMemberRequestVO findMemberRequestVO) {
         log.info("findMember memberUID: {}", findMemberRequestVO.getMemberUID());
         FindMemberResponseDTO findMemberResponseDTO = memberService.findMember(findMemberRequestVO.toDTO());
-        return new BaseResponse<FindMemberResponseVO>(findMemberResponseDTO.toVO());
+        return new BaseResponse<>(findMemberResponseDTO.toVO());
     }
 
 

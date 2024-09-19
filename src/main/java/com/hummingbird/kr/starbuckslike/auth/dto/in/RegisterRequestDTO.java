@@ -9,6 +9,7 @@ import lombok.ToString;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
 import java.util.Date;
+import java.time.LocalDate;
 import java.util.UUID;
 
 @Getter
@@ -22,8 +23,7 @@ public class RegisterRequestDTO {
     private String name;
     private String phone;
     private String nickname;
-    private Date birth;
-    private String address;
+    private LocalDate birth;
 
 
     public Member toEntity(PasswordEncoder passwordEncoder) {
@@ -48,7 +48,7 @@ public class RegisterRequestDTO {
             String name,
             String phone,
             String nickname,
-            Date birth
+            LocalDate birth
     ) {
         this.email = email;
         this.password = password;
