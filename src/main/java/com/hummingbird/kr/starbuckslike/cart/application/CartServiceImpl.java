@@ -36,6 +36,7 @@ public class CartServiceImpl implements CartService{
      * @param requestAddCartItemDto
      * @author 허정현
      */
+
     @Override
     public void addCartItem(RequestAddCartItemDto requestAddCartItemDto) {
         canAddToCart(requestAddCartItemDto); // 장바구니에 넣을 수 있는지 체크
@@ -59,6 +60,26 @@ public class CartServiceImpl implements CartService{
         else{
             // 같은 사람의 장바구니에 같은 상품이 2개가 담겼다. 문제있음 에러처리
             throw new IllegalStateException("동일한 상품이 장바구니에 담길 수 없습니다.");
+        }
+    }
+
+    @Override
+    public void addCartItemV2(RequestAddCartItemDto requestAddCartItemDto) {
+        canAddToCart(requestAddCartItemDto); // 장바구니에 넣을 수 있는지 체크
+        // 이미 장바구니에 있는 상품인지 확인
+        if(cartSearch.exists(requestAddCartItemDto.getMemberUID(), requestAddCartItemDto.getOptionId())){
+            // 이미 존재
+            Cart findCart =
+                    cartSearch.findCartOption(requestAddCartItemDto.getMemberUID(), requestAddCartItemDto.getOptionId());
+            findCart.changeQty(findCart.getQty() + requestAddCartItemDto.getQty()); // 수량 더해줌
+            cartRepository.save(findCart);
+        }
+        else{
+            // 처음 장바구니에 담는 상품
+            ProductOption selectOption = productOptionRepository
+                    .findById(requestAddCartItemDto.getOptionId())
+                    .orElseThrow(() -> new NoSuchElementException("상품 옵션을 찾을 수 없습니다. " ));
+            cartRepository.save(requestAddCartItemDto.toEntity(selectOption)); // 신규 장바구니 상품 저장 완료
         }
     }
 
@@ -110,10 +131,13 @@ public class CartServiceImpl implements CartService{
         customCartRepository.selectCartItem(cartId);
     }
 
+
     @Override
     public void selectAllCartItems(List<Long> cartIds) {
         List<Cart> carts = customCartRepository.findCartItemsByCartIds(cartIds);
+        // todo 이것도 dto로 처리한다면 carts 가 아니라 DTO 리스트를 받은 다음 장바구니 객체를 생성해 바꿔주면 되는거죠??
         carts.forEach(Cart::toggleSelect); // 전체 선택 처리
+        cartRepository.saveAll(carts);
     }
 
 

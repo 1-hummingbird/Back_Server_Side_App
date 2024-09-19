@@ -26,7 +26,11 @@ public interface CartSearch {
     // 회원 장바구니에  상품옵션 담았는지 확인 [ 1 : 이미 존재 , 0 : 없음  ]
     Long findCartOptionCount(String userUid, Long optionId);
 
+    Boolean exists(String userUid, Long optionId);
+
     // 회원의 장바구니에 삼은 상품들의 숫자 (20개로 제한)
     Long findCartItemCountByMember(String userUid);
+
+    //
 
 }

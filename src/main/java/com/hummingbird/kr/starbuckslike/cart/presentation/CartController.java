@@ -33,7 +33,7 @@ public class CartController {
     @PostMapping("")
     public CommonResponseEntity<Void> addCartItemV1(@RequestBody RequestAddCartItemVo requestAddCartItemVo){
 
-        cartService.addCartItem(RequestAddCartItemDto.toDto(requestAddCartItemVo));
+        cartService.addCartItemV2(RequestAddCartItemDto.toDto(requestAddCartItemVo));
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),

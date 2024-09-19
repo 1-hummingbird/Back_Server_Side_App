@@ -31,7 +31,6 @@ public class CustomCartRepositoryImpl implements  CustomCartRepository{
                         cart.id.in(cartIds).and(cart.isDeleted.eq(false))
                 )
                 .fetch();
-
     }
 
     @Override
@@ -46,10 +45,10 @@ public class CustomCartRepositoryImpl implements  CustomCartRepository{
     @Override
     public void removeAllCartItemsByUserUid(String userUid) {
         long count = queryFactory
-                .update(cart)
-                .set(cart.isDeleted, true)
-                .where(cart.userUid.eq(userUid))
-                .execute();
+                        .update(cart)
+                        .set(cart.isDeleted, true)
+                        .where(cart.userUid.eq(userUid))
+                        .execute();
         em.clear();
     }
 }

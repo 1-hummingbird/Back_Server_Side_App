@@ -16,6 +16,7 @@ import com.hummingbird.kr.starbuckslike.category.infrastructure.CategoryProductL
 import com.hummingbird.kr.starbuckslike.category.infrastructure.MiddleCategoryRepository;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.TopCategoryRepository;
 import com.hummingbird.kr.starbuckslike.common.utils.CategoryCodeGenerator;
+import com.hummingbird.kr.starbuckslike.common.utils.PurchaseCodeGenerator;
 import com.hummingbird.kr.starbuckslike.exhibition.domain.Exhibition;
 import com.hummingbird.kr.starbuckslike.exhibition.domain.ExhibitionProduct;
 import com.hummingbird.kr.starbuckslike.exhibition.infrastructure.ExhibitionProductRepository;
@@ -33,6 +34,12 @@ import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseProduct;
 import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseStatus;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseProductRepository;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseRepository;
+import com.hummingbird.kr.starbuckslike.review.domain.Review;
+import com.hummingbird.kr.starbuckslike.review.domain.ReviewComment;
+import com.hummingbird.kr.starbuckslike.review.domain.ReviewImage;
+import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewCommentRepository;
+import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewImageRepository;
+import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewRepository;
 import org.springframework.boot.CommandLineRunner;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
@@ -71,7 +78,10 @@ public class LoadTestData {
             MemberRepository memberRepository,
             BannerRepository bannerRepository,
             PurchaseRepository purchaseRepository,
-            PurchaseProductRepository purchaseProductRepository
+            PurchaseProductRepository purchaseProductRepository,
+            ReviewRepository reviewRepository,
+            ReviewImageRepository reviewImageRepository,
+            ReviewCommentRepository reviewCommentRepository
                                    ) {
         return args -> {
             /**
@@ -453,11 +463,15 @@ public class LoadTestData {
 
             Purchase purchase1 = purchaseRepository.save(
                     Purchase.builder()
+                            .code(PurchaseCodeGenerator.generateOrderCode())
                             .address("주소 주소 주소")
+                            .totalPrice(147000L)
+                            .totalDiscount(3000L)
                             .primaryPhone(member1.getPhone())
                             .userName(member1.getName())
                             .userUuid(member1.getMemberUID())
                             .memo("현관문 앞에 배송해주세요")
+                            .isDelete(false)
                             .build()
             );
             purchaseProductRepository.save(
@@ -496,11 +510,15 @@ public class LoadTestData {
             );
             Purchase purchase2 = purchaseRepository.save(
                     Purchase.builder()
+                            .code(PurchaseCodeGenerator.generateOrderCode())
                             .address("주소 주소 주소2")
+                            .totalPrice(87000L)
+                            .totalDiscount(3000L)
                             .primaryPhone(member1.getPhone())
                             .userName(member1.getName())
                             .userUuid(member1.getMemberUID())
                             .memo("현관문 앞에 배송해주세요2")
+                            .isDelete(false)
                             .build()
             );
             purchaseProductRepository.save(
@@ -517,6 +535,70 @@ public class LoadTestData {
                             .purchaseStatus(PurchaseStatus.PENDING)
 
                             .build()
+            );
+            /**
+             * 리뷰
+             */
+            Review top1_middle1_product1_op1_review = Review.builder()
+                    .purchaseCode(purchase1.getCode())
+                    .nickname(member1.getNickname())
+                    .memberUID(member1.getMemberUID())
+                    .productId(top1_middle1_product1.getId())
+                    .optionId(top1_middle1_product1_op1.getId())
+                    .content("리뷰 내용입니다")
+                    .star(4)
+                    .commentCount(3)
+                    .isDeleted(false)
+                    .build();
+            reviewRepository.save(top1_middle1_product1_op1_review);
+            reviewImageRepository.save(ReviewImage.builder()
+                    .seq(0)
+                    .review(top1_middle1_product1_op1_review)
+                    .imageUrl("/test/test")
+                    .build());
+            reviewImageRepository.save(ReviewImage.builder()
+                    .seq(1)
+                    .review(top1_middle1_product1_op1_review)
+                    .imageUrl("/test/test")
+                    .build());
+            Review top1_middle1_product1_op2_review = Review.builder()
+                    .purchaseCode(purchase1.getCode())
+                    .nickname(member1.getNickname())
+                    .memberUID(member1.getMemberUID())
+                    .productId(top1_middle1_product1.getId())
+                    .optionId(top1_middle1_product1_op2.getId())
+                    .content("리뷰 내용입니다")
+                    .star(5)
+                    .commentCount(0)
+                    .isDeleted(false)
+                    .build();
+            reviewRepository.save(top1_middle1_product1_op2_review);
+            reviewImageRepository.save(ReviewImage.builder()
+                    .seq(0)
+                    .review(top1_middle1_product1_op2_review)
+                    .imageUrl("/test/test")
+                    .build());
+            // 댓글
+            reviewCommentRepository.save(ReviewComment.builder()
+                    .reviewId(top1_middle1_product1_op1_review.getId())
+                    .nickname("hjh")
+                    .memberUID("aaa-bbb-ccc")
+                    .content("정보 감사")
+                    .build()
+            );
+            reviewCommentRepository.save(ReviewComment.builder()
+                    .reviewId(top1_middle1_product1_op1_review.getId())
+                    .nickname("hjh")
+                    .memberUID("aaa-bbb-ccc")
+                    .content("정보 감사2")
+                    .build()
+            );
+            reviewCommentRepository.save(ReviewComment.builder()
+                    .reviewId(top1_middle1_product1_op1_review.getId())
+                    .nickname("hjh")
+                    .memberUID("aaa-bbb-ccc")
+                    .content("정보 감사3")
+                    .build()
             );
 
 

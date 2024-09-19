@@ -10,7 +10,7 @@ import lombok.*;
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
-@Table(name = "top_category", uniqueConstraints = {@UniqueConstraint(columnNames = "categoryCode, categoryName")})
+@Table(name = "top_category", uniqueConstraints = {@UniqueConstraint(columnNames = {"category_code", "category_name"} )})
 public class TopCategory extends BaseEntity {
 
     @Id
