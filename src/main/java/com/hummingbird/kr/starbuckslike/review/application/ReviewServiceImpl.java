@@ -36,6 +36,11 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
+    public Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String memberUuid) {
+        return reviewSearch.searchReviewListByMemberUuid(pageable,memberUuid);
+    }
+
+    @Override
     public ReviewListImageResponseDto findReviewImageById(Long reviewId) {
         return reviewSearch.findReviewImageById(reviewId);
     }

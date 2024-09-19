@@ -18,6 +18,7 @@ public interface ReviewService {
      * Select
      */
     Slice<Long> searchReviewListById(Pageable pageable, Long productId);
+    Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String memberUuid);
     // 리뷰 이미지 조회
     ReviewListImageResponseDto findReviewImageById(Long reviewId);
     // 리뷰 내용 조회

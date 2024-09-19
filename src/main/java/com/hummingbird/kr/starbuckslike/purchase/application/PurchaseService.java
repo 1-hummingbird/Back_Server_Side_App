@@ -30,5 +30,5 @@ public interface PurchaseService {
     void addPurchase(AddPurchaseRequestDto addPurchaseRequestDto);
 
     @Transactional
-    void deletePurchase(Long purchaseId);
+    void deletePurchase(String purchaseCode);
 }

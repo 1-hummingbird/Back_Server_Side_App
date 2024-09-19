@@ -32,7 +32,7 @@ import java.util.stream.Stream;
 public class ReviewController {
     private final ReviewService reviewService;
 
-    @Operation(summary = "리뷰 리스트 조회 리스트 [페이징]", description = "상품 id 로 리뷰 리스트 조회 ")
+    @Operation(summary = "리뷰 리스트 조회 [페이징]", description = "상품 id 로 리뷰 리스트 조회 ")
     @GetMapping("/list/{productId}")
     public CommonResponseEntity<Slice<Long>> searchReviewListByIdV1(
             Pageable pageable, @PathVariable("productId") Long productId
@@ -43,6 +43,19 @@ public class ReviewController {
                 reviewService.searchReviewListById(pageable, productId)
         );
     }
+    @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
+                summary = "회원이 쓴 리뷰 리스트 조회 [페이징]", description = "회원 UUID 로 리뷰 리스트 조회 ")
+    @PostMapping("/my/list/{memberUuid}")
+    public CommonResponseEntity<Slice<Long>> searchReviewListByMemberUuidV1(
+            Pageable pageable, @PathVariable("memberUuid") String memberUuid
+    ){
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                reviewService.searchReviewListByMemberUuid(pageable, memberUuid)
+        );
+    }
+
 
     @Operation(summary = "리뷰 이미지 조회", description = "상품 id 로 리뷰 이미지 조회 ")
     @GetMapping("/image/{productId}")

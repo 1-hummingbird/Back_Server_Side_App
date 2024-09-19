@@ -67,6 +67,28 @@ public class ReviewSearchImpl implements ReviewSearch{
     }
 
     @Override
+    public Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String uuid) {
+        List<Long> fetch = queryFactory
+                .select(review.id)
+                .from(review)
+                .where(
+                        review.memberUID.eq(uuid)
+                        .and(review.isDeleted.isFalse())
+                )
+                .orderBy(review.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        boolean hasNext = fetch.size() > pageable.getPageSize();
+
+        if (hasNext) {
+            fetch.remove(fetch.size() - 1);
+        }
+        return new SliceImpl<>(fetch, pageable, hasNext);
+    }
+
+    @Override
     public Boolean exists(String memberUuid, String purchaseCode, Long optionId) {
         Integer fetchOne = queryFactory
                             .selectOne()

@@ -57,11 +57,11 @@ public class PurchaseServiceImpl implements PurchaseService{
     }
 
     @Override
-    public void deletePurchase(Long purchaseId) {
+    public void deletePurchase(String purchaseCode) {
         // 기존의 purchase 엔티티를 조회
-        Purchase purchase = purchaseRepository.findById(purchaseId)
+        Purchase purchase = purchaseRepository.findByCode(purchaseCode)
                 .orElseThrow(() -> new IllegalArgumentException("해당 주문이 존재하지 않습니다."));
-        purchaseRepository.softDeletePurchase(purchaseId);
+        purchaseRepository.softDeletePurchase(purchaseCode);
     }
 
     private String generateUniquePurchaseCode() {

@@ -38,7 +38,10 @@ public class CartSearchImpl implements CartSearch {
         List<Tuple> fetch = queryFactory
                 .select(cart.id, cart.updatedAt)
                 .from(cart)
-                .where(cart.userUid.eq(userUid))
+                .where(
+                        cart.userUid.eq(userUid)
+                        .and(cart.isDeleted.isFalse())
+                )
                 //.orderBy(cart.updatedAt.desc())
                 .fetch();
         return fetch.stream()
