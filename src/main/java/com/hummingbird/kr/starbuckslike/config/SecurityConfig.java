@@ -34,7 +34,7 @@ public class SecurityConfig {
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);
         config.setAllowedOrigins(Arrays.asList(
-                "http://localhost:3000","https://team-hummingbird.shop","https://www.team-hummingbird.shop"));
+                "http://localhost:3000","http://localhost:8080","https://team-hummingbird.shop","https://www.team-hummingbird.shop"));
 	    config.setAllowedMethods(Arrays.asList("GET","POST"));
         config.addAllowedHeader("*");
         config.setExposedHeaders(List.of("Authorization"));

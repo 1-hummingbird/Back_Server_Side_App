@@ -55,13 +55,6 @@ public class AuthServiceImpl implements AuthService{
         log.info("AuthserviceImpl init");
     }
 
-    /**
-     * AuthServiceImpl
-     * 1. 회원가입
-     * 2. 로그인
-     * 3. 로그아웃
-     */
-
     @Override
     @Transactional
     public void register(RegisterRequestDTO registerRequestDTO) {

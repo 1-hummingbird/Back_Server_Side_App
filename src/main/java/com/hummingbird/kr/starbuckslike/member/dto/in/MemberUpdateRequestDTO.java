@@ -1,24 +1,24 @@
 package com.hummingbird.kr.starbuckslike.member.dto.in;
 
-import java.util.Date;
+import java.time.LocalDate;
 
 import lombok.Getter;
+import lombok.NoArgsConstructor;
+import lombok.Setter;
 
+import org.springframework.lang.Nullable;
+
+@Setter
 @Getter
+@NoArgsConstructor
 public class MemberUpdateRequestDTO {
-    private String memberUID;
-    private String name;
-    private String nickname;
-    private Date birthDate;
-    private String phone;
-    private String email;
 
-    public MemberUpdateRequestDTO(String memberUID, String name, String nickname, Date birthDate, String phone, String email) {
-        this.memberUID = memberUID;
-        this.name = name;
-        this.nickname = nickname;
-        this.birthDate = birthDate;
-        this.phone = phone;
-        this.email = email;
-    }
+    private @Nullable String memberUID;
+    private @Nullable String name;
+    private @Nullable String nickname;
+    private @Nullable LocalDate birthDate;
+    private @Nullable String phone;
+    private @Nullable String email;
+
+    
 }

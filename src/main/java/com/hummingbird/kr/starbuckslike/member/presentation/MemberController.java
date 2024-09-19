@@ -4,6 +4,7 @@ import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponse;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import com.hummingbird.kr.starbuckslike.member.application.MemberService;
+import com.hummingbird.kr.starbuckslike.member.dto.in.MemberUpdateRequestDTO;
 import com.hummingbird.kr.starbuckslike.member.vo.out.*;
 import com.hummingbird.kr.starbuckslike.member.vo.in.*;
 import com.hummingbird.kr.starbuckslike.member.dto.out.*;
@@ -51,9 +52,16 @@ public class MemberController {
     @PostMapping("update")
     @Operation(security = @SecurityRequirement(name = "Bearer Auth")
             , summary = "Member information update API", description = "Member information update API", tags = {"Member"})
-    public BaseResponse<Void> update(@RequestBody MemberUpdateRequestVO memberUpdateRequestVO) {
-        log.info("update memberUID: {}", memberUpdateRequestVO.getMemberUID());
-        memberService.update(memberUpdateRequestVO.toDTO());
+    public BaseResponse<Void> update(@RequestBody MemberUpdateRequestVO memberUpdateRequestVO,
+                                     @AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        MemberUpdateRequestDTO memberUpdateRequestDTO = new MemberUpdateRequestDTO();
+        memberUpdateRequestDTO.setMemberUID(authUserDetail.getUsername());
+        memberUpdateRequestDTO.setBirthDate(memberUpdateRequestVO.getBirthDate());
+        memberUpdateRequestDTO.setEmail(memberUpdateRequestVO.getEmail());
+        memberUpdateRequestDTO.setName(memberUpdateRequestVO.getName());
+        memberUpdateRequestDTO.setNickname(memberUpdateRequestVO.getNickname());
+        memberUpdateRequestDTO.setPhone(memberUpdateRequestVO.getPhone());
+        memberService.update(memberUpdateRequestDTO);
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
     

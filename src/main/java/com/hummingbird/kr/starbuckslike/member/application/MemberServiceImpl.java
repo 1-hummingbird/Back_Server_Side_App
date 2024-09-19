@@ -31,6 +31,21 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public void update(MemberUpdateRequestDTO requestDTO) {
+        Member oldMember = memberRepository.findByMemberUID(requestDTO.getMemberUID())
+            .orElseThrow(() -> new RuntimeException("Member not found"));
+        Member newMember = Member.builder()
+            .id(oldMember.getId())
+            .loginID(oldMember.getLoginID())
+            .name(requestDTO.getName() == null ? oldMember.getName() : requestDTO.getName())
+            .nickname(requestDTO.getNickname() == null ? oldMember.getNickname() : requestDTO.getNickname())
+            .birthdate(requestDTO.getBirthDate() == null ? oldMember.getBirthdate() : requestDTO.getBirthDate())
+            .phone(requestDTO.getPhone() == null ? oldMember.getPhone() : requestDTO.getPhone())
+            .email(requestDTO.getEmail() == null ? oldMember.getEmail() : requestDTO.getEmail())
+            .password(oldMember.getPassword())
+            .isDeleted(oldMember.getIsDeleted())
+            .memberUID(oldMember.getMemberUID())
+            .build();
+        memberRepository.save(newMember);
 
     }
 
