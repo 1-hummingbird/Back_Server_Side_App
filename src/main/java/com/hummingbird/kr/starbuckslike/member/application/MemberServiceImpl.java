@@ -33,8 +33,8 @@ public class MemberServiceImpl implements MemberService {
     public void update(MemberUpdateRequestDTO requestDTO) {
         Member oldMember = memberRepository.findByMemberUID(requestDTO.getMemberUID())
             .orElseThrow(() -> new RuntimeException("Member not found"));
-        Member newMember = Member.builder()
-            .id(oldMember.getId())
+        MemberUpdate memberUpdate = MemberUpdate.builder()
+            .memberId(oldMember.getId())
             .loginID(oldMember.getLoginID())
             .name(requestDTO.getName() == null ? oldMember.getName() : requestDTO.getName())
             .nickname(requestDTO.getNickname() == null ? oldMember.getNickname() : requestDTO.getNickname())
@@ -45,6 +45,7 @@ public class MemberServiceImpl implements MemberService {
             .isDeleted(oldMember.getIsDeleted())
             .memberUID(oldMember.getMemberUID())
             .build();
+        Member newMember = new Member(memberUpdate);
         memberRepository.save(newMember);
 
     }

@@ -70,8 +70,7 @@ public class Member extends BaseEntity {
         this.isDeleted = false; 
     }
 
-    @Builder
-    protected Member(Long id, String loginID, String name, String nickname, LocalDate birthdate, String phone, String email, String password, Boolean isDeleted, String memberUID) {
+    public Member(MemberUpdate memberUpdate) {
         this.id = id;
         this.loginID = loginID;
         this.name = name;
@@ -83,5 +82,7 @@ public class Member extends BaseEntity {
         this.isDeleted = isDeleted;
         this.memberUID = memberUID;
     }
+
+    protected Member(){    };
 
 }
