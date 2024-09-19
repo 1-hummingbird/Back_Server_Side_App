@@ -4,7 +4,7 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.beans.factory.annotation.Autowired;
 import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
-import com.hummingbird.kr.starbuckslike.member.domain.Member;
+import com.hummingbird.kr.starbuckslike.member.domain.*;
 import com.hummingbird.kr.starbuckslike.member.dto.out.*;
 import com.hummingbird.kr.starbuckslike.member.dto.in.*;
 import java.time.LocalDateTime;
@@ -31,27 +31,19 @@ public class MemberServiceImpl implements MemberService {
     }
 
     @Override
-    public PurchaseResponseDTO purchase(PurchaseRequestDTO requestDTO) {
-        return null;
-    }
-
-    @Override
-    public void refund(RefundRequestDTO requestDTO) {
-
-    }
-
-    @Override
-    public CanReviewResponseDTO canReview(CanReviewRequestDTO requestDTO) {
-        return null;
-    }
-
-    @Override
     public void update(MemberUpdateRequestDTO requestDTO) {
 
     }
 
     @Override
-    public MemberInfoResponseDTO info(MemberInfoRequestDTO requestDTO) {
+    public MemberInfoResponseDTO info(String memberUID) {
+        MemberInfo memberInfo = new MemberInfo(memberRepository.findByMemberUID(memberUID)
+            .orElseThrow(() -> new RuntimeException("Member not found")));
+        return new MemberInfoResponseDTO(memberInfo);
+    }
+
+    @Override
+    public FindMemberResponseDTO findMember(FindMemberRequestDTO requestDTO) {
         return null;
     }
 }

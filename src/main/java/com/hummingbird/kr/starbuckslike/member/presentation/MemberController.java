@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.member.presentation;
 
+import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponse;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import com.hummingbird.kr.starbuckslike.member.application.MemberService;
@@ -11,6 +12,7 @@ import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -37,22 +39,13 @@ public class MemberController {
         return new BaseResponse<PassageResponseVO>(passageResponseDTO.toVO());
     }
 
-    @PostMapping("canReview")
-    @Operation(security = @SecurityRequirement(name = "Bearer Auth")
-            , summary = "Check if the member can review API", description = "Check if the member can review API", tags = {"Member"})
-    public BaseResponse<CanReviewResponseVO> canReview(@RequestBody CanReviewRequestVO canReviewRequestVO) {
-        log.info("canReview memberUID: {}", canReviewRequestVO.getMemberUID());
-        CanReviewResponseDTO canReviewResponseDTO = memberService.canReview(canReviewRequestVO.toDTO());
-        return new BaseResponse<CanReviewResponseVO>(canReviewResponseDTO.toVO());
-    }
-
     @PostMapping("info")
     @Operation(security = @SecurityRequirement(name = "Bearer Auth")
             , summary = "Member information API", description = "Member information API", tags = {"Member"})
-    public BaseResponse<MemberInfoResponseVO> info(@RequestBody MemberInfoRequestVO memberInfoRequestVO) {
-        log.info("info memberUID: {}", memberInfoRequestVO.getMemberUID());
-        MemberInfoResponseDTO memberInfoResponseDTO = memberService.info(memberInfoRequestVO.toDTO());
-        return new BaseResponse<MemberInfoResponseVO>(memberInfoResponseDTO.toVO());
+    public BaseResponse<MemberInfoResponseVO> info(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        log.info("info memberUID: {}", authUserDetail.getUsername());
+        MemberInfoResponseDTO memberInfoResponseDTO = memberService.info(authUserDetail.getUsername());
+        return new BaseResponse<>(memberInfoResponseDTO.toVO());
     }
 
     @PostMapping("update")
@@ -63,23 +56,15 @@ public class MemberController {
         memberService.update(memberUpdateRequestVO.toDTO());
         return new BaseResponse<Void>(BaseResponseStatus.SUCCESS);
     }
-
-    @PostMapping("purchase")
+    
+    @PostMapping("admin/findMember")
     @Operation(security = @SecurityRequirement(name = "Bearer Auth")
-            , summary = "Purchase history API", description = "Purchase history API", tags = {"Member"})
-    public BaseResponse<PurchaseResponseVO> purchase(@RequestBody PurchaseRequestVO purchaseRequestVO) {
-        log.info("purchase memberUID: {}", purchaseRequestVO.getMemberUID());
-        PurchaseResponseDTO purchaseResponseDTO = memberService.purchase(purchaseRequestVO.toDTO());
-        return new BaseResponse<PurchaseResponseVO>(purchaseResponseDTO.toVO());
+            , summary = "Find member information API", description = "Find member information for ADMIN API", tags = {"Member"})
+    public BaseResponse<FindMemberResponseVO> findMember(@RequestBody FindMemberRequestVO findMemberRequestVO) {
+        log.info("findMember memberUID: {}", findMemberRequestVO.getMemberUID());
+        FindMemberResponseDTO findMemberResponseDTO = memberService.findMember(findMemberRequestVO.toDTO());
+        return new BaseResponse<FindMemberResponseVO>(findMemberResponseDTO.toVO());
     }
 
-    @PostMapping("refund")
-    @Operation(security = @SecurityRequirement(name = "Bearer Auth")
-            , summary = "Refund request API", description = "Refund request API", tags = {"Member"})
-    public BaseResponse<Void> refund(@RequestBody RefundRequestVO refundRequestVO) {
-        log.info("refund memberUID: {}", refundRequestVO.getMemberUID());
-        memberService.refund(refundRequestVO.toDTO());
-        return new BaseResponse<Void>(BaseResponseStatus.SUCCESS);
-    }
 
 }
