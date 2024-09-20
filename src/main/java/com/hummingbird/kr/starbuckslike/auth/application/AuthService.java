@@ -114,4 +114,11 @@ public interface AuthService {
      * @return void
      */
     void withdraw(WithdrawRequestDTO withdrawRequestDTO);
+
+    /**
+     * 16. updatePW
+     * @param updatePWRequestDTO
+     * @return void
+     */
+    void updatePW(UpdatePWRequestDTO updatePWRequestDTO);
 }

@@ -1,16 +1,19 @@
 package com.hummingbird.kr.starbuckslike.auth.presentation;
 
 import com.hummingbird.kr.starbuckslike.auth.application.AuthService;
+import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;
+import com.hummingbird.kr.starbuckslike.auth.dto.in.UpdatePWRequestDTO;
 import com.hummingbird.kr.starbuckslike.auth.dto.out.*;
 import com.hummingbird.kr.starbuckslike.auth.vo.in.*;
 import com.hummingbird.kr.starbuckslike.auth.vo.out.*;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponse;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import io.swagger.v3.oas.annotations.Operation;
-
+import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.ComponentScan;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 
@@ -43,10 +46,17 @@ public class AuthController {
         authService.register(registerRequestVO.toDTO());
         return new BaseResponse<>();
     }
-    @Operation(summary = "PW update API", description = "PW update API", tags = {"Auth"})
+    @Operation(summary = "PW re_init API", description = "PW reset API", tags = {"Auth"})
     @PostMapping("/resetPW")
     public BaseResponse<Void> resetPW(@RequestBody ResetPWRequestVO resetPWRequestVO) {
         authService.resetPW(resetPWRequestVO.toDTO());
+        return new BaseResponse<>();
+    }
+    @Operation(security = @SecurityRequirement(name = "Bearer Auth")
+            ,summary = "PW update API", description = "PW update API", tags = {"Auth"})
+    @PostMapping("/updatePW")
+    public BaseResponse<Void> updatePW(@RequestBody UpdatePWRequestVO updatePWRequestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        authService.updatePW(new UpdatePWRequestDTO(updatePWRequestVO.getNewPassword(), updatePWRequestVO.getOldPassword(), authUserDetail.getUsername()));
         return new BaseResponse<>();
     }
     @Operation(summary = "Member Logout API", description = "Member Logout API", tags = {"Auth"})

@@ -193,6 +193,20 @@ public class AuthServiceImpl implements AuthService{
         }
     }
 
+    @Override
+    public void updatePW(UpdatePWRequestDTO updatePWRequestDTO) {
+        log.info("updatePWRequestDTO : {}", updatePWRequestDTO);
+        try {
+            Member userinfo = authRepository.findByMemberUID(updatePWRequestDTO.getMemberUID()).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+            if (!passwordEncoder.matches(updatePWRequestDTO.getOldPassword(), userinfo.getPassword())) {
+                throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);
+            }
+            authRepository.updatePasswordByUuid(updatePWRequestDTO.getMemberUID(), passwordEncoder.encode(updatePWRequestDTO.getNewPassword()));
+        } catch (Exception e) {
+            throw e;
+        }
+    }
+
     private String createToken(Authentication authentication) {
         return jwtTokenProvider.generateAccessToken(authentication);
     }
