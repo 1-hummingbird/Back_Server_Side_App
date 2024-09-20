@@ -27,6 +27,14 @@ public interface ReviewService {
     // 리뷰 댓글 조회
     List<ReviewCommentResponseDto> findReviewCommentById(Long reviewId);
 
+
+    // DB 락 테스트
+    @Transactional
+    void increaseCommentCountWithLock(AddReviewCommentRequestDto dto);
+
+
+
+
     /**
      * Create , Update , Delete
      */

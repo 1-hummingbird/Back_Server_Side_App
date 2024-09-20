@@ -18,7 +18,7 @@ public class RedisLockRepository {
     public Boolean reviewLock(Long reviewId) {
         return redisTemplate
                 .opsForValue()
-                .setIfAbsent(generateReviewKey(reviewId), "lock", Duration.ofMillis(3_000)); // 3초 동안 락 유지
+                .setIfAbsent(generateReviewKey(reviewId), "lock", Duration.ofMillis(1_000)); // 0.3초 동안 락 유지
     }
     // 리뷰에 대한 락 해제
     public Boolean reviewUnlock(Long reviewId) {

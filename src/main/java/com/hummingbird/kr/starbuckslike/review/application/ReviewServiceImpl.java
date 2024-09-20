@@ -20,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.List;
 import java.util.Objects;
@@ -56,6 +57,17 @@ public class ReviewServiceImpl implements ReviewService{
     @Override
     public List<ReviewCommentResponseDto> findReviewCommentById(Long reviewId) {
         return reviewSearch.findReviewCommentById(reviewId);
+    }
+
+    @Override
+    public void increaseCommentCountWithLock(AddReviewCommentRequestDto dto) {
+        // 비관적 락을 사용하여 리뷰 조회
+        Review review = reviewRepository.findByIdWithPessimisticLock(dto.getReviewId());
+        // 댓글 달기
+        reviewCommentRepository.save(dto.toReviewComment());
+        // 리뷰 댓글카운트 +1 업데이트
+        review.increaseCommentCount();
+        reviewRepository.save(review);
     }
 
     @Override

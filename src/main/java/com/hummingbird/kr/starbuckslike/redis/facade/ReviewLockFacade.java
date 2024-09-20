@@ -22,7 +22,7 @@ public class ReviewLockFacade {
     public void addReviewCommentAndIncreaseCount(AddReviewCommentRequestDto dto) throws InterruptedException {
         Long reviewId = dto.getReviewId(); // 리뷰 Id
         while (!redisLockRepository.reviewLock(reviewId)) {
-            Thread.sleep(100);
+            Thread.sleep(30);
         }
         try {
             reviewService.addReviewComment(dto);
@@ -38,7 +38,7 @@ public class ReviewLockFacade {
 
         // 리뷰 ID로 락을 걸어 동시성 처리
         while (!redisLockRepository.reviewLock(reviewId)) {
-            Thread.sleep(100);
+            Thread.sleep(30);
         }
         try {
             reviewService.deleteReviewComment(dto);
