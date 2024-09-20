@@ -1,7 +1,11 @@
 package com.hummingbird.kr.starbuckslike.review.infrastructure.search;
 
+import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.PriceType;
 import com.hummingbird.kr.starbuckslike.review.domain.QReviewComment;
 import com.hummingbird.kr.starbuckslike.review.dto.out.*;
+import com.hummingbird.kr.starbuckslike.review.infrastructure.condition.ReviewCondition;
+import com.querydsl.core.types.dsl.BooleanExpression;
+import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -14,6 +18,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.hummingbird.kr.starbuckslike.product.domain.QProduct.product;
 import static com.hummingbird.kr.starbuckslike.review.domain.QReview.review;
 import static com.hummingbird.kr.starbuckslike.review.domain.QReviewComment.reviewComment;
 import static com.hummingbird.kr.starbuckslike.review.domain.QReviewImage.reviewImage;
@@ -24,13 +29,14 @@ import static com.hummingbird.kr.starbuckslike.review.domain.QReviewImage.review
 public class ReviewSearchImpl implements ReviewSearch{
     private final JPAQueryFactory queryFactory;
     @Override
-    public Slice<Long> searchReviewListById(Pageable pageable, Long productId) {
+    public Slice<Long> searchReviewListById(Pageable pageable, Long productId , ReviewCondition reviewCondition) {
         List<Long> fetch = queryFactory
                 .select(review.id)
                 .from(review)
                 .where(
                         review.productId.eq(productId)
-                        .and(review.isDeleted.isFalse())
+                        .and(review.isDeleted.isFalse()),
+                        photoReviewCondition(reviewCondition) // 포토 리뷰만 보기
                 )
                 .orderBy(review.createdAt.desc())
                 .offset(pageable.getOffset())
@@ -153,4 +159,17 @@ public class ReviewSearchImpl implements ReviewSearch{
 
         return res;
     }
+
+
+    /**
+     * 리뷰 조회의 모든 검색조건
+     */
+    private BooleanExpression photoReviewCondition(ReviewCondition reviewCondition) {
+        log.info("reviewCondition :" + reviewCondition.getShowPhoto());
+        if (reviewCondition.getShowPhoto() == null || !reviewCondition.getShowPhoto()) {
+            return null;
+        }
+        return review.isPhoto.isTrue();
+    }
+
 }

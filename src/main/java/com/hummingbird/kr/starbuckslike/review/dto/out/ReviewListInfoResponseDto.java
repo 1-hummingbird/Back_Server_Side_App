@@ -20,6 +20,7 @@ public class ReviewListInfoResponseDto {
 
     private Integer commentCount;
 
+
     public ReviewListInfoResponseVo toVo(){
         return ReviewListInfoResponseVo.builder()
                 .nickName(nickName)

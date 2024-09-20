@@ -6,6 +6,7 @@ import com.hummingbird.kr.starbuckslike.review.dto.in.DeleteReviewCommentRequest
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewCommentResponseDto;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListImageResponseDto;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListInfoResponseDto;
+import com.hummingbird.kr.starbuckslike.review.infrastructure.condition.ReviewCondition;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.transaction.annotation.Transactional;
@@ -17,7 +18,7 @@ public interface ReviewService {
     /**
      * Select
      */
-    Slice<Long> searchReviewListById(Pageable pageable, Long productId);
+    Slice<Long> searchReviewListById(Pageable pageable, Long productId, ReviewCondition reviewCondition);
     Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String memberUuid);
     // 리뷰 이미지 조회
     ReviewListImageResponseDto findReviewImageById(Long reviewId);
@@ -26,6 +27,14 @@ public interface ReviewService {
 
     // 리뷰 댓글 조회
     List<ReviewCommentResponseDto> findReviewCommentById(Long reviewId);
+
+
+    // DB 락 테스트
+    @Transactional
+    void increaseCommentCountWithLock(AddReviewCommentRequestDto dto);
+
+
+
 
     /**
      * Create , Update , Delete

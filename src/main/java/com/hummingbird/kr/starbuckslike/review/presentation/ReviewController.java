@@ -8,6 +8,7 @@ import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewCommentRequestDto
 import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewRequestDto;
 import com.hummingbird.kr.starbuckslike.review.dto.in.DeleteReviewCommentRequestDto;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewCommentResponseDto;
+import com.hummingbird.kr.starbuckslike.review.infrastructure.condition.ReviewCondition;
 import com.hummingbird.kr.starbuckslike.review.vo.in.AddReviewCommentRequestVo;
 import com.hummingbird.kr.starbuckslike.review.vo.in.AddReviewRequestVo;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewCommentResponseVo;
@@ -37,12 +38,12 @@ public class ReviewController {
     @Operation(summary = "리뷰 리스트 조회 [페이징]", description = "상품 id 로 리뷰 리스트 조회 ")
     @GetMapping("/list/{productId}")
     public CommonResponseEntity<Slice<Long>> searchReviewListByIdV1(
-            Pageable pageable, @PathVariable("productId") Long productId
+            Pageable pageable, @PathVariable("productId") Long productId , ReviewCondition reviewCondition
     ){
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),
-                reviewService.searchReviewListById(pageable, productId)
+                reviewService.searchReviewListById(pageable, productId, reviewCondition)
         );
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),

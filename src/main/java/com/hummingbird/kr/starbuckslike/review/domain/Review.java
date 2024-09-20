@@ -4,15 +4,16 @@ import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Max;
 import jakarta.validation.constraints.Min;
-import lombok.AccessLevel;
-import lombok.Builder;
-import lombok.Getter;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicUpdate;
 
 @Entity
 @Getter
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
+@DynamicUpdate
+@ToString
 @Table(name = "review")
 public class Review extends BaseEntity {
     @Id
@@ -53,8 +54,13 @@ public class Review extends BaseEntity {
     @Column(nullable = false)
     private Integer commentCount;
 
+    @Comment("포토 리뷰 여부")
+    @Column(nullable = false)
+    private Boolean isPhoto;
+
     @Comment("삭제 여부")
     @Column(nullable = false)
+    @ColumnDefault("false")
     private Boolean isDeleted;
 
     // 댓글 수 증가
@@ -68,7 +74,7 @@ public class Review extends BaseEntity {
 
     @Builder
     public Review(String purchaseCode, String nickname, String memberUID, Long productId, Long optionId,
-                  String content, Integer star, Integer commentCount, Boolean isDeleted) {
+                  String content, Integer star, Integer commentCount, Boolean isPhoto, Boolean isDeleted) {
         this.purchaseCode = purchaseCode;
         this.nickname = nickname;
         this.memberUID = memberUID;
@@ -77,6 +83,7 @@ public class Review extends BaseEntity {
         this.content = content;
         this.star = star;
         this.commentCount = commentCount;
+        this.isPhoto = isPhoto;
         this.isDeleted = isDeleted;
     }
 }

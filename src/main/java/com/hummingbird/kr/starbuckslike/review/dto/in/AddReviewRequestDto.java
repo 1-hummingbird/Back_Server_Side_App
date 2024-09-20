@@ -41,6 +41,7 @@ public class AddReviewRequestDto {
                 .content(content)
                 .star(star)
                 .commentCount(0)
+                .isPhoto(!reviewImages.isEmpty())
                 .isDeleted(false)
                 .build();
     }
