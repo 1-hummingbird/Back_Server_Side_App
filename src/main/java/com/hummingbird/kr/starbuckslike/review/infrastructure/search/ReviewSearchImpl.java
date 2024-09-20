@@ -67,6 +67,28 @@ public class ReviewSearchImpl implements ReviewSearch{
     }
 
     @Override
+    public Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String uuid) {
+        List<Long> fetch = queryFactory
+                .select(review.id)
+                .from(review)
+                .where(
+                        review.memberUID.eq(uuid)
+                        .and(review.isDeleted.isFalse())
+                )
+                .orderBy(review.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1)
+                .fetch();
+
+        boolean hasNext = fetch.size() > pageable.getPageSize();
+
+        if (hasNext) {
+            fetch.remove(fetch.size() - 1);
+        }
+        return new SliceImpl<>(fetch, pageable, hasNext);
+    }
+
+    @Override
     public Boolean exists(String memberUuid, String purchaseCode, Long optionId) {
         Integer fetchOne = queryFactory
                             .selectOne()
@@ -83,6 +105,8 @@ public class ReviewSearchImpl implements ReviewSearch{
 
     @Override
     public List<ReviewCommentResponseDto> findReviewCommentById(Long reviewId) {
+        long startTime = System.currentTimeMillis();
+
         List<ReviewCommentResponseDto> res = queryFactory
                 .select(new QReviewCommentResponseDto(reviewComment.nickname,
                                                         reviewComment.content,
@@ -92,8 +116,41 @@ public class ReviewSearchImpl implements ReviewSearch{
                 .where(reviewComment.reviewId.eq(reviewId))
                 .fetch();
         // 리뷰 댓글 특성상 데이터가 많지 않을 것으로 예상, 성능을 고려해 애플리케이션 단에서 정렬하도록 함
-        return res.stream()
+//        return res.stream()
+//                .sorted(Comparator.comparing(ReviewCommentResponseDto::getCreateAt).reversed()) // 작성일 내림차순 정렬
+//                .collect(Collectors.toList());
+        List<ReviewCommentResponseDto> sortedRes = res.stream()
                 .sorted(Comparator.comparing(ReviewCommentResponseDto::getCreateAt).reversed()) // 작성일 내림차순 정렬
-                .collect(Collectors.toList());
+                .toList();
+        long endTime = System.currentTimeMillis();
+
+        // 걸린 시간 출력
+        long elapsedTime = endTime - startTime;
+        log.info(" Review Comment(stream sort) Execution time: " + elapsedTime + " ms");
+
+        return sortedRes;
+    }
+
+    @Override
+    public List<ReviewCommentResponseDto> findReviewCommentByIdTest(Long reviewId) {
+        long startTime = System.currentTimeMillis();
+
+        List<ReviewCommentResponseDto> res = queryFactory
+                .select(new QReviewCommentResponseDto(reviewComment.nickname,
+                        reviewComment.content,
+                        reviewComment.createdAt)
+                )
+                .from(reviewComment)
+                .where(reviewComment.reviewId.eq(reviewId))
+                .orderBy(reviewComment.createdAt.desc())
+                .fetch();
+
+        long endTime = System.currentTimeMillis();
+
+        // 걸린 시간 출력
+        long elapsedTime = endTime - startTime;
+        log.info(" Review Comment(Order by sort) Execution time: " + elapsedTime + " ms");
+
+        return res;
     }
 }

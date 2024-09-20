@@ -7,6 +7,7 @@ import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
 import com.hummingbird.kr.starbuckslike.product.vo.ProductDetailResponseVo;
 import com.hummingbird.kr.starbuckslike.purchase.application.PurchaseService;
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
+import com.hummingbird.kr.starbuckslike.purchase.dto.in.DeletePurchaseRequestDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseDetailResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseListResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.vo.in.AddPurchaseRequestVo;
@@ -74,9 +75,10 @@ public class PurchaseController {
         );
     }
     @Operation(summary = "주문 삭제")
-    @PostMapping("/delete/{purchaseId}")
-    public CommonResponseEntity<Void> deletePurchaseV1(@PathVariable("purchaseId") Long purchaseId) {
-        purchaseService.deletePurchase(purchaseId);
+    @PostMapping("/delete/")
+    public CommonResponseEntity<Void> deletePurchaseV1(
+            @RequestBody DeletePurchaseRequestDto dto) {
+        purchaseService.deletePurchase(dto.getPurchaseCode());
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),

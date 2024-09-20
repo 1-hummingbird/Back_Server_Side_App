@@ -70,7 +70,6 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                         .where(
                                 purchase.userUuid.eq(memberUuid).and(purchase.isDelete.isFalse()),
                                 searchYearCondition(year)
-
                         )
                         .orderBy(purchase.createdAt.desc())
                         .offset(pageable.getOffset())

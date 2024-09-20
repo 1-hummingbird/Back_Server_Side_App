@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.review.vo.in;
 
+import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @Getter

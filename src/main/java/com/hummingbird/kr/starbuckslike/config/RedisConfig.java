@@ -1,51 +1,59 @@
-package com.hummingbird.kr.starbuckslike.config;
+package com.hummingbird.kr.starbuckslike.config;//package com.hummingbird.kr.starbuckslike.config;
 
+import jakarta.annotation.PostConstruct;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.context.annotation.Primary;
 import org.springframework.data.redis.connection.RedisConnectionFactory;
+import org.springframework.data.redis.connection.RedisStandaloneConfiguration;
 import org.springframework.data.redis.connection.lettuce.LettuceConnectionFactory;
 import org.springframework.data.redis.core.RedisTemplate;
+import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
 import java.util.Date;
 
 import java.util.Arrays;
-
 @Configuration
+@EnableRedisRepositories
 @ComponentScan("com.hummingbird.kr.starbuckslike")
-public class RedisConfig {
+@Log4j2
+public class RedisConfig  {
 
+    //@Value("${spring.redis.host}")
     @Value("${spring.data.redis.host}")
-    private String redisHost;
+    private String host;
 
     @Value("${spring.data.redis.port}")
-    private int redisPort;
+    private int port;
 
-        //Redis Connection Factory 객체 생성 : Redis - Spring App 연결 생성기입니다.
+//     @Value("${spring.data.redis.password}")
+//     private String password;
+
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
-        LettuceConnectionFactory factory = new LettuceConnectionFactory(redisHost, redisPort);
-        return factory;
+        RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration();
+        redisConfiguration.setHostName(host);
+        redisConfiguration.setPort(port);
+        redisConfiguration.setPassword(password);
+
+        return new LettuceConnectionFactory(redisConfiguration);
+
     }
 
     @Bean
-    public RedisTemplate<String, String> redisTemplate(RedisConnectionFactory connectionFactory) {
-        RedisTemplate<String, String> template = new RedisTemplate<>();
-        template.setConnectionFactory(connectionFactory);
-        
-        // Use StringRedisSerializer for keys
-        template.setKeySerializer(new StringRedisSerializer());
-        
-        // Use StringRedisSerializer for values as well, you can change this if needed
-        template.setValueSerializer(new StringRedisSerializer());
-        
-        // Set serializers for hash key and hash value
-        template.setHashKeySerializer(new StringRedisSerializer());
-        template.setHashValueSerializer(new StringRedisSerializer());
-        
-        template.afterPropertiesSet();
-        return template;
+    @Primary
+    public RedisTemplate<String, String> redisTemplate() {
+        RedisTemplate<String, String> redisTemplate = new RedisTemplate<>();
+        redisTemplate.setKeySerializer(new StringRedisSerializer());
+        redisTemplate.setValueSerializer(new StringRedisSerializer());
+        redisTemplate.setConnectionFactory(redisConnectionFactory());
+        return redisTemplate;
     }
+
+
 }
+

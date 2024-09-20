@@ -4,6 +4,7 @@ import com.hummingbird.kr.starbuckslike.category.domain.QCategoryProductList;
 import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductOption;
+import com.hummingbird.kr.starbuckslike.product.domain.QWish;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.OrderCondition;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.PriceType;
@@ -37,6 +38,7 @@ import static com.hummingbird.kr.starbuckslike.exhibition.domain.QExhibitionProd
 import static com.hummingbird.kr.starbuckslike.product.domain.QProduct.product;
 import static com.hummingbird.kr.starbuckslike.product.domain.QProductImage.productImage;
 import static com.hummingbird.kr.starbuckslike.product.domain.QProductOption.productOption;
+import static com.hummingbird.kr.starbuckslike.product.domain.QWish.wish;
 
 /**
  * 상품 조회  (querydsl 등 조회 쿼리, JpaRepository와 따로 두었음)
@@ -185,6 +187,29 @@ public class ProductSearchImpl implements ProductSearch {
                 .from(product)
                 .where(product.id.eq(productId))
                 .fetchOne();
+    }
+
+    @Override
+    public Slice<Long> searchWishProductIdsV1(Pageable pageable , String memberUid) {
+        List<Long> fetch = queryFactory
+                .select(wish.productId)
+                .from(wish)
+                .join(product).on(wish.productId.eq(product.id))
+                .where(
+                        product.isDeleted.isFalse()
+                        .and(wish.memberUid.eq(memberUid))
+                        .and(wish.isWished.isTrue())
+                )
+                .orderBy(wish.updatedAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize() + 1) // 다음 페이지가 있는지 확인하기 위해 1개 더 가져옴
+                .fetch();
+
+        boolean hasNext = fetch.size() > pageable.getPageSize();
+        if (hasNext) {
+            fetch.remove(fetch.size() - 1); // 페이징 사이즈 + 1 만큼 가져왔으므로 마지막 한 개 제거
+        }
+        return new SliceImpl<>(fetch, pageable, hasNext);
     }
 
 
