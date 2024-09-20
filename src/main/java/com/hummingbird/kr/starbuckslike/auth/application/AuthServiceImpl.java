@@ -142,6 +142,7 @@ public class AuthServiceImpl implements AuthService{
 
     }
 
+    // todo: oauth register and login need to check kakao token vaildation and register need to prevent duplicated user
     @Override
     public void oauthRegister(OauthRegisterRequestDTO oauthRegisterRequestDTO) {
         log.info("oauthRegisterRequestDTO : {}", oauthRegisterRequestDTO);
@@ -217,6 +218,11 @@ public class AuthServiceImpl implements AuthService{
         } catch (Exception e) {
             throw e;
         }
+    }
+
+    @Override
+    public OauthInfoResponseDTO getOauthInfo(String memberUID) {
+        return new OauthInfoResponseDTO(oauthInfoRepository.findByMemberUID(memberUID));
     }
 
     private String createToken(Authentication authentication) {

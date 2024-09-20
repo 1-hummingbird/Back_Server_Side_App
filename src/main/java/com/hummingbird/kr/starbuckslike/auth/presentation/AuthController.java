@@ -140,5 +140,12 @@ public class AuthController {
         LoginResponseDTO loginResponseDTO = authService.oauthLogin(oauthLoginRequestVO.toDTO());
         return new BaseResponse<LoginResponseVO>(loginResponseDTO.toVO());
     }
+    
+    @Operation(security = @SecurityRequirement(name = "Bearer Auth")
+    ,summary = "Get OAuth info List API", description = "OAuth info list API", tags = {"Auth"})
+    @PostMapping("oauthinfo")
+    public BaseResponse<OauthInfoResponseVO> oauthRegister(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        return new BaseResponse<>(authService.getOauthInfo(authUserDetail.getUsername()).toVO());
+    }
 
 }

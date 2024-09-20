@@ -125,8 +125,8 @@ public interface AuthService {
 
     /*
      * 17. getOauthInfo
-     * @param oauthInfoRequestDTO
+     * @param memberUID (from token)
      * @return OauthInfoResponseDTO this DTO contains List<OauthInfo>
      */
-    
+    OauthInfoResponseDTO getOauthInfo(String memberUID);
 }
