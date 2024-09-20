@@ -4,7 +4,7 @@ import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponse;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import com.hummingbird.kr.starbuckslike.member.application.MemberService;
-import com.hummingbird.kr.starbuckslike.member.dto.in.MemberUpdateRequestDTO;
+import com.hummingbird.kr.starbuckslike.member.dto.in.*;
 import com.hummingbird.kr.starbuckslike.member.vo.out.*;
 import com.hummingbird.kr.starbuckslike.member.vo.in.*;
 import com.hummingbird.kr.starbuckslike.member.dto.out.*;
