@@ -12,6 +12,8 @@ import java.time.LocalDateTime;
 @Builder
 public class FindMemberRequestDTO {
 
+    private String requesterUID;
+
     private @Nullable Date birthdate;
 
     private @Nullable Integer month;

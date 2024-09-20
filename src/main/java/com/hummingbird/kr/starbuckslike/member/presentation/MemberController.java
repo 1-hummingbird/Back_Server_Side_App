@@ -68,9 +68,10 @@ public class MemberController {
     @PostMapping("admin/findMember")
     @Operation(security = @SecurityRequirement(name = "Bearer Auth")
             , summary = "Find member information API", description = "Find member information for ADMIN API", tags = {"Member"})
-    public BaseResponse<FindMemberResponseVO> findMember(@RequestBody FindMemberRequestVO findMemberRequestVO) {
+    public BaseResponse<FindMemberResponseVO> findMember(@RequestBody FindMemberRequestVO findMemberRequestVO,
+                                                        @AuthenticationPrincipal AuthUserDetail authUserDetail) {
         log.info("findMember memberUID: {}", findMemberRequestVO.getMemberUID());
-        FindMemberResponseDTO findMemberResponseDTO = memberService.findMember(findMemberRequestVO.toDTO());
+        FindMemberResponseDTO findMemberResponseDTO = memberService.findMember(findMemberRequestVO.toDTO(authUserDetail.getUsername()));
         return new BaseResponse<>(findMemberResponseDTO.toVO());
     }
 
