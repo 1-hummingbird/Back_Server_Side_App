@@ -86,6 +86,7 @@ public interface AuthService {
      * @return LoginResponseDTO
      */
     LoginResponseDTO oauthLogin(OauthLoginRequestDTO oauthLoginRequestDTO);
+    // todo: not only kakao (in v1/ only kakao)
 
     /**
      * 12. checkEmail
@@ -121,4 +122,11 @@ public interface AuthService {
      * @return void
      */
     void updatePW(UpdatePWRequestDTO updatePWRequestDTO);
+
+    /*
+     * 17. getOauthInfo
+     * @param oauthInfoRequestDTO
+     * @return OauthInfoResponseDTO this DTO contains List<OauthInfo>
+     */
+    
 }

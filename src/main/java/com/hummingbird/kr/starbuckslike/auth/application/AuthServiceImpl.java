@@ -1,9 +1,10 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
-import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;
+import com.hummingbird.kr.starbuckslike.auth.domain.*;
 import com.hummingbird.kr.starbuckslike.auth.dto.in.*;
 import com.hummingbird.kr.starbuckslike.auth.dto.out.*;
 import com.hummingbird.kr.starbuckslike.auth.infrastructure.AuthRepository;
+import com.hummingbird.kr.starbuckslike.auth.infrastructure.OauthInfoRepository;
 import com.hummingbird.kr.starbuckslike.auth.util.JwtTokenProvider;
 import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
@@ -30,6 +31,7 @@ import java.util.Optional;
 public class AuthServiceImpl implements AuthService{
 
     private final AuthRepository authRepository;
+    private final OauthInfoRepository oauthInfoRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
@@ -38,13 +40,14 @@ public class AuthServiceImpl implements AuthService{
 
 
     @Autowired
-    public AuthServiceImpl(AuthRepository authRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RedisService redisService, Environment env) {
+    public AuthServiceImpl(AuthRepository authRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RedisService redisService, Environment env, OauthInfoRepository oauthInfoRepository) {
         this.authRepository = authRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
         this.redisService = redisService;
         this.env = env;
+        this.oauthInfoRepository = oauthInfoRepository;
     }
 
     @PostConstruct
@@ -141,13 +144,25 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public void oauthRegister(OauthRegisterRequestDTO oauthRegisterRequestDTO) {
-
+        log.info("oauthRegisterRequestDTO : {}", oauthRegisterRequestDTO);
+        try {
+            OauthInfo oauthInfo = oauthRegisterRequestDTO.toEntity();
+            oauthInfoRepository.save(oauthInfo);
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+        }
     }
 
     @Override
     public LoginResponseDTO oauthLogin(OauthLoginRequestDTO oauthLoginRequestDTO) {
-        
-        return null;
+        OauthInfo oauthInfo = oauthInfoRepository.findByOauthIDAndOauthType(oauthLoginRequestDTO.getOauthID(), oauthLoginRequestDTO.getOauthType()).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
+        );
+        Member member = authRepository.findByMemberUID(oauthInfo.getMemberUID()).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
+        );
+        String token = createToken(oAuthAuthenticate(member.getMemberUID()));
+        return new LoginResponseDTO(token,member.getName(),member.getMemberUID());
     }
 
     @Override
@@ -214,6 +229,16 @@ public class AuthServiceImpl implements AuthService{
                 new UsernamePasswordAuthenticationToken(
                         authUserDetail.getUsername(),
                         inputPassword
+                )
+        );
+    }
+
+    private Authentication oAuthAuthenticate(String memberUID) {
+        log.info("memberUID : {}", memberUID);
+        return authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        memberUID,
+                        null
                 )
         );
     }

@@ -19,4 +19,10 @@ public class OauthInfo {
     private String oauthID;
     private String oauthType;
     private String MemberUID;
+
+    public OauthInfo(String oauthID, String oauthType, String memberUID) {
+        this.oauthID = oauthID;
+        this.oauthType = oauthType;
+        MemberUID = memberUID;
+    }
 }

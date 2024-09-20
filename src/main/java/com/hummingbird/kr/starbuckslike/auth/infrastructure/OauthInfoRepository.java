@@ -15,6 +15,6 @@ public interface OauthInfoRepository extends JpaRepository<OauthInfo, Long> {
     Optional<OauthInfo> findByOauthIDAndOauthType(@Param("oauthID") String oauthID, @Param("oauthType") String oauthType);
 
     @Query("SELECT m FROM OauthInfo m WHERE m.MemberUID = :MemberUID")
-    List<OauthInfo> findBymemberUID(@Param("MemberUID")String memberUID);
+    List<OauthInfo> findByMemberUID(@Param("MemberUID")String memberUID);
 
 }

@@ -126,10 +126,11 @@ public class AuthController {
         return new BaseResponse<>();
     }
 
-    @Operation(summary = "OAuth Register API", description = "OAuth Register API", tags = {"Auth"})
+    @Operation(security = @SecurityRequirement(name = "Bearer Auth")
+    ,summary = "OAuth Register API", description = "OAuth Register API", tags = {"Auth"})
     @PostMapping("oauth/register")
-    public BaseResponse<Void> oauthRegister(@RequestBody OauthRegisterRequestVO oauthRegisterRequestVO) {
-        authService.oauthRegister(oauthRegisterRequestVO.toDTO());
+    public BaseResponse<Void> oauthRegister(@RequestBody OauthRegisterRequestVO oauthRegisterRequestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        authService.oauthRegister(oauthRegisterRequestVO.toDTO(authUserDetail.getUsername()));
         return new BaseResponse<>();
     }
 

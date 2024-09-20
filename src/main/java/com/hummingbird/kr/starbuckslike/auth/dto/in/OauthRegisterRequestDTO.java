@@ -1,5 +1,7 @@
 package com.hummingbird.kr.starbuckslike.auth.dto.in;
 
+import com.hummingbird.kr.starbuckslike.auth.domain.OauthInfo;
+
 import lombok.Getter;
 
 @Getter
@@ -12,5 +14,9 @@ public class OauthRegisterRequestDTO {
         this.oauthID = oauthID;
         this.oauthType = oauthType;
         this.memberUID = memberUID;
+    }
+
+    public OauthInfo toEntity() {
+        return new OauthInfo(this.oauthID, this.oauthType, this.memberUID);
     }
 }
