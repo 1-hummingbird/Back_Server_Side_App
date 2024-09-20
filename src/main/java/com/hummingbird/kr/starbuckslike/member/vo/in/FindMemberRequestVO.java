@@ -43,8 +43,9 @@ public class FindMemberRequestVO {
     private @Nullable String email;
     private @Nullable String phone;
 
-    public FindMemberRequestDTO toDTO() {
+    public FindMemberRequestDTO toDTO(String requesterUID) {
         return FindMemberRequestDTO.builder()
+                .requesterUID(requesterUID)
                 .birthdate(birthdate)
                 .month(month)
                 .day(day)

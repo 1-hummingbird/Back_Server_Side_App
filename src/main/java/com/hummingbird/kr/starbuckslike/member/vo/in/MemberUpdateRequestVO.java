@@ -1,20 +1,14 @@
 package com.hummingbird.kr.starbuckslike.member.vo.in;
 
-import com.hummingbird.kr.starbuckslike.member.dto.in.MemberUpdateRequestDTO;
-
-import java.util.Date;
+import java.time.LocalDate;
 import lombok.Getter;
+import org.springframework.lang.Nullable;
 
 @Getter
 public class MemberUpdateRequestVO {
-    private String memberUID;
-    private String name;
-    private String nickname;
-    private Date birthDate;
-    private String phone;
-    private String email;
-
-    public MemberUpdateRequestDTO toDTO() {
-        return new MemberUpdateRequestDTO(memberUID, name, nickname, birthDate, phone, email);
-    }
+    private @Nullable String name;
+    private @Nullable String nickname;
+    private @Nullable LocalDate birthDate;
+    private @Nullable String phone;
+    private @Nullable String email;
 }
