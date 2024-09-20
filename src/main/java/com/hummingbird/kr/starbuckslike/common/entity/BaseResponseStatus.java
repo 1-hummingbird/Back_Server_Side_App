@@ -19,6 +19,7 @@ public enum     BaseResponseStatus {
     /**
      * 4XX: Client Error(클라이언트 에러)
      */
+    DISALLOWED_ACTION(HttpStatus.BAD_REQUEST, false, 400, "올바르지 않은 행위 요청입니다."),
     WRONG_JWT_TOKEN(HttpStatus.UNAUTHORIZED, false, 401, "다시 로그인 해주세요"),
     NO_SIGN_IN(HttpStatus.UNAUTHORIZED, false, 401, "로그인을 먼저 진행해주세요"),
     NO_ACCESS_AUTHORITY(HttpStatus.FORBIDDEN, false, 403, "접근 권한이 없습니다"),
@@ -51,7 +52,7 @@ public enum     BaseResponseStatus {
     // Pet
     NO_EXIST_CATEGORY(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 카테고리입니다."),
 
-    // Interest
+    // Interest (could be Global not found?)
     NO_EXIST_INTEREST(HttpStatus.NOT_FOUND, false, 404, "존재하지 않는 관심사입니다."),
 
 
