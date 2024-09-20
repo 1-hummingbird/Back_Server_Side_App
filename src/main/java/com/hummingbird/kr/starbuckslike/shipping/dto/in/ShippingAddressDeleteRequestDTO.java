@@ -5,12 +5,12 @@ import lombok.Getter;
 
 @Getter
 public class ShippingAddressDeleteRequestDTO {
-    private Long shippingAddressId;
+    private Long shippingAddressID;
     private String memberUID;
 
     @Builder
-    public ShippingAddressDeleteRequestDTO(Long shippingAddressId, String memberUID) {
-        this.shippingAddressId = shippingAddressId;
+    public ShippingAddressDeleteRequestDTO(Long shippingAddressID, String memberUID) {
+        this.shippingAddressID = shippingAddressID;
         this.memberUID = memberUID;
     }
 }

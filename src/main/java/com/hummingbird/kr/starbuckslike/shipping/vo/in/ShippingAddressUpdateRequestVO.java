@@ -24,7 +24,6 @@ public class ShippingAddressUpdateRequestVO {
                 .phone(this.phone)
                 .memo(this.memo)
                 .memberUID(memberUID)
-                .defaultShippingAddress(defaultShippingAddress)
                 .build();
     }
 }

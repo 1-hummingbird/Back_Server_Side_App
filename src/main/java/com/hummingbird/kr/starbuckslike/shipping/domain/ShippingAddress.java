@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicUpdate;
 
 
 @Entity
 @Getter
 @NoArgsConstructor
+@DynamicUpdate
 public class ShippingAddress {
 
     @Id
@@ -35,7 +37,7 @@ public class ShippingAddress {
     @Column(length = 200)
     private String memo;
 
-    @Builder
+    @Builder(toBuilder = true)
     public ShippingAddress(
                            Long id,
                            String addressNickname,

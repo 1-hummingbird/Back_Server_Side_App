@@ -14,6 +14,7 @@ public interface ShippingService {
      * 3. deleteShippingAddress
      * 4. getShippingAddressList
      * 5. setDefaultShippingAddress
+     * 6. getDefualtShippingAddress
      */
 
      /*
@@ -52,5 +53,11 @@ public interface ShippingService {
     @Transactional
     void setDefault(ShippingAddressSetDefaultRequestDTO requestDTO);
 
-    
+    /*
+     * 6. getDefaultShippingAddress
+     * @param String memberUID
+     * @return DTO that contain default ShippingAddress
+     */
+    @Transactional
+    ShippingAddressGetDefaultResponseDTO getDefault(String memberUID);
 }

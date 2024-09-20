@@ -2,6 +2,9 @@ package com.hummingbird.kr.starbuckslike.shipping.vo.in;
 
 import com.hummingbird.kr.starbuckslike.shipping.dto.in.ShippingAddressAddRequestDTO;
 
+import lombok.Getter;
+
+@Getter
 public class ShippingAddressAddRequestVO {
 
     private String addressNickname;

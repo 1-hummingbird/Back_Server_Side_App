@@ -2,13 +2,16 @@ package com.hummingbird.kr.starbuckslike.shipping.vo.in;
 
 import com.hummingbird.kr.starbuckslike.shipping.dto.in.ShippingAddressDeleteRequestDTO;
 
+import lombok.Getter;
+
+@Getter
 public class ShippingAddressDeleteRequestVO {
 
-    private Long shippingAddressId;
+    private Long shippingAddressID;
 
     public ShippingAddressDeleteRequestDTO toDTO(String memberUID) {
         return ShippingAddressDeleteRequestDTO.builder()
-                .shippingAddressId(this.shippingAddressId)
+                .shippingAddressID(this.shippingAddressID)
                 .memberUID(memberUID)
                 .build();
     }

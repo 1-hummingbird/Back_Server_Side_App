@@ -9,6 +9,6 @@ import lombok.Getter;
 @AllArgsConstructor
 public class ShippingAddressSetDefaultRequestDTO {
 
-    private Long shippingAddressId;
+    private Long shippingAddressID;
     private String memberUID;
 }
