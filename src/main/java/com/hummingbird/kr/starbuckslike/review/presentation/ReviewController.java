@@ -2,6 +2,7 @@ package com.hummingbird.kr.starbuckslike.review.presentation;
 
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
+import com.hummingbird.kr.starbuckslike.redis.facade.ReviewLockFacade;
 import com.hummingbird.kr.starbuckslike.review.application.ReviewService;
 import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewCommentRequestDto;
 import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewRequestDto;
@@ -31,6 +32,7 @@ import java.util.stream.Stream;
 @RequestMapping("/api/v1/review")
 public class ReviewController {
     private final ReviewService reviewService;
+    private final ReviewLockFacade reviewLockFacade;
 
     @Operation(summary = "리뷰 리스트 조회 [페이징]", description = "상품 id 로 리뷰 리스트 조회 ")
     @GetMapping("/list/{productId}")
@@ -109,8 +111,9 @@ public class ReviewController {
     @PostMapping("/comment")
     public CommonResponseEntity<Void> addReviewCommentV1(
             @RequestBody AddReviewCommentRequestVo vo
-    ){
-        reviewService.addReviewComment(AddReviewCommentRequestDto.of(vo));
+    ) throws InterruptedException {
+        //reviewService.addReviewComment(AddReviewCommentRequestDto.of(vo));
+        reviewLockFacade.addReviewCommentAndIncreaseCount(AddReviewCommentRequestDto.of(vo)); // 동시성 처리 완료
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),
@@ -122,8 +125,9 @@ public class ReviewController {
     @PostMapping("/delete/comment")
     public CommonResponseEntity<Void> deleteReviewCommentV1(
             @RequestBody DeleteReviewCommentRequestDto requestDto
-    ) {
-        reviewService.deleteReviewComment(requestDto);
+    ) throws InterruptedException {
+        //reviewService.deleteReviewComment(requestDto);
+        reviewLockFacade.deleteReviewAndDecreaseCount(requestDto); // 동시성 처리 완료
         return new CommonResponseEntity<>(
                 HttpStatus.OK,
                 CommonResponseMessage.SUCCESS.getMessage(),

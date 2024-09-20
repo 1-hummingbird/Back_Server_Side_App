@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.product.presentation;
 
 
+import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
 import com.hummingbird.kr.starbuckslike.product.application.ProductService;
@@ -9,6 +10,9 @@ import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.Product
 import com.hummingbird.kr.starbuckslike.product.vo.*;
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
 import com.hummingbird.kr.starbuckslike.purchase.vo.in.AddPurchaseRequestVo;
+import com.hummingbird.kr.starbuckslike.redis.dto.out.RecentSearchResponseDto;
+import com.hummingbird.kr.starbuckslike.redis.service.RedisService;
+import com.hummingbird.kr.starbuckslike.redis.vo.out.RecentSearchResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
@@ -16,6 +20,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -27,7 +32,7 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/product")
 public class ProductController {
     private final ProductService productService;
-
+    private final RedisService redisService; // 최근검색어 캐싱
     /**
      * 상품 리스트 단건 조회
      */
@@ -132,23 +137,6 @@ public class ProductController {
     /**
      *  메인 상품 리스트 필터링[카테고리,가격] , 정렬 조건 적용
      */
-    // 몽땅 가져오는 코드
-//    @Operation(summary = "상품 리스트 조회 [필터링, 정렬]",
-//            description = "필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격]")
-//    @GetMapping("/list")
-//    public CommonResponseEntity<Page<ProductListResponseVo>> searchProductListPageV1(
-//            ProductCondition productCondition, Pageable pageable ){
-//
-//        Page<ProductListResponseDto> productPage = productService.searchProductListPageV1(productCondition, pageable);
-//        // to Vo
-//        Page<ProductListResponseVo> res = productPage.map(ProductListResponseDto::toVo);
-//
-//        return new CommonResponseEntity<>(
-//                HttpStatus.OK,
-//                CommonResponseMessage.SUCCESS.getMessage(),
-//                res
-//        );
-//    }
 
     @Operation(summary = "상품 리스트 조회 [필터링, 정렬] ",
             description = "[Slice] 필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격] 해당 상품들의 id만 가져옴")
@@ -197,9 +185,56 @@ public class ProductController {
         );
     }
 
-
-
-
+    /**
+     * 상품 최근검색어
+     */
+    @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
+                summary = "최근 검색어 등록", description = "최근 검색어 등록")
+    @PostMapping("/search/word")
+    public CommonResponseEntity<Void> addSearchWordV1(
+            @AuthenticationPrincipal AuthUserDetail authUserDetail ,@RequestBody String searchWord ){
+        redisService.addSearchWord(authUserDetail.getLoginId(), searchWord);
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                null
+        );
+    }
+    @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
+            summary = "최근 검색어 조회", description = "회원의 최근 검색어 조회")
+    @GetMapping("/search/list")
+    public CommonResponseEntity<RecentSearchResponseVo> getRecentSearchV1(
+            @AuthenticationPrincipal AuthUserDetail authUserDetail ){
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                redisService.getRecentSearchDto(authUserDetail.getLoginId()).toVo()
+        );
+    }
+    @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
+            summary = "최근 검색어 개별 삭제", description = "회원의 최근 검색어 개별 삭제")
+    @PostMapping("/search/word/delete")
+    public CommonResponseEntity<Void> deleteSearchWordV1(
+            @AuthenticationPrincipal AuthUserDetail authUserDetail ,@RequestBody String searchWord ){
+        redisService.deleteSearchWord(authUserDetail.getLoginId(), searchWord);
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                null
+        );
+    }
+    @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
+            summary = "최근 검색어 전체 삭제", description = "회원의 최근 검색어 전체 삭제")
+    @PostMapping("/search/word/delete-all")
+    public CommonResponseEntity<Void> deleteUserSearchKeyV1(
+            @AuthenticationPrincipal AuthUserDetail authUserDetail){
+        redisService.deleteUserSearchKey(authUserDetail.getLoginId());
+        return new CommonResponseEntity<>(
+                HttpStatus.OK,
+                CommonResponseMessage.SUCCESS.getMessage(),
+                null
+        );
+    }
 
 
 }

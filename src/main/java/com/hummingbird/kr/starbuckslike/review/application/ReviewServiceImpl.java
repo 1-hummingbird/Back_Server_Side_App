@@ -2,6 +2,7 @@ package com.hummingbird.kr.starbuckslike.review.application;
 
 
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.search.PurchaseSearch;
+import com.hummingbird.kr.starbuckslike.redis.facade.ReviewLockFacade;
 import com.hummingbird.kr.starbuckslike.review.domain.Review;
 import com.hummingbird.kr.starbuckslike.review.domain.ReviewComment;
 import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewCommentRequestDto;
@@ -15,6 +16,7 @@ import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewImageReposit
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewRepository;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.search.ReviewSearch;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.stereotype.Service;
@@ -24,6 +26,7 @@ import java.util.Objects;
 
 @Service
 @RequiredArgsConstructor
+@Log4j2
 public class ReviewServiceImpl implements ReviewService{
     private final ReviewSearch reviewSearch;
     private final ReviewRepository reviewRepository;
@@ -100,12 +103,11 @@ public class ReviewServiceImpl implements ReviewService{
 
         // 댓글 달기
         reviewCommentRepository.save(addReviewCommentRequestDto.toReviewComment());
-
-        // todo redis 동시성 처리
         // 리뷰 댓글카운트 +1 업데이트
         review.increaseCommentCount();
         reviewRepository.save(review);
     }
+
 
     @Override
     public void deleteReviewComment(DeleteReviewCommentRequestDto dto) {
@@ -115,13 +117,13 @@ public class ReviewServiceImpl implements ReviewService{
             reviewCommentRepository.delete(reviewComment);
         }
         Review review = reviewRepository.findById(reviewComment.getReviewId()).orElseThrow();
-        // todo redis 동시성 처리
         // 리뷰 댓글카운트 -1 업데이트
         review.decreaseCommentCount();
         if(review.getCommentCount() < 0){
             throw new IllegalStateException("댓글 개수는 0개 보다 작을 수 없습니다.");
         }
         reviewRepository.save(review);
+        log.info("리뷰댓글 서비스 실행됨 ");
     }
 
 }

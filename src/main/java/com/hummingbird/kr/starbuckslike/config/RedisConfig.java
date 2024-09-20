@@ -51,18 +51,5 @@ public class RedisConfig  {
         return redisTemplate;
     }
 
-    // 검색 로그 템플릿
-//    @Bean
-//    public RedisTemplate<String, SearchLog> SearchLogRedis() {
-//        RedisTemplate<String, SearchLog> redisTemplate = new RedisTemplate<>();
-//        redisTemplate.setConnectionFactory(redisConnectionFactory());
-//        redisTemplate.setKeySerializer(new StringRedisSerializer());
-//        redisTemplate.setHashKeySerializer(new StringRedisSerializer());
-//        redisTemplate.setHashValueSerializer(new Jackson2JsonRedisSerializer<>(SearchLog.class));
-//        redisTemplate.setValueSerializer(new Jackson2JsonRedisSerializer<>(SearchLog.class));
-//
-//        return redisTemplate;
-//    }
-
 
 }
