@@ -21,12 +21,14 @@ public class AuthUserDetail implements UserDetails {
     private String password;
     private String loginId;
     private Boolean isDeleted;
+    private String nickname;
 
     public AuthUserDetail(Member member) {
         this.uuid = member.getMemberUID();
         this.password = member.getPassword();
         this.loginId = member.getLoginID();
         this.isDeleted = member.getIsDeleted();
+        this.nickname = member.getNickname();
     }
 
     @Override
@@ -42,6 +44,10 @@ public class AuthUserDetail implements UserDetails {
     @Override
     public String getUsername() {
         return this.uuid;
+    }
+
+    public String getNickname() {
+        return this.nickname;
     }
 
     @Override
