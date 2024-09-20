@@ -140,6 +140,7 @@ public class ProductSearchImpl implements ProductSearch {
                 .where(
                         topCategoryCodeCondition(productCondition.getTopCode()),  // 상 카테고리 필터링
                         middleCategoryCodeCondition(productCondition.getMiddleCode()), // 중 카테고리 필터링
+                        productNameCondition(productCondition.getProductName()), // %상품명% 필터링
                         product.isDeleted.eq(false)
                 )
                 .orderBy(
@@ -309,6 +310,13 @@ public class ProductSearchImpl implements ProductSearch {
         }
         // 중 카테고리 코드
         return categoryProductList.middleCategoryCode.in(middleCode);
+    }
+    // 상품명으로 검색
+    private BooleanExpression productNameCondition(String productName) {
+        if (productName == null || productName.isEmpty()) {
+            return null;
+        }
+        return product.name.like("%" + productName + "%");
     }
 
     // 기획전으로 검색 (여러개 선택 가능)
