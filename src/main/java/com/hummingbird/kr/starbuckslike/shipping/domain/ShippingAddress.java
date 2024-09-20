@@ -27,10 +27,7 @@ public class ShippingAddress {
     private String address;
 
     @Column(length = 30, nullable = false)
-    private String primaryPhone;
-
-    @Column(length = 30)
-    private String secondaryPhone;
+    private String Phone;
 
     @Column(length = 40, nullable = false)
     private String memberUID;
@@ -38,30 +35,39 @@ public class ShippingAddress {
     @Column(length = 200)
     private String memo;
 
-    @Column(name = "default_address", nullable = false)
-    private Boolean defaultAddress = false;
-
     @Builder
     public ShippingAddress(
                            Long id,
                            String addressNickname,
                            String name,
                            String address,
-                           String primaryPhone,
-                           String secondaryPhone,
+                           String Phone,
                            String memberUID,
-                           String memo,
-                           Boolean defaultAddress
+                           String memo
     ) {
         this.id = id;
         this.addressNickname = addressNickname;
         this.name = name;
         this.address = address;
-        this.primaryPhone = primaryPhone;
-        this.secondaryPhone = secondaryPhone;
+        this.Phone = Phone;
         this.memberUID = memberUID;
         this.memo = memo;
-        this.defaultAddress = defaultAddress;
+    }
+
+    public ShippingAddress(
+            String addressNickname,
+            String name,
+            String address,
+            String Phone,
+            String memberUID,
+            String memo
+    ) {
+        this.addressNickname = addressNickname;
+        this.name = name;
+        this.address = address;
+        this.Phone = Phone;
+        this.memberUID = memberUID;
+        this.memo = memo;
     }
 }
 

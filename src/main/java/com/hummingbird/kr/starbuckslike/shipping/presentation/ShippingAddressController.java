@@ -19,51 +19,52 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
 @RestController
 @Slf4j
 @RequestMapping("/api/v1/shipping")
 public class ShippingAddressController {
 
-    private final ShippingAddressService shippingAddressService;
+    private final ShippingService shippingService;
 
     @Autowired
-    public ShippingAddressController(ShippingAddressService shippingAddressService) {
-        this.shippingAddressService = shippingAddressService;
+    public ShippingAddressController(ShippingService shippingService) {
+        this.shippingService = shippingService;
     }
 
     @PostMapping("/add")
-    public ShippingAddressAddResponseVO add(@RequestBody ShippingAddressAddRequestVO requestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
-        ShippingAddressAddRequestDTO requestDTO = requestVO.toDTO();
-        ShippingAddressAddResponseDTO responseDTO = shippingAddressService.add(requestDTO);
-        return new ShippingAddressAddResponseVO(responseDTO);
+    public BaseResponse<Void> add(@RequestBody ShippingAddressAddRequestVO requestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        ShippingAddressAddRequestDTO requestDTO = requestVO.toDTO(authUserDetail.getUsername());
+        shippingService.add(requestDTO);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
     @PostMapping("/update")
-    public ShippingAddressUpdateResponseVO update(@RequestBody ShippingAddressUpdateRequestVO requestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
-        ShippingAddressUpdateRequestDTO requestDTO = requestVO.toDTO();
-        ShippingAddressUpdateResponseDTO responseDTO = shippingAddressService.update(requestDTO);
-        return new ShippingAddressUpdateResponseVO(responseDTO);
+    public BaseResponse<Void> update(@RequestBody ShippingAddressUpdateRequestVO requestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        ShippingAddressUpdateRequestDTO requestDTO = requestVO.toDTO(authUserDetail.getUsername());
+        shippingService.update(requestDTO);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
     @PostMapping("/delete")
-    public ShippingAddressDeleteResponseVO delete(@RequestBody ShippingAddressDeleteRequestVO requestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
-        ShippingAddressDeleteRequestDTO requestDTO = requestVO.toDTO();
-        ShippingAddressDeleteResponseDTO responseDTO = shippingAddressService.delete(requestDTO);
-        return new ShippingAddressDeleteResponseVO(responseDTO);
+    public BaseResponse<Void> delete(@RequestBody ShippingAddressDeleteRequestVO requestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        ShippingAddressDeleteRequestDTO requestDTO = requestVO.toDTO(authUserDetail.getUsername());
+        shippingService.delete(requestDTO);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
     @PostMapping("/list")
-    public ShippingAddressListResponseVO list(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
-        ShippingAddressListResponseDTO responseDTO = shippingAddressService.list(authUserDetail.getUsername());
-        return new ShippingAddressListResponseVO(responseDTO);
+    public BaseResponse<ShippingAddressListResponseVO> list(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        ShippingAddressListResponseDTO responseDTO = shippingService.list(authUserDetail.getUsername());
+        return new BaseResponse<>(new ShippingAddressListResponseVO(responseDTO));
     }
 
     @PostMapping("/set-default")
-    public ShippingAddressSetDefaultResponseVO setDefault(@RequestBody ShippingAddressSetDefaultRequestVO requestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
-        ShippingAddressSetDefaultRequestDTO requestDTO = requestVO.toDTO();
-        ShippingAddressSetDefaultResponseDTO responseDTO = shippingAddressService.setDefault(requestDTO);
-        return new ShippingAddressSetDefaultResponseVO(responseDTO);
+    public BaseResponse<Void> setDefault(@RequestBody ShippingAddressSetDefaultRequestVO requestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        ShippingAddressSetDefaultRequestDTO requestDTO = requestVO.toDTO(authUserDetail.getUsername());
+        shippingService.setDefault(requestDTO);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
     
