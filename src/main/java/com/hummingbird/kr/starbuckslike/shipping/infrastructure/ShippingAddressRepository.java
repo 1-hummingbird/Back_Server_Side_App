@@ -6,5 +6,5 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import java.util.Optional;
 
 public interface ShippingAddressRepository extends JpaRepository<ShippingAddress, Long> {
-    Optional<ShippingAddress> findByUserUuid(String userUuid);
+    Optional<ShippingAddress> findByMemberUID(String memberUID);
 }

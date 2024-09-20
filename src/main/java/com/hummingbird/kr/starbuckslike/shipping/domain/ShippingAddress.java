@@ -32,8 +32,8 @@ public class ShippingAddress {
     @Column(length = 30)
     private String secondaryPhone;
 
-    @Column(name = "user_uuid", length = 100, nullable = false)
-    private String userUuid;
+    @Column(length = 40, nullable = false)
+    private String memberUID;
 
     @Column(length = 200)
     private String memo;
@@ -43,22 +43,23 @@ public class ShippingAddress {
 
     @Builder
     public ShippingAddress(
+                           Long id,
                            String addressNickname,
                            String name,
                            String address,
                            String primaryPhone,
                            String secondaryPhone,
-                           String userUuid,
+                           String memberUID,
                            String memo,
                            Boolean defaultAddress
     ) {
-
+        this.id = id;
         this.addressNickname = addressNickname;
         this.name = name;
         this.address = address;
         this.primaryPhone = primaryPhone;
         this.secondaryPhone = secondaryPhone;
-        this.userUuid = userUuid;
+        this.memberUID = memberUID;
         this.memo = memo;
         this.defaultAddress = defaultAddress;
     }
