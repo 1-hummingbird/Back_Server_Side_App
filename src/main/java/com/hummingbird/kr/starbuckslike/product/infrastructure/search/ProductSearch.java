@@ -32,6 +32,7 @@ public interface ProductSearch {
      ProductListImageResponseDto findProductListImageResponseDtoById(Long productId);
      // 상품아이디로 상품 리스트 정보 단건 조회
      ProductListInfoResponseDto findProductListInfoResponseDtoById(Long productId);
+
     /**
      * 위시리스트 상품 조회
      * offset based
