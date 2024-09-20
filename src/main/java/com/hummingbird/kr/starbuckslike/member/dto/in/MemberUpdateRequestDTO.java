@@ -13,7 +13,7 @@ import org.springframework.lang.Nullable;
 @NoArgsConstructor
 public class MemberUpdateRequestDTO {
 
-    private @Nullable String memberUID;
+    private String memberUID;
     private @Nullable String name;
     private @Nullable String nickname;
     private @Nullable LocalDate birthDate;
