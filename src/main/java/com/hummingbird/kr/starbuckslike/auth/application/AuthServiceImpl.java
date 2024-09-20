@@ -55,13 +55,6 @@ public class AuthServiceImpl implements AuthService{
         log.info("AuthserviceImpl init");
     }
 
-    /**
-     * AuthServiceImpl
-     * 1. 회원가입
-     * 2. 로그인
-     * 3. 로그아웃
-     */
-
     @Override
     @Transactional
     public void register(RegisterRequestDTO registerRequestDTO) {
@@ -79,8 +72,6 @@ public class AuthServiceImpl implements AuthService{
     @Override
     @Transactional
     public LoginResponseDTO login(LoginRequestDTO loginRequestDTO) {
-
-        log.info("signInRequestDto : {}", loginRequestDTO);
         log.info(loginRequestDTO.getLoginID());
         Member member;
         member = authRepository.findByLoginID(loginRequestDTO.getLoginID()).orElseThrow(
@@ -199,6 +190,20 @@ public class AuthServiceImpl implements AuthService{
             authRepository.disableMember(withdrawRequestDTO.getMemberUID());
         } catch (Exception e) {
             throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+
+    @Override
+    public void updatePW(UpdatePWRequestDTO updatePWRequestDTO) {
+        log.info("updatePWRequestDTO : {}", updatePWRequestDTO);
+        try {
+            Member userinfo = authRepository.findByMemberUID(updatePWRequestDTO.getMemberUID()).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+            if (!passwordEncoder.matches(updatePWRequestDTO.getOldPassword(), userinfo.getPassword())) {
+                throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);
+            }
+            authRepository.updatePasswordByUuid(updatePWRequestDTO.getMemberUID(), passwordEncoder.encode(updatePWRequestDTO.getNewPassword()));
+        } catch (Exception e) {
+            throw e;
         }
     }
 

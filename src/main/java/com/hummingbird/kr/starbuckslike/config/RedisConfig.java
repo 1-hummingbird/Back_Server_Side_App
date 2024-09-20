@@ -14,6 +14,9 @@ import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.data.redis.repository.configuration.EnableRedisRepositories;
 import org.springframework.data.redis.serializer.StringRedisSerializer;
 
+import java.util.Date;
+
+import java.util.Arrays;
 @Configuration
 @EnableRedisRepositories
 @ComponentScan("com.hummingbird.kr.starbuckslike")
@@ -27,18 +30,12 @@ public class RedisConfig  {
     @Value("${spring.data.redis.port}")
     private int port;
 
-    @Value("${spring.data.redis.password}")
-    private String password;
-
     @Bean
     public RedisConnectionFactory redisConnectionFactory() {
         RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration();
         redisConfiguration.setHostName(host);
         redisConfiguration.setPort(port);
-        redisConfiguration.setPassword(password);
-
         return new LettuceConnectionFactory(redisConfiguration);
-
     }
 
     @Bean
@@ -53,3 +50,4 @@ public class RedisConfig  {
 
 
 }
+
