@@ -59,9 +59,14 @@ public class AuthController {
         authService.updatePW(new UpdatePWRequestDTO(updatePWRequestVO.getNewPassword(), updatePWRequestVO.getOldPassword(), authUserDetail.getUsername()));
         return new BaseResponse<>();
     }
-    @Operation(summary = "Member Logout API", description = "Member Logout API", tags = {"Auth"})
+    @Operation(security = @SecurityRequirement(name = "Bearer Auth")
+            , summary = "Member Logout API", description = "Member Logout API", tags = {"Auth"})
     @PostMapping("/logout")
-    public BaseResponse<Void> logout(@RequestBody LogoutRequestVO logoutRequestVO) {
+    public BaseResponse<Void> logout(@RequestHeader("Authorization") String authorizationHeader) {
+        String token = authorizationHeader.replace("Bearer ", "");
+        LogoutRequestVO logoutRequestVO = new LogoutRequestVO();
+        logoutRequestVO.setAccessToken(token);
+        logoutRequestVO.setRefreshToken(token);
         authService.logout(logoutRequestVO.toDTO());
         return new BaseResponse<>();
     }

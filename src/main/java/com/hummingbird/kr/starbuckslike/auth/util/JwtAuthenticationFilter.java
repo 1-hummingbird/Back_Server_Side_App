@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.auth.util;
 
 import com.hummingbird.kr.starbuckslike.auth.application.AuthUserDetailService;
+import com.hummingbird.kr.starbuckslike.redis.service.RedisService;
 import io.jsonwebtoken.Jwts;
 import jakarta.servlet.FilterChain;
 import jakarta.servlet.ServletException;
@@ -26,6 +27,7 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
 
     private final JwtTokenProvider jwtTokenProvider;
     private final AuthUserDetailService userDetailsService;
+    private final RedisService redisService;
 
     @Override
     protected void doFilterInternal(
@@ -43,22 +45,27 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         }
 
         jwt = authHeader.substring(7);
-
-        uuid = Jwts.parser().verifyWith((SecretKey) jwtTokenProvider.getSignKey())
-                .build().parseSignedClaims(jwt).getPayload().get("uuid", String.class);
-
-        log.info("uuid: {}", uuid);
-
-        if (SecurityContextHolder.getContext().getAuthentication() == null) {
-            UserDetails userDetails = this.userDetailsService.loadUserByUsername(uuid);
-            UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
-                    userDetails,
-                    null,
-                    userDetails.getAuthorities()
-            );
-            authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
-            SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+        if (redisService.isTokenBlocked(jwt)){
+            filterChain.doFilter(request, response);
+            return;
         }
-        filterChain.doFilter(request, response);
-    }
+        else {
+            uuid = Jwts.parser().verifyWith((SecretKey) jwtTokenProvider.getSignKey())
+                    .build().parseSignedClaims(jwt).getPayload().get("uuid", String.class);
+
+            log.info("uuid: {}", uuid);
+
+            if (SecurityContextHolder.getContext().getAuthentication() == null) {
+                UserDetails userDetails = this.userDetailsService.loadUserByUsername(uuid);
+                UsernamePasswordAuthenticationToken authenticationToken = new UsernamePasswordAuthenticationToken(
+                        userDetails,
+                        null,
+                        userDetails.getAuthorities()
+                );
+                authenticationToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
+                SecurityContextHolder.getContext().setAuthentication(authenticationToken);
+            }
+            filterChain.doFilter(request, response);
+            }
+        }
 }

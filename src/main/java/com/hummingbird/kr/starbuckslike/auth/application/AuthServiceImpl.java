@@ -9,15 +9,12 @@ import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
+import com.hummingbird.kr.starbuckslike.redis.service.RedisService;
+
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
 
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.concurrent.TimeUnit;
-
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.redis.core.RedisTemplate;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -36,17 +33,17 @@ public class AuthServiceImpl implements AuthService{
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
-    private final RedisTemplate<String, String> redisTemplate;
+    private final RedisService redisService;
     private final Environment env;
 
 
     @Autowired
-    public AuthServiceImpl(AuthRepository authRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RedisTemplate<String, String> redisTemplate, Environment env) {
+    public AuthServiceImpl(AuthRepository authRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RedisService redisService, Environment env) {
         this.authRepository = authRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
-        this.redisTemplate = redisTemplate;
+        this.redisService = redisService;
         this.env = env;
     }
 
@@ -94,10 +91,10 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public void logout(LogoutRequestDTO logoutRequestDTO) {
         log.info("logoutRequestDTO : {}", logoutRequestDTO);
-        Long accessExpireTime = Optional.ofNullable(env.getProperty("JWT.token.access-expire-time", Long.class)).orElse(3600L);
+        Long accessExpireTime = Optional.ofNullable(env.getProperty("JWT.token.access-expire-time", Long.class)).orElse(3600L)*1000;
         Date expires = new Date(accessExpireTime + System.currentTimeMillis());
-        saveToken(logoutRequestDTO.getAccessToken(), expires);
-        saveToken(logoutRequestDTO.getRefreshToken(), expires);
+        redisService.recordToken(logoutRequestDTO.getAccessToken(), expires);
+
     }
 
     @Override
@@ -221,22 +218,4 @@ public class AuthServiceImpl implements AuthService{
         );
     }
 
-
-    //for logout Request, this is black-list of Refresh, so TTL is same as expires
-    private static final SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSSZ");
-
-    public void saveToken(String tokenUID, Date expires) {
-        long ttl = (expires.getTime() - System.currentTimeMillis()) / 1000;
-        String expiresStr = dateFormat.format(expires);
-        redisTemplate.opsForValue().set(tokenUID, expiresStr, ttl, TimeUnit.SECONDS);
-    }
-
-    public Date findTokenExp(String tokenUID) {
-        String expiresStr = redisTemplate.opsForValue().get(tokenUID);
-        try {
-            return dateFormat.parse(expiresStr);
-        } catch (ParseException e) {
-            throw new RuntimeException("Failed to parse date from Redis", e);
-        }
-    }
 }

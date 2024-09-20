@@ -10,7 +10,9 @@ import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
+import java.util.concurrent.TimeUnit;
 
 @Service
 @RequiredArgsConstructor
@@ -81,5 +83,16 @@ public class RedisServiceImpl implements  RedisService{
         }
 
         return searchWordDetails;
+    }
+
+    @Override
+    public void recordToken(String token, Date expires){
+        redisTemplate.opsForValue().set(token, "1",
+            expires.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public boolean isTokenBlocked(String token){
+        return redisTemplate.hasKey(token);
     }
 }
