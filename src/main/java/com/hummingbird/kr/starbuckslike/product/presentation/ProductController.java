@@ -54,14 +54,17 @@ public class ProductController {
      * 상품 디테일
      */
     // 상품 디테일 상품 상품명 가격 등 조회
-    @Operation(summary = "상품 디테일(상품명,가격,할인 등) 조회", description = "상품 id로 상품 디테일(상품명,가격,할인 등) 조회", tags = {"상품"})
+    @Operation(summary = "상품 디테일(상품명,가격,할인 등) 조회", description = "상품 id로 상품 디테일(상품명,가격,할인 등) 조회")
     @GetMapping("/info/{productId}")
-    public BaseResponse<ProductInfoResponseVo> findProductInfoByIdV1(
-            @PathVariable("productId") Long productId){
+    public BaseResponse<ProductInfoResponseVo> findProductInfoByIdV2(
+            @PathVariable("productId") Long productId , @AuthenticationPrincipal AuthUserDetail authUserDetail){
+        String memberUid = (authUserDetail != null) ? authUserDetail.getUuid() : "";
+        //log.info("memberUid : "+memberUid);
         return new BaseResponse<>(
-                productService.findProductInfoById(productId).toVo()
+                productService.findProductInfoByIdV2(productId, memberUid).toVo()
         );
     }
+
     // 상품 디테일 상세정보(에티터 html) 조회
     @Operation(summary = "상품 디테일 상세정보 조회", description = "상품 상세정보(에디터) 조회", tags = {"상품"})
     @GetMapping("/detail/{productId}")

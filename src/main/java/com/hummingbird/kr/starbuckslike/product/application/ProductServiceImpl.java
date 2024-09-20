@@ -32,6 +32,11 @@ public class ProductServiceImpl implements  ProductService{
     }
 
     @Override
+    public ProductInfoResponseDto findProductInfoByIdV2(Long productId, String memberUid) {
+        return productSearch.findProductInfoByIdV2(productId, memberUid);
+    }
+
+    @Override
     public ProductDetailResponseDto findProductDetailDtoById(Long productId) {
         Product product = productRepository.findById(productId).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));

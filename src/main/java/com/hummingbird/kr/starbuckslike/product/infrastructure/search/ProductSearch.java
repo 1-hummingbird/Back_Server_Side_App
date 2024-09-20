@@ -44,6 +44,7 @@ public interface ProductSearch {
      */
     //상품 디테일 상품 이미지+상품명 가격 등 조회
     ProductInfoResponseDto findProductInfoById(Long productId);
+    ProductInfoResponseDto findProductInfoByIdV2(Long productId, String memberUid); // 개선 + 장바구니 개수 포함
 
     // 상품 id로 상품 상세정보(에티터 html)  조회
     ProductDetailResponseDto findProductDetailDtoById(Long productId);
@@ -53,5 +54,7 @@ public interface ProductSearch {
 
     // 상품의 옵션 조회
     List<ProductOptionResponseDto> findProductOptionDtoById(Long productId);
+
+    // 상품 디테일 해당 상품이 장바구니 담긴 수량 조회
 
 }

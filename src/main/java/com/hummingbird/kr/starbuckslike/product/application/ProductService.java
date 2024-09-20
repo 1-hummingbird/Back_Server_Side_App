@@ -17,6 +17,7 @@ public interface ProductService {
      */
     // 상품 디테일 상품 상품명 가격 등 조회
     public ProductInfoResponseDto findProductInfoById(Long productId);
+    ProductInfoResponseDto findProductInfoByIdV2(Long productId, String memberUid);
     // 상품 디테일 상세정보(에티터 html) 조회
     public ProductDetailResponseDto findProductDetailDtoById(Long productId);
     // 상품에 포함된 이미지 정보 조회

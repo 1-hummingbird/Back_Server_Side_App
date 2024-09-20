@@ -15,4 +15,6 @@ public class ProductInfoResponseVo {
     private String shortDescription; // 짧은 상품설명 (텍스트)
     private Boolean isDiscounted; // 할인 여부
     private Float discountRate; // 할인율
+
+    private Long cartCount; // 해당 상품이 장바구니에 몇개 담겼는지
 }

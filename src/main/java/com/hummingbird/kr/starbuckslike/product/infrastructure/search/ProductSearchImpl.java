@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.product.infrastructure.search;
 
+import com.hummingbird.kr.starbuckslike.cart.domain.QCart;
 import com.hummingbird.kr.starbuckslike.category.domain.QCategoryProductList;
 import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
@@ -33,6 +34,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.hummingbird.kr.starbuckslike.cart.domain.QCart.cart;
 import static com.hummingbird.kr.starbuckslike.category.domain.QCategoryProductList.categoryProductList;
 import static com.hummingbird.kr.starbuckslike.exhibition.domain.QExhibitionProduct.exhibitionProduct;
 import static com.hummingbird.kr.starbuckslike.product.domain.QProduct.product;
@@ -229,6 +231,38 @@ public class ProductSearchImpl implements ProductSearch {
                         .and(product.isDeleted.eq(false))
                 )
                 .fetchOne();
+    }
+
+    @Override
+    public ProductInfoResponseDto findProductInfoByIdV2(Long productId, String memberUid) {
+        ProductInfoResponseDto productInfoResponseDto = queryFactory
+                .select(new QProductInfoResponseDto(product.name,
+                        new CaseBuilder() // sql case문
+                                .when(isNewCondition).then(true)
+                                .otherwise(false),
+                        product.shortDescription, product.isDiscounted, product.discountRate
+                ))
+                .from(product)
+                .where(
+                        product.id.eq(productId)
+                                .and(product.isDeleted.eq(false))
+                )
+                .fetchOne();
+        // 해당 상품이 장바구니 담긴 개수
+        Long cartItemQuantity = 0L;
+        if(memberUid != null && !memberUid.isEmpty()){
+            cartItemQuantity = queryFactory.select(cart.count())
+                    .from(cart)
+                    .where(
+                            cart.isDeleted.isFalse()
+                            .and(cart.userUid.eq(memberUid))
+                            .and(cart.productId.eq(productId))
+                    ).fetchOne();
+        }
+        assert productInfoResponseDto != null;
+        productInfoResponseDto.setCartCount(cartItemQuantity);
+
+        return productInfoResponseDto;
     }
 
     @Override
