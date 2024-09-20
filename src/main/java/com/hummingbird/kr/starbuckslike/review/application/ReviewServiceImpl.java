@@ -14,6 +14,7 @@ import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListInfoResponseDto
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewCommentRepository;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewImageRepository;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewRepository;
+import com.hummingbird.kr.starbuckslike.review.infrastructure.condition.ReviewCondition;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.search.ReviewSearch;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
@@ -35,8 +36,8 @@ public class ReviewServiceImpl implements ReviewService{
     private final PurchaseSearch purchaseSearch;
     private final ReviewCommentRepository reviewCommentRepository;
     @Override
-    public Slice<Long> searchReviewListById(Pageable pageable, Long productId) {
-        return reviewSearch.searchReviewListById(pageable, productId);
+    public Slice<Long> searchReviewListById(Pageable pageable, Long productId, ReviewCondition reviewCondition) {
+        return reviewSearch.searchReviewListById(pageable, productId, reviewCondition);
     }
 
     @Override
