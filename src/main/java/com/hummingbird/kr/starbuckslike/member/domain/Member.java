@@ -54,7 +54,7 @@ public class Member extends BaseEntity {
     private Boolean isDeleted;
 
     @Comment("회원 UUID")
-    @Column(nullable = false)
+    @Column(nullable = false, length = 40)
     private String memberUID;
 
     @Builder(toBuilder = true)

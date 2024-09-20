@@ -5,11 +5,13 @@ import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.Comment;
+import org.hibernate.annotations.DynamicUpdate;
 
 
 @Entity
 @Getter
 @NoArgsConstructor
+@DynamicUpdate
 public class ShippingAddress {
 
     @Id
@@ -27,40 +29,47 @@ public class ShippingAddress {
     private String address;
 
     @Column(length = 30, nullable = false)
-    private String primaryPhone;
+    private String Phone;
 
-    @Column(length = 30)
-    private String secondaryPhone;
-
-    @Column(name = "user_uuid", length = 100, nullable = false)
-    private String userUuid;
+    @Column(length = 40, nullable = false)
+    private String memberUID;
 
     @Column(length = 200)
     private String memo;
 
-    @Column(name = "default_address", nullable = false)
-    private Boolean defaultAddress = false;
-
-    @Builder
+    @Builder(toBuilder = true)
     public ShippingAddress(
+                           Long id,
                            String addressNickname,
                            String name,
                            String address,
-                           String primaryPhone,
-                           String secondaryPhone,
-                           String userUuid,
-                           String memo,
-                           Boolean defaultAddress
+                           String Phone,
+                           String memberUID,
+                           String memo
     ) {
-
+        this.id = id;
         this.addressNickname = addressNickname;
         this.name = name;
         this.address = address;
-        this.primaryPhone = primaryPhone;
-        this.secondaryPhone = secondaryPhone;
-        this.userUuid = userUuid;
+        this.Phone = Phone;
+        this.memberUID = memberUID;
         this.memo = memo;
-        this.defaultAddress = defaultAddress;
+    }
+
+    public ShippingAddress(
+            String addressNickname,
+            String name,
+            String address,
+            String Phone,
+            String memberUID,
+            String memo
+    ) {
+        this.addressNickname = addressNickname;
+        this.name = name;
+        this.address = address;
+        this.Phone = Phone;
+        this.memberUID = memberUID;
+        this.memo = memo;
     }
 }
 
