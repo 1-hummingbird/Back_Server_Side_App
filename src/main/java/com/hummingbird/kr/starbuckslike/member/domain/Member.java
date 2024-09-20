@@ -57,8 +57,9 @@ public class Member extends BaseEntity {
     @Column(nullable = false)
     private String memberUID;
 
-    @Builder
-    public Member(String loginID, String name, String nickname, LocalDate birthdate, String phone, String email, String password, String memberUID) {
+    @Builder(toBuilder = true)
+    public Member(Long id,String loginID, String name, String nickname, LocalDate birthdate, String phone, String email, String password, String memberUID) {
+        this.id = id;
         this.loginID = loginID;
         this.name = name;
         this.nickname = nickname;
@@ -70,19 +71,7 @@ public class Member extends BaseEntity {
         this.isDeleted = false; 
     }
 
-    public Member(MemberUpdate memberUpdate) {
-        this.id = id;
-        this.loginID = loginID;
-        this.name = name;
-        this.nickname = nickname;
-        this.birthdate = birthdate;
-        this.phone = phone;
-        this.email = email;
-        this.password = password;
-        this.isDeleted = isDeleted;
-        this.memberUID = memberUID;
-    }
-
     protected Member(){    };
 
+    
 }

@@ -33,21 +33,16 @@ public class MemberServiceImpl implements MemberService {
     public void update(MemberUpdateRequestDTO requestDTO) {
         Member oldMember = memberRepository.findByMemberUID(requestDTO.getMemberUID())
             .orElseThrow(() -> new RuntimeException("Member not found"));
-        MemberUpdate memberUpdate = MemberUpdate.builder()
-            .memberId(oldMember.getId())
-            .loginID(oldMember.getLoginID())
-            .name(requestDTO.getName() == null ? oldMember.getName() : requestDTO.getName())
-            .nickname(requestDTO.getNickname() == null ? oldMember.getNickname() : requestDTO.getNickname())
-            .birthdate(requestDTO.getBirthDate() == null ? oldMember.getBirthdate() : requestDTO.getBirthDate())
-            .phone(requestDTO.getPhone() == null ? oldMember.getPhone() : requestDTO.getPhone())
-            .email(requestDTO.getEmail() == null ? oldMember.getEmail() : requestDTO.getEmail())
-            .password(oldMember.getPassword())
-            .isDeleted(oldMember.getIsDeleted())
-            .memberUID(oldMember.getMemberUID())
+        
+        Member updatedMember = oldMember.toBuilder()
+            .name(requestDTO.getName() != null ? requestDTO.getName() : oldMember.getName())
+            .nickname(requestDTO.getNickname() != null ? requestDTO.getNickname() : oldMember.getNickname())
+            .birthdate(requestDTO.getBirthDate() != null ? requestDTO.getBirthDate() : oldMember.getBirthdate())
+            .phone(requestDTO.getPhone() != null ? requestDTO.getPhone() : oldMember.getPhone())
+            .email(requestDTO.getEmail() != null ? requestDTO.getEmail() : oldMember.getEmail())
             .build();
-        Member newMember = new Member(memberUpdate);
-        memberRepository.save(newMember);
-
+        
+        memberRepository.save(updatedMember);
     }
 
     @Override
