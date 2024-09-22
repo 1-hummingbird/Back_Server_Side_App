@@ -31,14 +31,14 @@ import static com.hummingbird.kr.starbuckslike.review.domain.QReview.review;
 public class PurchaseSearchImpl implements PurchaseSearch{
     private final JPAQueryFactory queryFactory;
     @Override
-    public List<PurchaseListResponseDto> findPurchaseByUuid(String memberUuid, Integer year) {
+    public List<PurchaseListResponseDto> findPurchaseByUuid(String memberUID, Integer year) {
         // 주문목록 Dto 를 상품목록 필드는 비워두고 조회
         List<PurchaseListResponseDto> purchaseData =
                 queryFactory
                         .select(new QPurchaseListResponseDto(purchase.id, purchase.createdAt, purchase.totalPrice))
                         .from(purchase)
                         .where(
-                                purchase.userUuid.eq(memberUuid)
+                                purchase.memberUID.eq(memberUID)
                                 .and(searchYearCondition(year))
                         )
                         .orderBy(purchase.createdAt.desc())
@@ -61,14 +61,14 @@ public class PurchaseSearchImpl implements PurchaseSearch{
     }
 
     @Override
-    public Slice<PurchaseListResponseDto> searchPurchaseByUuid(Pageable pageable, String memberUuid, Integer year) {
+    public Slice<PurchaseListResponseDto> searchPurchaseByUuid(Pageable pageable, String memberUID, Integer year) {
         // 주문목록 Dto 를 상품목록 필드는 비워두고 조회
         List<PurchaseListResponseDto> purchaseList =
                 queryFactory
                         .select(new QPurchaseListResponseDto(purchase.id, purchase.createdAt, purchase.totalPrice))
                         .from(purchase)
                         .where(
-                                purchase.userUuid.eq(memberUuid).and(purchase.isDelete.isFalse()),
+                                purchase.memberUID.eq(memberUID).and(purchase.isDelete.isFalse()),
                                 searchYearCondition(year)
                         )
                         .orderBy(purchase.createdAt.desc())

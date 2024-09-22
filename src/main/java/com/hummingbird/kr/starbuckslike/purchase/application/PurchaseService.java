@@ -15,9 +15,9 @@ public interface PurchaseService {
     /**
      * Select
      */
-    List<PurchaseListResponseDto> findPurchaseByUuid(String memberUuid, Integer year);
+    List<PurchaseListResponseDto> findPurchaseByUuid(String memberUID, Integer year);
     // 주문 목록 조회
-    Slice<PurchaseListResponseDto> searchPurchaseByUuid(Pageable pageable, String memberUuid, Integer year);
+    Slice<PurchaseListResponseDto> searchPurchaseByUuid(Pageable pageable, String memberUID, Integer year);
 
     // 주문 디테일 조회
     PurchaseDetailResponseDto findPurchaseDetailById(String purchaseCode);
