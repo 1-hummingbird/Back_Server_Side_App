@@ -12,9 +12,10 @@ import com.hummingbird.kr.starbuckslike.category.infrastructure.MiddleCategoryRe
 import com.hummingbird.kr.starbuckslike.category.infrastructure.TopCategoryRepository;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.search.CategorySearch;
 import com.hummingbird.kr.starbuckslike.common.utils.CategoryCodeGenerator;
+import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.data.convert.DtoInstantiatingConverter;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -44,8 +45,7 @@ public class CategoryServiceImpl implements CategoryService{
     public void createTopCategory(TopCategoryRequestDto topCategoryRequestDto) {
 
         if (topCategoryRepository.existsByCategoryName(topCategoryRequestDto.getTopCategoryName())) {
-            throw new IllegalArgumentException(
-                    "이미 존재하는 카테고리 이름입니다: " + topCategoryRequestDto.getTopCategoryName());
+            throw new BaseException(BaseResponseStatus.DUPLICATED_CATEGORY_NAME);
         }
 
         String categoryCode = generateUniqueCategoryCode("TC-");
@@ -53,10 +53,10 @@ public class CategoryServiceImpl implements CategoryService{
             topCategoryRepository.save(topCategoryRequestDto.toEntity(categoryCode));
         } catch (IllegalArgumentException e) {
             log.warn("Validation failed: {}", e.getMessage());
-            throw e;  // rethrow the exception to be handled by the caller or a global exception handler
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);  // rethrow the exception to be handled by the caller or a global exception handler
         } catch (Exception e) {
             log.error("An unexpected error occurred: ", e);
-            throw new RuntimeException("카테고리 생성 중 오류가 발생했습니다.", e);
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -66,24 +66,23 @@ public class CategoryServiceImpl implements CategoryService{
     public void createMiddleCategory(MiddleCategoryRequestDto middleCategoryRequestDto) {
 
         if( middleCategoryRepository.existsByCategoryName(middleCategoryRequestDto.getMiddleCategoryName()) ){
-            throw new IllegalArgumentException(
-                    "이미 존재하는 카테고리 이름입니다: " + middleCategoryRequestDto.getMiddleCategoryName());
+            throw new BaseException(BaseResponseStatus.DUPLICATED_CATEGORY_NAME);
         }
 
         try {
             TopCategory topCategory = topCategoryRepository.findByCategoryCode(
                     middleCategoryRequestDto.getTopCategoryCode()).orElseThrow(
-                    () -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다.")
+                    () -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY)
             );
 
             String categoryCode = generateUniqueCategoryCode("MC-");
             middleCategoryRepository.save(middleCategoryRequestDto.toEntity(topCategory, categoryCode));
         } catch (IllegalArgumentException e) {
             log.warn("Validation failed: {}", e.getMessage());
-            throw e;  // rethrow the exception to be handled by the caller or a global exception handler
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             log.error("An unexpected error occurred: ", e);
-            throw new RuntimeException("카테고리 생성 중 오류가 발생했습니다.", e);
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -93,24 +92,23 @@ public class CategoryServiceImpl implements CategoryService{
     public void createBottomCategory(BottomCategoryRequestDto bottomCategoryRequestDto) {
 
         if( bottomCategoryRepository.existsByCategoryName(bottomCategoryRequestDto.getBottomCategoryName()) ){
-            throw new IllegalArgumentException(
-                    "이미 존재하는 카테고리 이름입니다: " + bottomCategoryRequestDto.getBottomCategoryName());
+            throw new BaseException(BaseResponseStatus.DUPLICATED_CATEGORY_NAME);
         }
 
         try {
             MiddleCategory middleCategory = middleCategoryRepository.findByCategoryCode(
                     bottomCategoryRequestDto.getMiddleCategoryCode()).orElseThrow(
-                    () -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다.")
+                    () -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY)
             );
 
             String categoryCode = generateUniqueCategoryCode("BC-");
             bottomCategoryRepository.save(bottomCategoryRequestDto.toEntity(middleCategory, categoryCode));
         } catch (IllegalArgumentException e) {
             log.warn("Validation failed: {}", e.getMessage());
-            throw e;  // rethrow the exception to be handled by the caller or a global exception handler
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             log.error("An unexpected error occurred: ", e);
-            throw new RuntimeException("카테고리 생성 중 오류가 발생했습니다.", e);
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -157,7 +155,7 @@ public class CategoryServiceImpl implements CategoryService{
         try {
             TopCategory topCategory = topCategoryRepository
                     .findByCategoryCode(topCategoryCode).orElseThrow(
-                    () -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다.")
+                    () -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY)
             );
             log.info("topCategory : {}", topCategory);
             return TopCategoryResponseDto.builder()
@@ -184,7 +182,7 @@ public class CategoryServiceImpl implements CategoryService{
         try {
             MiddleCategory middleCategory = middleCategoryRepository
                     .findByCategoryCode(middleCategoryCode).orElseThrow(
-                    () -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다.")
+                    () -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY)
             );
             log.info("middleCategory : {}", middleCategory);
             return MiddleCategoryResponseDto.builder()
@@ -212,7 +210,7 @@ public class CategoryServiceImpl implements CategoryService{
         try {
             BottomCategory bottomCategory = bottomCategoryRepository
                     .findByCategoryCode(bottomCategoryCode).orElseThrow(
-                    () -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다.")
+                    () -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY)
             );
             log.info("bottomCategory : {}", bottomCategory);
             return BottomCategoryResponseDto.builder()
@@ -244,10 +242,10 @@ public class CategoryServiceImpl implements CategoryService{
     public List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryName) {
 
         try {
-//            TopCategory topCategory = topCategoryRepository.findByCategoryName(topCategoryName)
-//                    .orElseThrow(() -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다."));
-//
-//            log.info("topCategory : {}", topCategory);
+            TopCategory topCategory = topCategoryRepository.findByCategoryName(topCategoryName)
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY));
+
+            log.info("topCategory : {}", topCategory);
 
             List<MiddleCategoryResponseDto> middleCategoryResponseDtos = middleCategoryRepository
                     .findByTopCategoryCategoryName(topCategoryName)
@@ -265,10 +263,10 @@ public class CategoryServiceImpl implements CategoryService{
 
         } catch (IllegalArgumentException e) {
             log.warn("Validation failed: {}", e.getMessage());
-            throw e;  // rethrow the exception to be handled by the caller or a global exception handler
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             log.error("An unexpected error occurred: ", e);
-            throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
         }
     }
 
@@ -279,7 +277,7 @@ public class CategoryServiceImpl implements CategoryService{
         try {
             MiddleCategory middleCategory = middleCategoryRepository.findByCategoryCode(middleCategoryCode)
                     .orElseThrow(
-                    () -> new IllegalArgumentException("해당 카테고리가 존재하지 않습니다.")
+                    () -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY)
             );
             log.info("middleCategory : {}", middleCategory);
             List<BottomCategory> bottomCategories = bottomCategoryRepository
@@ -296,10 +294,10 @@ public class CategoryServiceImpl implements CategoryService{
 
         } catch (IllegalArgumentException e) {
             log.warn("Validation failed: {}", e.getMessage());
-            throw e;  // rethrow the exception to be handled by the caller or a global exception handler
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
         } catch (Exception e) {
             log.error("An unexpected error occurred: ", e);
-            throw new RuntimeException("카테고리 조회 중 오류가 발생했습니다.", e);
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
         }
 
     }
@@ -329,11 +327,11 @@ public class CategoryServiceImpl implements CategoryService{
                     }
                     break;
                 default:
-                    throw new IllegalArgumentException("유효하지 않은 카테고리 코드 접두사입니다: " + prefix);
+                    throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
             }
 
         }
-        throw new IllegalStateException("고유한 카테고리 코드를 생성하는 데 실패했습니다.");
+        throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
     }
 
 }
