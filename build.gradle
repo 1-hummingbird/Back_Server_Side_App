@@ -75,7 +75,7 @@ tasks.named('test') {
 }
 
 
-//Querydsl 추가 clean
-clean {
-	delete file('src/main/generated')
-}
+////Querydsl 추가 clean
+//clean {
+//	delete file('src/main/generated')
+//}
