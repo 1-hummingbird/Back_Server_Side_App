@@ -150,12 +150,16 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public void oauthRegister(OauthRegisterRequestDTO oauthRegisterRequestDTO) {
         log.info("oauthRegisterRequestDTO : {}", oauthRegisterRequestDTO);
-        try {
-            OauthInfo oauthInfo = oauthRegisterRequestDTO.toEntity();
-            oauthInfoRepository.save(oauthInfo);
-        } catch (Exception e) {
-            throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+        if (OauthTokenCheck(oauthRegisterRequestDTO.getOauthToken())){
+            try {
+                OauthInfo oauthInfo = oauthRegisterRequestDTO.toEntity();
+                oauthInfoRepository.save(oauthInfo);
+            } catch (Exception e) {
+                throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+            }
         }
+        else{throw new BaseException(BaseResponseStatus.TOKEN_NOT_VALID);}
+
     }
 
     @Override
@@ -166,8 +170,10 @@ public class AuthServiceImpl implements AuthService{
         Member member = authRepository.findByMemberUID(oauthInfo.getMemberUID()).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
         );
-        String token = createToken(oAuthAuthenticate(member.getMemberUID()));
-        return new LoginResponseDTO(token,member.getName(),member.getMemberUID());
+        if (OauthTokenCheck(oauthLoginRequestDTO.getOauthToken())){
+            String token = createToken(oAuthAuthenticate(member.getMemberUID()));
+            return new LoginResponseDTO(token,member.getName(),member.getMemberUID());}
+        else{throw new BaseException(BaseResponseStatus.TOKEN_NOT_VALID);}
     }
 
     @Override
@@ -247,6 +253,11 @@ public class AuthServiceImpl implements AuthService{
                         null
                 )
         );
+    }
+
+    private boolean OauthTokenCheck(String token){
+
+        return true;
     }
 
 }

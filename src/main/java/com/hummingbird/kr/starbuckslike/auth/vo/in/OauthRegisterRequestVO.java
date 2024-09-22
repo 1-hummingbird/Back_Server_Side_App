@@ -8,8 +8,14 @@ import lombok.Getter;
 public class OauthRegisterRequestVO {
     private String oauthID;
     private String oauthType;
+    private String oauthToken;
     
     public OauthRegisterRequestDTO toDTO(String memberUID) {
-        return new OauthRegisterRequestDTO(this.oauthID, this.oauthType, memberUID);
+        return OauthRegisterRequestDTO.builder()
+                .memberUID(memberUID)
+                .oauthID(this.oauthID)
+                .oauthType(this.oauthType)
+                .oauthToken(this.oauthToken)
+                .build();
     }
 }
