@@ -34,12 +34,12 @@ public class CartSearchImpl implements CartSearch {
     }
 
     @Override
-    public List<Long> findAllCartIdByUserUid(String userUid) {
+    public List<Long> findAllCartIdByMemberUID(String membereUID) {
         List<Tuple> fetch = queryFactory
                 .select(cart.id, cart.updatedAt)
                 .from(cart)
                 .where(
-                        cart.userUid.eq(userUid)
+                        cart.memberUID.eq(membereUID)
                         .and(cart.isDeleted.isFalse())
                 )
                 //.orderBy(cart.updatedAt.desc())
@@ -86,22 +86,22 @@ public class CartSearchImpl implements CartSearch {
     }
 
     @Override
-    public Cart findCartOption(String userUid, Long optionId) {
+    public Cart findCartOption(String memberUID, Long optionId) {
         return queryFactory
                 .selectFrom(cart)
                 .where(
-                        cart.userUid.eq(userUid).and(cart.productOption.id.eq(optionId))
+                        cart.memberUID.eq(memberUID).and(cart.productOption.id.eq(optionId))
                 )
                 .fetchOne();
     }
 
     @Override
-    public Long findCartOptionCount(String userUid, Long optionId) {
+    public Long findCartOptionCount(String memberUID, Long optionId) {
         return queryFactory
                 .select(cart.count())
                 .from(cart)
                 .where(
-                        cart.userUid.eq(userUid)
+                        cart.memberUID.eq(memberUID)
                         .and(cart.productOption.id.eq(optionId))
                         .and(cart.isDeleted.eq(false))
                 )
@@ -109,12 +109,12 @@ public class CartSearchImpl implements CartSearch {
     }
 
     @Override
-    public Boolean exists(String userUid, Long optionId) {
+    public Boolean exists(String memberUID, Long optionId) {
         Integer fetchOne = queryFactory
                 .selectOne()
                 .from(cart)
                 .where(
-                        cart.userUid.eq(userUid)
+                        cart.memberUID.eq(memberUID)
                         .and(cart.productOption.id.eq(optionId))
                         .and(cart.isDeleted.isFalse())
                 )
@@ -124,11 +124,11 @@ public class CartSearchImpl implements CartSearch {
     }
 
     @Override
-    public Long findCartItemCountByMember(String userUid) {
+    public Long findCartItemCountByMember(String memberUID) {
         return queryFactory
                 .select(cart.count())
                 .from(cart)
-                .where( cart.userUid.eq(userUid)
+                .where( cart.memberUID.eq(memberUID)
                         .and(cart.isDeleted.eq(false))
                 )
                 .fetchOne();

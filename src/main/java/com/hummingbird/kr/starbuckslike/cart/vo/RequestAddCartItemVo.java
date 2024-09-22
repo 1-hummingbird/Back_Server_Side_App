@@ -4,7 +4,6 @@ import lombok.Getter;
 
 @Getter
 public class RequestAddCartItemVo {
-    private String memberUID; // 유저 정보
 
     private Long productId; // 상품 id
 

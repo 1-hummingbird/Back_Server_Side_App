@@ -9,7 +9,7 @@ import java.util.List;
 public interface CartSearch {
 
     // 회원 uuid로 회원 장바구니 번호 리스트 조회
-    List<Long> findAllCartIdByUserUid(String userUid);
+    List<Long> findAllCartIdByMemberUID(String memberUID);
 
     // 장바구니 id로 장바구니 옵션상품의 대표이미지 조회
     ResponseCartItemImageDto findCartMainImageDtoById(Long cartId);
@@ -21,15 +21,15 @@ public interface CartSearch {
     // ex) 옵션타입T , 옵션타입디테일T  => 그래야 각인옵션에서도 한문 영어 등 자유롭게 선택가능하다
 
     // 회원 장바구니에 담은 상품 조회
-    Cart findCartOption(String userUid, Long optionId);
+    Cart findCartOption(String memberUID, Long optionId);
 
     // 회원 장바구니에  상품옵션 담았는지 확인 [ 1 : 이미 존재 , 0 : 없음  ]
-    Long findCartOptionCount(String userUid, Long optionId);
+    Long findCartOptionCount(String memberUID, Long optionId);
 
     Boolean exists(String userUid, Long optionId);
 
     // 회원의 장바구니에 삼은 상품들의 숫자 (20개로 제한)
-    Long findCartItemCountByMember(String userUid);
+    Long findCartItemCountByMember(String memberUID);
 
     //
 

@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.cart.dto.in;
 
 import com.hummingbird.kr.starbuckslike.cart.domain.CartAdjustType;
+import com.hummingbird.kr.starbuckslike.cart.vo.RequestAdjustCartItemVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
@@ -18,4 +19,14 @@ public class RequestAdjustCartItemDto {
     private Long cartId;
 
     private CartAdjustType cartAdjustType;
+
+    private String memberUID;
+
+    public static RequestAdjustCartItemDto toDto(RequestAdjustCartItemVo requestAdjustCartItemVo, String memberUID){
+        return RequestAdjustCartItemDto.builder()
+                .cartId(requestAdjustCartItemVo.getCartId())
+                .cartAdjustType(requestAdjustCartItemVo.getCartAdjustType())
+                .memberUID(memberUID)
+                .build();
+    }
 }

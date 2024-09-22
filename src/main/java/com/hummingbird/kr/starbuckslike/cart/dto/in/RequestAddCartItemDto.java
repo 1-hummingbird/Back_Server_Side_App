@@ -31,7 +31,7 @@ public class RequestAddCartItemDto {
 
     public Cart toEntity(ProductOption productOption) {
         return Cart.builder()
-                .userUid(memberUID)
+                .memberUID(memberUID)
                 .productId(productId)
                 .productOption(productOption)
                 .qty(qty)
@@ -41,9 +41,9 @@ public class RequestAddCartItemDto {
                 .build();
     }
 
-    public static RequestAddCartItemDto toDto (RequestAddCartItemVo requestAddCartItemVo){
+    public static RequestAddCartItemDto toDto (RequestAddCartItemVo requestAddCartItemVo, String memberUID){
         return  RequestAddCartItemDto.builder()
-                .memberUID(requestAddCartItemVo.getMemberUID())
+                .memberUID(memberUID)
                 .productId(requestAddCartItemVo.getProductId())
                 .optionId(requestAddCartItemVo.getOptionId())
                 .qty(requestAddCartItemVo.getQty())
