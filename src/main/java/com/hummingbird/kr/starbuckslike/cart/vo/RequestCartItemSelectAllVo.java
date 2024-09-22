@@ -8,3 +8,4 @@ public class RequestCartItemSelectAllVo {
     private List<Long> cartIds;
 
 }
+    

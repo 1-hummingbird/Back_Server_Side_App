@@ -15,9 +15,6 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 
-import java.util.List;
-
-// todo 팀장님 spring security 작업되면 수정
 
 @RestController
 @RequiredArgsConstructor
