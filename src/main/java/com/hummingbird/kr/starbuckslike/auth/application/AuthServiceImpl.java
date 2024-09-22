@@ -94,9 +94,13 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public void logout(LogoutRequestDTO logoutRequestDTO) {
         log.info("logoutRequestDTO : {}", logoutRequestDTO);
-        Long accessExpireTime = Optional.ofNullable(env.getProperty("JWT.token.access-expire-time", Long.class)).orElse(3600L)*1000;
-        Date expires = new Date(accessExpireTime + System.currentTimeMillis());
-        redisService.recordToken(logoutRequestDTO.getAccessToken(), expires);
+        try{
+            long accessExpireTime = Optional.ofNullable(env.getProperty("JWT.token.access-expire-time", Long.class)).orElse(3600L)*1000;
+            Date expires = new Date(accessExpireTime + System.currentTimeMillis());
+            redisService.recordToken(logoutRequestDTO.getAccessToken(), expires);}
+        catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
 
@@ -209,15 +213,11 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public void updatePW(UpdatePWRequestDTO updatePWRequestDTO) {
         log.info("updatePWRequestDTO : {}", updatePWRequestDTO);
-        try {
-            Member userinfo = authRepository.findByMemberUID(updatePWRequestDTO.getMemberUID()).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
-            if (!passwordEncoder.matches(updatePWRequestDTO.getOldPassword(), userinfo.getPassword())) {
-                throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);
-            }
-            authRepository.updatePasswordByUuid(updatePWRequestDTO.getMemberUID(), passwordEncoder.encode(updatePWRequestDTO.getNewPassword()));
-        } catch (Exception e) {
-            throw e;
+        Member userinfo = authRepository.findByMemberUID(updatePWRequestDTO.getMemberUID()).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+        if (!passwordEncoder.matches(updatePWRequestDTO.getOldPassword(), userinfo.getPassword())) {
+            throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);
         }
+        authRepository.updatePasswordByUuid(updatePWRequestDTO.getMemberUID(), passwordEncoder.encode(updatePWRequestDTO.getNewPassword()));
     }
 
     @Override
