@@ -34,7 +34,7 @@ public class ProductController {
     /**
      * 상품 리스트 단건 조회
      */
-    @Operation(summary = "상품 리스트 단건 조회(이미지)", description = "상품 id로 상품리스트 이미지 단건 조회")
+    @Operation(summary = "상품 리스트 단건 조회(이미지)", description = "상품 id로 상품리스트 이미지 단건 조회", tags = {"상품"})
     @GetMapping("/list/image/{productId}")
     public BaseResponse<ProductListImageResponseVo> findProductListImageResponseDtoByIdV1(
             @PathVariable("productId") Long productId){
@@ -44,7 +44,7 @@ public class ProductController {
         );
     }
 
-    @Operation(summary = "상품 리스트 단건 정보 조회(이름,가격 등)", description = "상품 id로 상품리스트 정보(이름,가격 등) 단건 조회")
+    @Operation(summary = "상품 리스트 단건 정보 조회(이름,가격 등)", description = "상품 id로 상품리스트 정보(이름,가격 등) 단건 조회", tags = {"상품"})
     @GetMapping("/list/info/{productId}")
     public BaseResponse<ProductListInfoResponseVo> findProductListInfoResponseDtoByIdV1(
             @PathVariable("productId") Long productId){
@@ -56,7 +56,7 @@ public class ProductController {
      * 상품 디테일
      */
     // 상품 디테일 상품 상품명 가격 등 조회
-    @Operation(summary = "상품 디테일(상품명,가격,할인 등) 조회", description = "상품 id로 상품 디테일(상품명,가격,할인 등) 조회")
+    @Operation(summary = "상품 디테일(상품명,가격,할인 등) 조회", description = "상품 id로 상품 디테일(상품명,가격,할인 등) 조회", tags = {"상품"})
     @GetMapping("/info/{productId}")
     public BaseResponse<ProductInfoResponseVo> findProductInfoByIdV1(
             @PathVariable("productId") Long productId){
@@ -65,7 +65,7 @@ public class ProductController {
         );
     }
     // 상품 디테일 상세정보(에티터 html) 조회
-    @Operation(summary = "상품 디테일 상세정보 조회", description = "상품 상세정보(에디터) 조회")
+    @Operation(summary = "상품 디테일 상세정보 조회", description = "상품 상세정보(에디터) 조회", tags = {"상품"})
     @GetMapping("/detail/{productId}")
     public BaseResponse<ProductDetailResponseVo> findProductDetailDtoByIdV1(
             @PathVariable("productId") Long productId){
@@ -74,7 +74,7 @@ public class ProductController {
         );
     }
     // 상품의 이미지 조회
-    @Operation(summary = "상품 디테일 이미지 조회", description = "상품 id로 상품 이미지 조회")
+    @Operation(summary = "상품 디테일 이미지 조회", description = "상품 id로 상품 이미지 조회", tags = {"상품"})
     @GetMapping("/images/{productId}")
     public BaseResponse<List<ProductImageResponseVo>> findProductImageDtoByIdV1(
             @PathVariable("productId") Long productId){
@@ -90,7 +90,7 @@ public class ProductController {
         );
     }
     // 상품 옵션 조회
-    @Operation(summary = "상품 디테일 옵션 조회", description = "상품 id로 상품 옵션 조회")
+    @Operation(summary = "상품 디테일 옵션 조회", description = "상품 id로 상품 옵션 조회", tags = {"상품"})
     @GetMapping("/options/{productId}")
     public BaseResponse<List<ProductOptionResponseVo>> findProductOptionDtoByIdV1(
             @PathVariable("productId") Long productId){
@@ -109,7 +109,7 @@ public class ProductController {
      * 기획전에 해당하는 상품 리스트
      */
     // 기획전으로 상품 id 리스트 조회
-    @Operation(summary = "기획전 상품 리스트", description = "기획전에 해당하는 상품 id 리스트 조회")
+    @Operation(summary = "기획전 상품 리스트", description = "기획전에 해당하는 상품 id 리스트 조회", tags = {"기획전"})
     @GetMapping("/list/exhibition/{exhibitionId}")
     public BaseResponse<List<Long>> findProductIdListByExhibitionIdV1(
             @PathVariable("exhibitionId") Long exhibitionId){
@@ -123,7 +123,7 @@ public class ProductController {
      */
 
     @Operation(summary = "상품 리스트 조회 [필터링, 정렬] ",
-            description = "[Slice] 필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격] 해당 상품들의 id만 가져옴")
+            description = "[Slice] 필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격] 해당 상품들의 id만 가져옴", tags = {"상품"})
     @GetMapping("/list")
     public BaseResponse<Slice<Long>> searchProductIdsV1(
             ProductCondition productCondition, Pageable pageable ){
@@ -138,7 +138,7 @@ public class ProductController {
     /**
      *  상품 위시리스트 관련
      */
-    @Operation(summary = "상품 위시리스트 활성,비활성", description = "토글방식으로 동작")
+    @Operation(summary = "상품 위시리스트 활성,비활성", description = "토글방식으로 동작", tags = {"위시리스트"})
     @PostMapping("/wish")
     public BaseResponse<Void> updateWishStatusV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail,
@@ -152,7 +152,7 @@ public class ProductController {
     }
 
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
-            summary = "상품 위시리스트 조회", description = "[Slice] 회원이 위시리스트한 상품만 조회")
+            summary = "상품 위시리스트 조회", description = "[Slice] 회원이 위시리스트한 상품만 조회", tags = {"위시리스트"})
     @GetMapping("/wish/list")
     public BaseResponse<Slice<Long>> searchWishProductIdsV1(
                 Pageable pageable, @AuthenticationPrincipal AuthUserDetail authUserDetail){
@@ -166,7 +166,7 @@ public class ProductController {
      * 상품 최근검색어
      */
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
-                summary = "최근 검색어 등록", description = "최근 검색어 등록")
+                summary = "최근 검색어 등록", description = "최근 검색어 등록", tags = {"최근검색어"})
     @PostMapping("/search/word")
     public BaseResponse<Void> addSearchWordV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail ,@RequestBody String searchWord ){
@@ -174,7 +174,7 @@ public class ProductController {
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
-            summary = "최근 검색어 조회", description = "회원의 최근 검색어 조회")
+            summary = "최근 검색어 조회", description = "회원의 최근 검색어 조회", tags = {"최근검색어"})
     @GetMapping("/search/list")
     public BaseResponse<RecentSearchResponseVo> getRecentSearchV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail ){
@@ -183,7 +183,7 @@ public class ProductController {
         );
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
-            summary = "최근 검색어 개별 삭제", description = "회원의 최근 검색어 개별 삭제")
+            summary = "최근 검색어 개별 삭제", description = "회원의 최근 검색어 개별 삭제", tags = {"최근검색어"})
     @PostMapping("/search/word/delete")
     public BaseResponse<Void> deleteSearchWordV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail ,@RequestBody String searchWord ){
@@ -193,7 +193,7 @@ public class ProductController {
         );
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
-            summary = "최근 검색어 전체 삭제", description = "회원의 최근 검색어 전체 삭제")
+            summary = "최근 검색어 전체 삭제", description = "회원의 최근 검색어 전체 삭제", tags = {"최근검색어"})
     @PostMapping("/search/word/delete-all")
     public BaseResponse<Void> deleteUserSearchKeyV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail){

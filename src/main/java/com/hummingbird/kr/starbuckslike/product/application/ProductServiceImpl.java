@@ -94,7 +94,7 @@ public class ProductServiceImpl implements  ProductService{
     public void updateWishStatus(String memberUid, Long productId) {
         productRepository.findById(productId).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
-        Optional<Wish> existingWish = wishRepository.findWishByMemberUidAndProductId(memberUid, productId);
+        Optional<Wish> existingWish = wishRepository.findWishByMemberUIDAndProductId(memberUid, productId);
         if (existingWish.isPresent()) { // 기존에 위시 등록한 상품인지 확인
             // 이미 존재하면 isWished 값을 토글
             Wish wish = existingWish.get();

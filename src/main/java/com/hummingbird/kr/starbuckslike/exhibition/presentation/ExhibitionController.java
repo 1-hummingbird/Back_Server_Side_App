@@ -23,7 +23,7 @@ public class ExhibitionController {
     private final ExhibitionService exhibitionService;
 
     // 상품 디테일 상품 상품명 가격 등 조회
-    @Operation(summary = "기획전 조회", description = "기획전 시작~끝 날짜 유효해야 조회됨")
+    @Operation(summary = "기획전 조회", description = "기획전 시작~끝 날짜 유효해야 조회됨", tags = {"기획전"})
     @GetMapping("/list")
     public BaseResponse<List<ExhibitionListResponseVo>> findAllExhibitionNamesV1(){
 
@@ -35,7 +35,7 @@ public class ExhibitionController {
         return new BaseResponse<>(res);
     }
 
-    @Operation(summary = "기획전 디테일 조회", description = "기획전 에디터 데이터(html) 조회")
+    @Operation(summary = "기획전 디테일 조회", description = "기획전 에디터 데이터(html) 조회", tags = {"기획전"})
     @GetMapping("/{id}")
     public BaseResponse<ExhibitionDetailResponseVo> findExhibitionDetailV1(
             @PathVariable("id") Long id
