@@ -46,4 +46,13 @@ public class BaseExceptionHandler {
         return new ResponseEntity<>(response, response.httpStatus());
     }
 
+    @ExceptionHandler
+    protected ResponseEntity<BaseResponse<Void>> handleInterruptedException(InterruptedException e) {
+        BaseResponse<Void> response = new BaseResponse<>(BaseResponseStatus.REDIS_ERROR);
+        log.error("InterruptedException from Redis: ", e);
+        for (StackTraceElement s : e.getStackTrace()) {
+            System.out.println(s);
+        }
+        return new ResponseEntity<>(response, response.httpStatus());
+    }
 }

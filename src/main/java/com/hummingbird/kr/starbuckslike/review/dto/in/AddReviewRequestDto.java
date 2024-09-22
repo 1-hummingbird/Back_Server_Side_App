@@ -57,11 +57,11 @@ public class AddReviewRequestDto {
                 .collect(Collectors.toList());
     }
 
-    public static AddReviewRequestDto of(AddReviewRequestVo vo) {
+    public static AddReviewRequestDto of(AddReviewRequestVo vo, String memberUID, String nickname) {
         return AddReviewRequestDto.builder()
                 .purchaseCode(vo.getPurchaseCode())
-                .nickname(vo.getNickname())
-                .memberUID(vo.getMemberUID())
+                .nickname(nickname)
+                .memberUID(memberUID)
                 .productId(vo.getProductId())
                 .optionId(vo.getOptionId())
                 .content(vo.getContent())

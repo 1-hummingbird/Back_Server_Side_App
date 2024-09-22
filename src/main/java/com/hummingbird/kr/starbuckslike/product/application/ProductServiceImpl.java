@@ -5,7 +5,6 @@ import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import com.hummingbird.kr.starbuckslike.product.domain.Product;
 import com.hummingbird.kr.starbuckslike.product.domain.Wish;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
-import com.hummingbird.kr.starbuckslike.product.dto.in.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.search.ProductSearch;

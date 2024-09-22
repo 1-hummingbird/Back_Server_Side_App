@@ -7,9 +7,6 @@ import java.util.List;
 public class AddReviewRequestVo {
     private String purchaseCode;
 
-    private String nickname;
-    private String memberUID;
-
     private Long productId;
     private Long optionId;
 

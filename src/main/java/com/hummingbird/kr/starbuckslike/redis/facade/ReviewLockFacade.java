@@ -5,6 +5,7 @@ import com.hummingbird.kr.starbuckslike.review.application.ReviewService;
 import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewCommentRequestDto;
 import com.hummingbird.kr.starbuckslike.review.dto.in.DeleteReviewCommentRequestDto;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewCommentRepository;
+import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Component;
 

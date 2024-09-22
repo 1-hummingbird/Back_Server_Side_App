@@ -143,7 +143,7 @@ class RedisServiceTest {
                     DeleteReviewCommentRequestDto dto = DeleteReviewCommentRequestDto
                             .builder()
                             .reviewCommentId(reviewCommentId)  // index를 사용
-                            .memberUid("zzzz-yyyy")
+                            .memberUID("zzzz-yyyy")
                             .build();
                     reviewLockFacade.deleteReviewAndDecreaseCount(dto);
                 } catch (InterruptedException e) {
