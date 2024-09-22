@@ -1,6 +1,6 @@
 package com.hummingbird.kr.starbuckslike.product.dto.out;
 
-import com.hummingbird.kr.starbuckslike.product.vo.ProductListInfoResponseVo;
+import com.hummingbird.kr.starbuckslike.product.vo.out.ProductListInfoResponseVo;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Data;

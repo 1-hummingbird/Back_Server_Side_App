@@ -2,7 +2,6 @@ package com.hummingbird.kr.starbuckslike.product.infrastructure.search;
 
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
-import com.hummingbird.kr.starbuckslike.product.vo.ProductListImageResponseVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;

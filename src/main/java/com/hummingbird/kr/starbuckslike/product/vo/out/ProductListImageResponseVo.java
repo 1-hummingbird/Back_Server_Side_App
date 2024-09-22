@@ -1,4 +1,4 @@
-package com.hummingbird.kr.starbuckslike.product.vo;
+package com.hummingbird.kr.starbuckslike.product.vo.out;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
