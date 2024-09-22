@@ -1,4 +1,4 @@
-package com.hummingbird.kr.starbuckslike.cart.vo;
+package com.hummingbird.kr.starbuckslike.cart.vo.in;
 
 import java.util.List;
 import lombok.Getter;

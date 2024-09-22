@@ -2,7 +2,8 @@ package com.hummingbird.kr.starbuckslike.cart.presentation;
 
 import com.hummingbird.kr.starbuckslike.cart.application.CartService;
 import com.hummingbird.kr.starbuckslike.cart.dto.in.*;
-import com.hummingbird.kr.starbuckslike.cart.vo.*;
+import com.hummingbird.kr.starbuckslike.cart.vo.in.*;
+import com.hummingbird.kr.starbuckslike.cart.vo.out.*;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponse;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;

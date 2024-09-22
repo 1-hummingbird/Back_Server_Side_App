@@ -1,6 +1,6 @@
 package com.hummingbird.kr.starbuckslike.cart.dto.in;
 
-import com.hummingbird.kr.starbuckslike.cart.vo.RequestRemoveCartItemVo;
+import com.hummingbird.kr.starbuckslike.cart.vo.in.RequestRemoveCartItemVo;
 
 import lombok.Getter;
 import lombok.Setter;

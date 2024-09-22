@@ -1,30 +1,21 @@
 package com.hummingbird.kr.starbuckslike.purchase.presentation;
 
-import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAddCartItemDto;
-import com.hummingbird.kr.starbuckslike.cart.vo.RequestAddCartItemVo;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
 import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
-import com.hummingbird.kr.starbuckslike.product.vo.ProductDetailResponseVo;
 import com.hummingbird.kr.starbuckslike.purchase.application.PurchaseService;
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.DeletePurchaseRequestDto;
-import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseDetailResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseListResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.vo.in.AddPurchaseRequestVo;
 import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseDetailResponseVo;
 import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
-import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.data.domain.SliceImpl;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
-import java.util.stream.Collectors;
 
 //@Tag()
 @RestController

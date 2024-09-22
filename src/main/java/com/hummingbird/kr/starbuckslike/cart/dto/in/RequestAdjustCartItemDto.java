@@ -1,7 +1,7 @@
 package com.hummingbird.kr.starbuckslike.cart.dto.in;
 
 import com.hummingbird.kr.starbuckslike.cart.domain.CartAdjustType;
-import com.hummingbird.kr.starbuckslike.cart.vo.RequestAdjustCartItemVo;
+import com.hummingbird.kr.starbuckslike.cart.vo.in.RequestAdjustCartItemVo;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Data;
