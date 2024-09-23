@@ -60,12 +60,18 @@ public class AuthServiceImpl implements AuthService{
     public void register(RegisterRequestDTO registerRequestDTO) {
 
         log.info("registerRequestDTO : {}", registerRequestDTO);
-
-        try {
-            authRepository.save(registerRequestDTO.toEntity(passwordEncoder));
-        } catch (Exception e) {
-            throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+        String phone = registerRequestDTO.getPhone();
+        String email = registerRequestDTO.getEmail();
+        //if (redisService.getAuthChallenge(phone) == "Success" &&
+        //        redisService.getAuthChallenge(email) == "Success"){
+        if (true){
+            try {
+                authRepository.save(registerRequestDTO.toEntity(passwordEncoder));
+           } catch (Exception e) {
+               throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+            }
         }
+        else {throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);}
 
     }
 
