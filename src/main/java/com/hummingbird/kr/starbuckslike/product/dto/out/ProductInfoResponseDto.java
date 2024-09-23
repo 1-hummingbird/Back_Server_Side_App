@@ -19,8 +19,10 @@ public class ProductInfoResponseDto {
     private Boolean isDiscounted; // 할인 여부
     private Float discountRate; // 할인율
 
-    //
     private Long cartCount; // 해당 상품이 장바구니에 몇개 담겼는지
+
+    private Long wishCount; // 해당 상품의 좋아요 개수
+
 
     @QueryProjection
     public ProductInfoResponseDto(String name, Boolean isNew, String shortDescription,
@@ -41,6 +43,18 @@ public class ProductInfoResponseDto {
         this.discountRate = discountRate;
         this.cartCount = cartCount;
     }
+
+    public ProductInfoResponseDto(String name, Boolean isNew, String shortDescription,
+                                  Boolean isDiscounted, Float discountRate, Long cartCount, Long wishCount) {
+        this.name = name;
+        this.isNew = isNew;
+        this.shortDescription = shortDescription;
+        this.isDiscounted = isDiscounted;
+        this.discountRate = discountRate;
+        this.cartCount = cartCount;
+        this.wishCount = wishCount;
+    }
+
     public ProductInfoResponseVo toVo(){
         return ProductInfoResponseVo.builder()
                 .name(name)
@@ -49,6 +63,7 @@ public class ProductInfoResponseDto {
                 .isDiscounted(isDiscounted)
                 .discountRate(discountRate)
                 .cartCount(cartCount)
+                .wishCount(wishCount)
                 .build();
     }
 

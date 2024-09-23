@@ -7,6 +7,7 @@ import java.util.List;
 public class AddReviewRequestVo {
     private String purchaseCode;
 
+    private Long purchaseProductId; // 주문상품 Id
     private Long productId;
     private Long optionId;
 

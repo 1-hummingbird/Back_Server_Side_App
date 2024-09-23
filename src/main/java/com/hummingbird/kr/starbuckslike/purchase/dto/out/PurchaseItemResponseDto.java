@@ -17,15 +17,18 @@ public class PurchaseItemResponseDto {
     private Long price; //주문 가격
     private Integer qty; //주문 수량
 
+    private Boolean isReviewable; // 리뷰 작성가능 여부
+
     @QueryProjection
     public PurchaseItemResponseDto(Long purchaseId, Long optionId, String productImage,
-                                     String optionName, Long price, Integer qty) {
+                                     String optionName, Long price, Integer qty, Boolean isReviewable) {
         this.purchaseId = purchaseId;
         this.optionId = optionId;
         this.productImage = productImage;
         this.optionName = optionName;
         this.price = price;
         this.qty = qty;
+        this.isReviewable = isReviewable;
     }
     public PurchaseItemResponseVo toVo() {
         return PurchaseItemResponseVo.builder()
@@ -35,6 +38,7 @@ public class PurchaseItemResponseDto {
                 .optionName(optionName)
                 .price(price)
                 .qty(qty)
+                .isReviewable(isReviewable)
                 .build();
     }
 }

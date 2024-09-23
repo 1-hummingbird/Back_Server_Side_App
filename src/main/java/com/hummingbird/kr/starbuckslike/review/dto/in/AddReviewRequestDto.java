@@ -22,6 +22,7 @@ public class AddReviewRequestDto {
     private String nickname;
     private String memberUID;
 
+    private Long purchaseProductId; // 주문상품 Id
     private Long productId;
     private Long optionId;
 
@@ -36,6 +37,7 @@ public class AddReviewRequestDto {
                 .purchaseCode(purchaseCode)
                 .nickname(nickname)
                 .memberUID(memberUID)
+                .purchaseProductId(purchaseProductId)
                 .productId(productId)
                 .optionId(optionId)
                 .content(content)
@@ -62,6 +64,7 @@ public class AddReviewRequestDto {
                 .purchaseCode(vo.getPurchaseCode())
                 .nickname(nickname)
                 .memberUID(memberUID)
+                .purchaseProductId(vo.getPurchaseProductId())
                 .productId(vo.getProductId())
                 .optionId(vo.getOptionId())
                 .content(vo.getContent())

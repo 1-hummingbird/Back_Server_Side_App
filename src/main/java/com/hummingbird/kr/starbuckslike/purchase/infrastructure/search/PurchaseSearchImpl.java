@@ -35,7 +35,7 @@ public class PurchaseSearchImpl implements PurchaseSearch{
         // 주문목록 Dto 를 상품목록 필드는 비워두고 조회
         List<PurchaseListResponseDto> purchaseData =
                 queryFactory
-                        .select(new QPurchaseListResponseDto(purchase.id, purchase.createdAt, purchase.totalPrice))
+                        .select(new QPurchaseListResponseDto(purchase.code, purchase.id, purchase.createdAt, purchase.totalPrice))
                         .from(purchase)
                         .where(
                                 purchase.memberUID.eq(memberUID)
@@ -65,10 +65,13 @@ public class PurchaseSearchImpl implements PurchaseSearch{
         // 주문목록 Dto 를 상품목록 필드는 비워두고 조회
         List<PurchaseListResponseDto> purchaseList =
                 queryFactory
-                        .select(new QPurchaseListResponseDto(purchase.id, purchase.createdAt, purchase.totalPrice))
+                        .select(new QPurchaseListResponseDto(purchase.code, purchase.id,
+                                                             purchase.createdAt, purchase.totalPrice)
+                        )
                         .from(purchase)
                         .where(
-                                purchase.memberUID.eq(memberUID).and(purchase.isDelete.isFalse()),
+                                purchase.memberUID.eq(memberUID)
+                                .and(purchase.isDelete.isFalse()),
                                 searchYearCondition(year)
                         )
                         .orderBy(purchase.createdAt.desc())
@@ -76,7 +79,7 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                         .limit(pageable.getPageSize() + 1) // 다음 페이지가 있는지 확인하기 위해 1개 더 가져옴
                         .fetch();
         // 구매번호만 뽑음
-        List<Long>purchaseIds = purchaseList
+        List<Long> purchaseIds = purchaseList
                 .stream()
                 .map(PurchaseListResponseDto::getPurchaseId)
                 .toList();
@@ -90,6 +93,8 @@ public class PurchaseSearchImpl implements PurchaseSearch{
         // 주문 <-> 주문상품들 조립
         purchaseList.forEach(plist-> plist.setPurchaseItems(purchaseItemMap.get(plist.getPurchaseId())));
 
+
+
         boolean hasNext = purchaseList.size() > pageable.getPageSize();
         // Slice 크기에 맞게 자르기
         if (hasNext) {
@@ -98,6 +103,7 @@ public class PurchaseSearchImpl implements PurchaseSearch{
         return new SliceImpl<>(purchaseList, pageable, hasNext);
 
     }
+
 
     @Override
     public PurchaseDetailResponseDto findPurchaseDetailById(String purchaseCode) {
@@ -109,7 +115,8 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                                     .when(purchase.secondaryPhone.isNull())
                                         .then("없음") // null 이면 "없음" 출력
                                         .otherwise(purchase.secondaryPhone),
-                                purchase.memo))
+                                purchase.memo)
+                )
                 .from(purchase)
                 .where(
                         purchase.code.eq(purchaseCode)
@@ -134,13 +141,18 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                     .select(new QPurchaseItemResponseDto(
                                 purchaseProduct.purchase.id, purchaseProduct.optionId,
                                 productImage.imageUrl, purchaseProduct.optionName,
-                                purchaseProduct.price, purchaseProduct.qty
-                            ))
+                                purchaseProduct.price, purchaseProduct.qty ,
+                                // 리뷰 작성 가능 여부 Boolean
+                                Expressions.booleanTemplate(
+                                    "case when {0} then true else false end", isReviewableCondition()
+                                )
+                            )
+                    )
                     .from(purchaseProduct)
                     .leftJoin(productImage)
                     .on(
-                            purchaseProduct.productId.eq(productImage.product.id)
-                            .and(productImage.seq.eq(0)) // 메인 이미지만
+                        purchaseProduct.productId.eq(productImage.product.id)
+                        .and(productImage.seq.eq(0)) // 메인 이미지만
                     )
                     .where(purchaseProduct.purchase.id.in(purchaseIds))
                     .orderBy(purchaseProduct.createdAt.desc())
@@ -169,6 +181,16 @@ public class PurchaseSearchImpl implements PurchaseSearch{
                 Expressions.dateTemplate(LocalDateTime.class, "{0}", from.atStartOfDay()),
                 Expressions.dateTemplate(LocalDateTime.class, "{0}", to.atTime(LocalTime.MAX)) // 날짜의 끝 시점
         );
+    }
+    // 리뷰 작성가능 조건
+    private BooleanExpression isReviewableCondition() {
+        LocalDate sixtyDaysAgo = LocalDate.now().minusDays(60);
+        LocalDate currentDate = LocalDate.now();
+        return purchaseProduct.createdAt.between(
+                    Expressions.dateTemplate(LocalDateTime.class, "{0}", sixtyDaysAgo.atStartOfDay()), // 60일 전
+                    Expressions.dateTemplate(LocalDateTime.class, "{0}", currentDate.atTime(LocalTime.MAX)) // 오늘
+                )
+                .and(purchaseProduct.isReviewed.isFalse()); // 이전에 리뷰 작성된 적 없어야 함
     }
 
 

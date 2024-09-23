@@ -13,5 +13,8 @@ public class ProductListInfoResponseVo {
     private String name; // 상품명
     private Boolean isNew; // 신규 상품 여부
     private Boolean isDiscounted; // 할인 여부
+    private Integer price; // 상품 가격
     private Float discountRate; // 할인율
+
+    private Long wishCount;
 }

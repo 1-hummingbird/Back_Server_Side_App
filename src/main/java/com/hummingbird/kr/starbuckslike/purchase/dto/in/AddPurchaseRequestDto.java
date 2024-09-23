@@ -66,6 +66,7 @@ public class AddPurchaseRequestDto {
                                                             .optionId(itemDto.getOptionId())
                                                             .optionName(itemDto.getOptionName())
                                                             .purchaseStatus(PurchaseStatus.PENDING)
+                                                            .isReviewed(false)
                                                             .build())
                                         .collect(Collectors.toList());
     }

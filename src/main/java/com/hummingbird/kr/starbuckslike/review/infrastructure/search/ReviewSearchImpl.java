@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.review.infrastructure.search;
 
+import com.hummingbird.kr.starbuckslike.batch.entity.QReviewStar;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.PriceType;
 import com.hummingbird.kr.starbuckslike.review.domain.QReviewComment;
 import com.hummingbird.kr.starbuckslike.review.dto.out.*;
@@ -18,6 +19,7 @@ import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 
+import static com.hummingbird.kr.starbuckslike.batch.entity.QReviewStar.reviewStar;
 import static com.hummingbird.kr.starbuckslike.product.domain.QProduct.product;
 import static com.hummingbird.kr.starbuckslike.review.domain.QReview.review;
 import static com.hummingbird.kr.starbuckslike.review.domain.QReviewComment.reviewComment;
@@ -158,6 +160,19 @@ public class ReviewSearchImpl implements ReviewSearch{
         log.info(" Review Comment(Order by sort) Execution time: " + elapsedTime + " ms");
 
         return res;
+    }
+
+    @Override
+    public ReviewSummaryResponseDto findReviewSummaryDtoById(Long productId) {
+        return queryFactory
+                .select(new QReviewSummaryResponseDto(
+                        reviewStar.reviewCount.coalesce(0L),
+                        reviewStar.photoReviewCount.coalesce(0L),
+                        reviewStar.averageStar.coalesce(0.0)
+                ))
+                .from(reviewStar)
+                .where(reviewStar.productId.eq(productId))
+                .fetchOne();
     }
 
 

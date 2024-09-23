@@ -80,7 +80,7 @@ public class CartSearchImpl implements CartSearch {
                 .from(productOption)
                 .join(cart).on(productOption.id.eq(cart.productOption.id))
                 .where(
-                        cart.id.eq(cartId)
+                    cart.id.eq(cartId)
                 )
                 .fetchOne();
     }

@@ -39,7 +39,7 @@ public interface CartService {
      * Select
      */
     // 장바구니 ID 리스트 조회
-    public ResponseFindAllCartDto findAllCartIdByMemberUID(String memberUID);
+    ResponseFindAllCartDto findAllCartIdByMemberUID(String memberUID);
 
     // 장바구니 옵션상품의 대표상품 이미지 조회
     ResponseCartItemImageDto findCartMainImageDtoById(Long cartId);
