@@ -122,7 +122,7 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public void resetPW(ResetPWRequestDTO resetPWRequestDTO) {
         log.info("resetPWRequestDTO : {}", resetPWRequestDTO);
-        if (redisService.getAuthChallenge(resetPWRequestDTO.getEmail()) == "Success"){
+        if (redisService.getAuthChallenge(resetPWRequestDTO.getEmail()).equals("Success")){
         try {
             authRepository.updatePasswordByLoginID(resetPWRequestDTO.getLoginID(), passwordEncoder.encode(resetPWRequestDTO.getPassword()));
         } catch (Exception e) {
@@ -135,7 +135,7 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public FindIDResponseDTO findID(FindIDRequestDTO findIDRequestDTO) {
         log.info("findIDRequestDTO : {}", findIDRequestDTO);
-        if (redisService.getAuthChallenge(findIDRequestDTO.getEmail()) == "Success"){
+        if (redisService.getAuthChallenge(findIDRequestDTO.getEmail()).equals("Success")){
         try {
             return new FindIDResponseDTO(authRepository.findByEmail(findIDRequestDTO.getEmail()).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER)).getLoginID());
         } catch (Exception e) {
