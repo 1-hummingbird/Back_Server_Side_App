@@ -13,6 +13,7 @@ import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.PriceTy
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
@@ -307,6 +308,9 @@ public class ProductSearchImpl implements ProductSearch {
                 )
                 .orderBy(productImage.seq.asc())
                 .fetch();
+;
+
+
     }
 
     @Override
@@ -319,9 +323,9 @@ public class ProductSearchImpl implements ProductSearch {
                 .from(productOption)
                 .where(
                         productOption.product.id.eq(productId)
-                        .and(productOption.isAvailable.eq(true))
-                        .and(productOption.isHidden.eq(false))
-                        .and(productOption.isDeleted.eq(false))
+                        .and(productOption.isAvailable.isTrue() )
+                        .and(productOption.isHidden.isFalse())
+                        .and(productOption.isDeleted.isFalse())
                 )
                 .orderBy(productOption.createdAt.desc())
                 .fetch();
