@@ -64,12 +64,13 @@ public class ShippingServiceImpl implements ShippingService {
         if (existOne.getMemberUID().equals(requestDTO.getMemberUID())){
             ShippingSetting shippingSetting = shippingSettingRepository.findByMemberUID(requestDTO.getMemberUID()).
                     orElse(null);
+            if (shippingSetting != null){
             if (shippingSetting.getDefaultShippingAddressID().equals(existOne.getId())){
                 shippingSetting.setDefaultShippingAddressID(null);
             }
             shippingAddressRepository.deleteByAddressID (requestDTO.getShippingAddressID());
             shippingSetting.countShippingMinus();
-            shippingSettingRepository.save(shippingSetting);}
+            shippingSettingRepository.save(shippingSetting);}}
         else {
             throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
         }
@@ -96,5 +97,11 @@ public class ShippingServiceImpl implements ShippingService {
         }
         ShippingAddress shippingAddress = shippingAddressRepository.findById(addressID).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_INTEREST));
         return ShippingAddressGetDefaultResponseDTO.fromEntity(shippingAddress) ;}
+
+    @Override
+    public ShippingDefaultIDResponseDTO defaultID(String memberUID){
+        Long addressID = shippingSettingRepository.findByMemberUID(memberUID).get().getDefaultShippingAddressID();
+        return new ShippingDefaultIDResponseDTO(addressID);
+    }
 
 }
