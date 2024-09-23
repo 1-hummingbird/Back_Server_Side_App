@@ -90,5 +90,13 @@ public class ShippingAddressController {
         return new BaseResponse<>(responseDTO.toVO());
     }
 
+    @PostMapping("/default-id")
+    @Operation(security = @SecurityRequirement(name = "Bearer Auth"),
+               summary = "기본 배송지 ID 확인",
+            description = "기본 배송지의 id를 가져옵니다", tags = {"Shipping"})
+    public BaseResponse<ShippingDefaultIDResponseVO> defaultID(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        return new BaseResponse<>(shippingService.defaultID(authUserDetail.getUsername()).toVO());
+    }
+
     
 }
