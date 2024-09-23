@@ -5,8 +5,10 @@ import org.springframework.mail.SimpleMailMessage;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.JavaMailSenderImpl;
 import org.springframework.stereotype.Service;
-
+import org.springframework.mail.MailSendException;
 import java.util.Properties;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
+import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
 
 @Service
 public class MailServiceImpl implements MailService {
@@ -31,6 +33,8 @@ public class MailServiceImpl implements MailService {
         props.put("mail.transport.protocol", "smtp");
         props.put("mail.smtp.auth", "true");
         props.put("mail.smtp.starttls.enable", "true");
+        props.put("mail.smtp.ssl.trust", "smtp.gmail.com");
+        props.put("mail.smtp.ssl.protocols", "TLSv1.2");
         props.put("mail.debug", "true");
 
         return mailSender;
@@ -44,6 +48,13 @@ public class MailServiceImpl implements MailService {
         message.setSubject(subject);
         message.setText(text);
 
-        getJavaMailSender().send(message);
+        try {
+            JavaMailSender mailSender = getJavaMailSender();
+            mailSender.send(message);
+        } catch (MailSendException e) {
+            throw new BaseException(BaseResponseStatus.MAIL_SEND_ERROR);
+        } catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 }

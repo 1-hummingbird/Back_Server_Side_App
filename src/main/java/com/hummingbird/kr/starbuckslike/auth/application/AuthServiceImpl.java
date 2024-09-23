@@ -11,6 +11,7 @@ import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 
 import com.hummingbird.kr.starbuckslike.member.domain.Member;
 import com.hummingbird.kr.starbuckslike.redis.service.RedisService;
+import com.hummingbird.kr.starbuckslike.mail.application.MailService;
 
 import jakarta.annotation.PostConstruct;
 import lombok.extern.slf4j.Slf4j;
@@ -25,6 +26,7 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.core.env.Environment;
 import java.util.Date;
 import java.util.Optional;
+import java.util.Random;
 
 @Slf4j
 @Service
@@ -37,15 +39,21 @@ public class AuthServiceImpl implements AuthService{
     private final PasswordEncoder passwordEncoder;
     private final RedisService redisService;
     private final Environment env;
+    private final MailService mailService;
+
+
+    private final long AUTH_CHALLENGE_EXPIRE_TIME = 600000; // 10 minutes
 
 
     @Autowired
-    public AuthServiceImpl(AuthRepository authRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RedisService redisService, Environment env, OauthInfoRepository oauthInfoRepository) {
+    public AuthServiceImpl(AuthRepository authRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RedisService redisService,
+                             Environment env, OauthInfoRepository oauthInfoRepository, MailService mailService) {
         this.authRepository = authRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
         this.redisService = redisService;
+        this.mailService = mailService;
         this.env = env;
         this.oauthInfoRepository = oauthInfoRepository;
     }
@@ -62,9 +70,9 @@ public class AuthServiceImpl implements AuthService{
         log.info("registerRequestDTO : {}", registerRequestDTO);
         String phone = registerRequestDTO.getPhone();
         String email = registerRequestDTO.getEmail();
-        //if (redisService.getAuthChallenge(phone) == "Success" &&
-        //        redisService.getAuthChallenge(email) == "Success"){
-        if (true){
+        //if (redisService.getAuthChallenge(phone).equals("Success") &&
+        //        redisService.getAuthChallenge(email).equals("Success")){
+        if (redisService.getAuthChallenge(email).equals("Success")){
             try {
                 authRepository.save(registerRequestDTO.toEntity(passwordEncoder));
            } catch (Exception e) {
@@ -114,27 +122,30 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public void resetPW(ResetPWRequestDTO resetPWRequestDTO) {
         log.info("resetPWRequestDTO : {}", resetPWRequestDTO);
+        if (redisService.getAuthChallenge(resetPWRequestDTO.getEmail()) == "Success"){
         try {
             authRepository.updatePasswordByLoginID(resetPWRequestDTO.getLoginID(), passwordEncoder.encode(resetPWRequestDTO.getPassword()));
         } catch (Exception e) {
             throw new BaseException(BaseResponseStatus.NO_EXIST_USER);
-        }
+        }}
+        else {throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);}
     }
 
     @Override
     @Transactional
     public FindIDResponseDTO findID(FindIDRequestDTO findIDRequestDTO) {
         log.info("findIDRequestDTO : {}", findIDRequestDTO);
+        if (redisService.getAuthChallenge(findIDRequestDTO.getEmail()) == "Success"){
         try {
             return new FindIDResponseDTO(authRepository.findByEmail(findIDRequestDTO.getEmail()).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER)).getLoginID());
         } catch (Exception e) {
             throw new BaseException(BaseResponseStatus.NO_EXIST_USER);
-        }
+        }}else {throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);}
     }
 
     @Override
     public void sendPhoneVerificationCode(PhoneVerificationRequestDTO phoneVerificationRequestDTO) {
-
+        String code = String.format("%06d", new Random().nextInt(1000000));
     }
 
     @Override
@@ -144,12 +155,25 @@ public class AuthServiceImpl implements AuthService{
 
     @Override
     public void sendEmailVerificationCode(EmailVerificationRequestDTO emailVerificationRequestDTO) {
-
+        String email = emailVerificationRequestDTO.getEmail();
+        Date expires = new Date(AUTH_CHALLENGE_EXPIRE_TIME + System.currentTimeMillis());
+        String code = String.format("%06d", new Random().nextInt(1000000));
+        try{mailService.sendMail(email, "Email Verification Code", "Your verification code is " + code);
+            redisService.recordAuthChallenge(email, code, expires);}
+        catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
+        }
     }
 
     @Override
     public void checkEmailVerificationCode(EmailVerificationCheckRequestDTO emailVerificationCheckRequestDTO) {
-
+        String email = emailVerificationCheckRequestDTO.getEmail();
+        String code = emailVerificationCheckRequestDTO.getVerificationCode();
+        Date expires = new Date(AUTH_CHALLENGE_EXPIRE_TIME + System.currentTimeMillis());
+        if (redisService.getAuthChallenge(email).equals(code)){
+            redisService.recordAuthChallengeSuccess(email, expires);
+        }
+        else{throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);}
     }
 
     // todo: oauth register and login need to check kakao token vaildation and register need to prevent duplicated user
