@@ -1,9 +1,10 @@
 package com.hummingbird.kr.starbuckslike.auth.application;
 
-import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;
+import com.hummingbird.kr.starbuckslike.auth.domain.*;
 import com.hummingbird.kr.starbuckslike.auth.dto.in.*;
 import com.hummingbird.kr.starbuckslike.auth.dto.out.*;
 import com.hummingbird.kr.starbuckslike.auth.infrastructure.AuthRepository;
+import com.hummingbird.kr.starbuckslike.auth.infrastructure.OauthInfoRepository;
 import com.hummingbird.kr.starbuckslike.auth.util.JwtTokenProvider;
 import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
@@ -30,6 +31,7 @@ import java.util.Optional;
 public class AuthServiceImpl implements AuthService{
 
     private final AuthRepository authRepository;
+    private final OauthInfoRepository oauthInfoRepository;
     private final AuthenticationManager authenticationManager;
     private final JwtTokenProvider jwtTokenProvider;
     private final PasswordEncoder passwordEncoder;
@@ -38,13 +40,14 @@ public class AuthServiceImpl implements AuthService{
 
 
     @Autowired
-    public AuthServiceImpl(AuthRepository authRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RedisService redisService, Environment env) {
+    public AuthServiceImpl(AuthRepository authRepository, AuthenticationManager authenticationManager, JwtTokenProvider jwtTokenProvider, PasswordEncoder passwordEncoder, RedisService redisService, Environment env, OauthInfoRepository oauthInfoRepository) {
         this.authRepository = authRepository;
         this.authenticationManager = authenticationManager;
         this.jwtTokenProvider = jwtTokenProvider;
         this.passwordEncoder = passwordEncoder;
         this.redisService = redisService;
         this.env = env;
+        this.oauthInfoRepository = oauthInfoRepository;
     }
 
     @PostConstruct
@@ -91,9 +94,13 @@ public class AuthServiceImpl implements AuthService{
     @Transactional
     public void logout(LogoutRequestDTO logoutRequestDTO) {
         log.info("logoutRequestDTO : {}", logoutRequestDTO);
-        Long accessExpireTime = Optional.ofNullable(env.getProperty("JWT.token.access-expire-time", Long.class)).orElse(3600L)*1000;
-        Date expires = new Date(accessExpireTime + System.currentTimeMillis());
-        redisService.recordToken(logoutRequestDTO.getAccessToken(), expires);
+        try{
+            long accessExpireTime = Optional.ofNullable(env.getProperty("JWT.token.access-expire-time", Long.class)).orElse(3600L)*1000;
+            Date expires = new Date(accessExpireTime + System.currentTimeMillis());
+            redisService.recordToken(logoutRequestDTO.getAccessToken(), expires);}
+        catch (Exception e) {
+            throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
+        }
 
     }
 
@@ -139,15 +146,34 @@ public class AuthServiceImpl implements AuthService{
 
     }
 
+    // todo: oauth register and login need to check kakao token vaildation and register need to prevent duplicated user
     @Override
     public void oauthRegister(OauthRegisterRequestDTO oauthRegisterRequestDTO) {
+        log.info("oauthRegisterRequestDTO : {}", oauthRegisterRequestDTO);
+        if (OauthTokenCheck(oauthRegisterRequestDTO.getOauthToken())){
+            try {
+                OauthInfo oauthInfo = oauthRegisterRequestDTO.toEntity();
+                oauthInfoRepository.save(oauthInfo);
+            } catch (Exception e) {
+                throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+            }
+        }
+        else{throw new BaseException(BaseResponseStatus.TOKEN_NOT_VALID);}
 
     }
 
     @Override
     public LoginResponseDTO oauthLogin(OauthLoginRequestDTO oauthLoginRequestDTO) {
-        
-        return null;
+        OauthInfo oauthInfo = oauthInfoRepository.findByOauthIDAndOauthType(oauthLoginRequestDTO.getOauthID(), oauthLoginRequestDTO.getOauthType()).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
+        );
+        Member member = authRepository.findByMemberUID(oauthInfo.getMemberUID()).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
+        );
+        if (OauthTokenCheck(oauthLoginRequestDTO.getOauthToken())){
+            String token = createToken(oAuthAuthenticate(member.getMemberUID()));
+            return new LoginResponseDTO(token,member.getName(),member.getMemberUID());}
+        else{throw new BaseException(BaseResponseStatus.TOKEN_NOT_VALID);}
     }
 
     @Override
@@ -193,15 +219,16 @@ public class AuthServiceImpl implements AuthService{
     @Override
     public void updatePW(UpdatePWRequestDTO updatePWRequestDTO) {
         log.info("updatePWRequestDTO : {}", updatePWRequestDTO);
-        try {
-            Member userinfo = authRepository.findByMemberUID(updatePWRequestDTO.getMemberUID()).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
-            if (!passwordEncoder.matches(updatePWRequestDTO.getOldPassword(), userinfo.getPassword())) {
-                throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);
-            }
-            authRepository.updatePasswordByUuid(updatePWRequestDTO.getMemberUID(), passwordEncoder.encode(updatePWRequestDTO.getNewPassword()));
-        } catch (Exception e) {
-            throw e;
+        Member userinfo = authRepository.findByMemberUID(updatePWRequestDTO.getMemberUID()).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
+        if (!passwordEncoder.matches(updatePWRequestDTO.getOldPassword(), userinfo.getPassword())) {
+            throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);
         }
+        authRepository.updatePasswordByUuid(updatePWRequestDTO.getMemberUID(), passwordEncoder.encode(updatePWRequestDTO.getNewPassword()));
+    }
+
+    @Override
+    public OauthInfoResponseDTO getOauthInfo(String memberUID) {
+        return new OauthInfoResponseDTO(oauthInfoRepository.findByMemberUID(memberUID));
     }
 
     private String createToken(Authentication authentication) {
@@ -216,6 +243,21 @@ public class AuthServiceImpl implements AuthService{
                         inputPassword
                 )
         );
+    }
+
+    private Authentication oAuthAuthenticate(String memberUID) {
+        log.info("memberUID : {}", memberUID);
+        return authenticationManager.authenticate(
+                new UsernamePasswordAuthenticationToken(
+                        memberUID,
+                        null
+                )
+        );
+    }
+
+    private boolean OauthTokenCheck(String token){
+
+        return true;
     }
 
 }

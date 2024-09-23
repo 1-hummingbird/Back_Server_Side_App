@@ -3,10 +3,9 @@ package com.hummingbird.kr.starbuckslike.category.presentation;
 import com.hummingbird.kr.starbuckslike.category.application.CategoryProductListService;
 import com.hummingbird.kr.starbuckslike.category.dto.in.CategoryProductListRequestDto;
 import com.hummingbird.kr.starbuckslike.category.vo.CategoryProductListRequestVo;
-import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
-import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponse;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,7 +20,7 @@ public class CategoryProductListController {
 
     // 카테고리 상품 추가
     @PostMapping("/product-category-list")
-    public CommonResponseEntity<Void> addProductByCategories(
+    public BaseResponse<Void> addProductByCategories(
             @RequestBody CategoryProductListRequestVo categoryProductListRequestVo) {
 
         categoryProductListService.addProductByCategories(CategoryProductListRequestDto.builder()
@@ -30,11 +29,6 @@ public class CategoryProductListController {
                 .middleCategoryCode(categoryProductListRequestVo.getMiddleCategoryCode())
                 .bottomCategoryCode(categoryProductListRequestVo.getBottomCategoryCode())
                 .build());
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                null
-        );
-
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 }

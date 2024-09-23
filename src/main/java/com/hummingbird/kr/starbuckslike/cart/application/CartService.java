@@ -1,12 +1,8 @@
 package com.hummingbird.kr.starbuckslike.cart.application;
 
-import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAddCartItemDto;
-import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAdjustCartItemDto;
-import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
-import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.in.*;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.*;
 import org.springframework.transaction.annotation.Transactional;
-
-import java.util.List;
 
 @Transactional(readOnly = true)
 public interface CartService {
@@ -25,25 +21,25 @@ public interface CartService {
 
     // 장바구니 단건 삭제 (soft)
     @Transactional
-    public void removeCartItem(Long cartId);
+    public void removeCartItem(RequestRemoveCartItemDto requestRemoveCartItemDto);
 
     // 장바구니 전체 삭제 (soft)
     @Transactional
-    public void removeAllCartItemsByUserUid(String userUid);
+    public void removeAllCartItemsByMemberUID(String memberUID);
 
     // 장바구니 단건 선택
     @Transactional
-    public void selectCartItem(Long cartId);
+    public void selectCartItem(RequestSelectCartItemDto requestSelectCartItemDto);
 
     // 장바구니 전체 선택
     @Transactional
-    public void selectAllCartItems(List<Long> cartIds);
+    public void selectAllCartItems(RequestCartItemSelectAllDto requestCartItemSelectAllDto);
 
     /**
      * Select
      */
     // 장바구니 ID 리스트 조회
-    public List<Long> findAllCartIdByUserUid(String userUid);
+    public ResponseFindAllCartDto findAllCartIdByMemberUID(String memberUID);
 
     // 장바구니 옵션상품의 대표상품 이미지 조회
     ResponseCartItemImageDto findCartMainImageDtoById(Long cartId);

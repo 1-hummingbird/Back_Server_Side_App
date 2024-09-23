@@ -27,4 +27,13 @@ public interface RedisService {
 
     // 토큰이 블랙리스트에 있는지 확인
     boolean isTokenBlocked(String token);
+
+    // 인증 요청을 기록(이메일/전화번호를 키, 시도 대상 코드를 값으로)
+    void recordAuthChallenge(String media, String code, Date expires);
+
+    // 성공한 인증 요청이면 위 인증 요청 기록을 덮어 씌움
+    void recordAuthChallengeSuccess(String media, Date expires);
+
+    // 인증 요청 정보를 불러옴
+    String getAuthChallenge(String media);
 }

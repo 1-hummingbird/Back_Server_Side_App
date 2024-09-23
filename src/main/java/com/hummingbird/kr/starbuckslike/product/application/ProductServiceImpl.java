@@ -1,5 +1,8 @@
 package com.hummingbird.kr.starbuckslike.product.application;
 
+import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
+import com.hummingbird.kr.starbuckslike.product.domain.Product;
 import com.hummingbird.kr.starbuckslike.product.domain.Wish;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
@@ -23,22 +26,30 @@ public class ProductServiceImpl implements  ProductService{
     private final WishRepository wishRepository;
     @Override
     public ProductInfoResponseDto findProductInfoById(Long productId) {
-        return productSearch.findProductInfoById(productId);
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
+        return productSearch.findProductInfoById(product.getId());
     }
 
     @Override
     public ProductDetailResponseDto findProductDetailDtoById(Long productId) {
-        return productSearch.findProductDetailDtoById(productId);
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
+        return productSearch.findProductDetailDtoById(product.getId());
     }
 
     @Override
     public List<ProductImageResponseDto> findProductImageDtoById(Long productId) {
-        return productSearch.findProductImageDtoById(productId);
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
+        return productSearch.findProductImageDtoById(product.getId());
     }
 
     @Override
     public List<ProductOptionResponseDto> findProductOptionDtoById(Long productId) {
-        return productSearch.findProductOptionDtoById(productId);
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
+        return productSearch.findProductOptionDtoById(product.getId());
     }
 
     @Override
@@ -48,7 +59,9 @@ public class ProductServiceImpl implements  ProductService{
 
     @Override
     public ProductListResponseDto findProductListDtoByProductId(Long productId) {
-        return productSearch.findProductListDtoByProductId(productId);
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
+        return productSearch.findProductListDtoByProductId(product.getId());
     }
 
     @Override
@@ -64,19 +77,23 @@ public class ProductServiceImpl implements  ProductService{
 
     @Override
     public ProductListImageResponseDto findProductListImageResponseDtoById(Long productId) {
-        return productSearch.findProductListImageResponseDtoById(productId);
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
+        return productSearch.findProductListImageResponseDtoById(product.getId());
     }
 
     @Override
     public ProductListInfoResponseDto findProductListInfoResponseDtoById(Long productId) {
-        return productSearch.findProductListInfoResponseDtoById(productId);
+        Product product = productRepository.findById(productId).orElseThrow(
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
+        return productSearch.findProductListInfoResponseDtoById(product.getId());
     }
 
     @Override
     public void updateWishStatus(String memberUid, Long productId) {
         productRepository.findById(productId).orElseThrow(
-                () -> new IllegalArgumentException("상품 번호가 잘못되었습니다."));
-        Optional<Wish> existingWish = wishRepository.findWishByMemberUidAndProductId(memberUid, productId);
+                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
+        Optional<Wish> existingWish = wishRepository.findWishByMemberUIDAndProductId(memberUid, productId);
         if (existingWish.isPresent()) { // 기존에 위시 등록한 상품인지 확인
             // 이미 존재하면 isWished 값을 토글
             Wish wish = existingWish.get();

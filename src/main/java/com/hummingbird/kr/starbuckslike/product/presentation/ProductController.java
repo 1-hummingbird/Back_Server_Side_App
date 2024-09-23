@@ -2,15 +2,12 @@ package com.hummingbird.kr.starbuckslike.product.presentation;
 
 
 import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;
-import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
-import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponse;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import com.hummingbird.kr.starbuckslike.product.application.ProductService;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
-import com.hummingbird.kr.starbuckslike.product.vo.*;
-import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
-import com.hummingbird.kr.starbuckslike.purchase.vo.in.AddPurchaseRequestVo;
-import com.hummingbird.kr.starbuckslike.redis.dto.out.RecentSearchResponseDto;
+import com.hummingbird.kr.starbuckslike.product.vo.out.*;
 import com.hummingbird.kr.starbuckslike.redis.service.RedisService;
 import com.hummingbird.kr.starbuckslike.redis.vo.out.RecentSearchResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -19,7 +16,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
-import org.springframework.http.HttpStatus;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
@@ -36,25 +32,21 @@ public class ProductController {
     /**
      * 상품 리스트 단건 조회
      */
-    @Operation(summary = "상품 리스트 단건 조회(이미지)", description = "상품 id로 상품리스트 이미지 단건 조회")
+    @Operation(summary = "상품 리스트 단건 조회(이미지)", description = "상품 id로 상품리스트 이미지 단건 조회", tags = {"상품"})
     @GetMapping("/list/image/{productId}")
-    public CommonResponseEntity<ProductListImageResponseVo> findProductListImageResponseDtoByIdV1(
+    public BaseResponse<ProductListImageResponseVo> findProductListImageResponseDtoByIdV1(
             @PathVariable("productId") Long productId){
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 productService.findProductListImageResponseDtoById(productId).toVo()
         );
     }
 
-    @Operation(summary = "상품 리스트 단건 정보 조회(이름,가격 등)", description = "상품 id로 상품리스트 정보(이름,가격 등) 단건 조회")
+    @Operation(summary = "상품 리스트 단건 정보 조회(이름,가격 등)", description = "상품 id로 상품리스트 정보(이름,가격 등) 단건 조회", tags = {"상품"})
     @GetMapping("/list/info/{productId}")
-    public CommonResponseEntity<ProductListInfoResponseVo> findProductListInfoResponseDtoByIdV1(
+    public BaseResponse<ProductListInfoResponseVo> findProductListInfoResponseDtoByIdV1(
             @PathVariable("productId") Long productId){
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 productService.findProductListInfoResponseDtoById(productId).toVo()
         );
     }
@@ -62,31 +54,27 @@ public class ProductController {
      * 상품 디테일
      */
     // 상품 디테일 상품 상품명 가격 등 조회
-    @Operation(summary = "상품 디테일(상품명,가격,할인 등) 조회", description = "상품 id로 상품 디테일(상품명,가격,할인 등) 조회")
+    @Operation(summary = "상품 디테일(상품명,가격,할인 등) 조회", description = "상품 id로 상품 디테일(상품명,가격,할인 등) 조회", tags = {"상품"})
     @GetMapping("/info/{productId}")
-    public CommonResponseEntity<ProductInfoResponseVo> findProductInfoByIdV1(
+    public BaseResponse<ProductInfoResponseVo> findProductInfoByIdV1(
             @PathVariable("productId") Long productId){
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 productService.findProductInfoById(productId).toVo()
         );
     }
     // 상품 디테일 상세정보(에티터 html) 조회
-    @Operation(summary = "상품 디테일 상세정보 조회", description = "상품 상세정보(에디터) 조회")
+    @Operation(summary = "상품 디테일 상세정보 조회", description = "상품 상세정보(에디터) 조회", tags = {"상품"})
     @GetMapping("/detail/{productId}")
-    public CommonResponseEntity<ProductDetailResponseVo> findProductDetailDtoByIdV1(
+    public BaseResponse<ProductDetailResponseVo> findProductDetailDtoByIdV1(
             @PathVariable("productId") Long productId){
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 productService.findProductDetailDtoById(productId).toVo()
         );
     }
     // 상품의 이미지 조회
-    @Operation(summary = "상품 디테일 이미지 조회", description = "상품 id로 상품 이미지 조회")
+    @Operation(summary = "상품 디테일 이미지 조회", description = "상품 id로 상품 이미지 조회", tags = {"상품"})
     @GetMapping("/images/{productId}")
-    public CommonResponseEntity<List<ProductImageResponseVo>> findProductImageDtoByIdV1(
+    public BaseResponse<List<ProductImageResponseVo>> findProductImageDtoByIdV1(
             @PathVariable("productId") Long productId){
         // map 으로 Vo 변환
         List<ProductImageResponseVo> responseVoList =
@@ -95,16 +83,14 @@ public class ProductController {
                     .map(ProductImageResponseDto::toVo)
                     .collect(Collectors.toList());
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 responseVoList
         );
     }
     // 상품 옵션 조회
-    @Operation(summary = "상품 디테일 옵션 조회", description = "상품 id로 상품 옵션 조회")
+    @Operation(summary = "상품 디테일 옵션 조회", description = "상품 id로 상품 옵션 조회", tags = {"상품"})
     @GetMapping("/options/{productId}")
-    public CommonResponseEntity<List<ProductOptionResponseVo>> findProductOptionDtoByIdV1(
+    public BaseResponse<List<ProductOptionResponseVo>> findProductOptionDtoByIdV1(
             @PathVariable("productId") Long productId){
 
         List<ProductOptionResponseVo> responseVoList =
@@ -113,9 +99,7 @@ public class ProductController {
                         .map(ProductOptionResponseDto::toVo)
                         .collect(Collectors.toList());
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 responseVoList
         );
     }
@@ -123,13 +107,11 @@ public class ProductController {
      * 기획전에 해당하는 상품 리스트
      */
     // 기획전으로 상품 id 리스트 조회
-    @Operation(summary = "기획전 상품 리스트", description = "기획전에 해당하는 상품 id 리스트 조회")
+    @Operation(summary = "기획전 상품 리스트", description = "기획전에 해당하는 상품 id 리스트 조회", tags = {"기획전"})
     @GetMapping("/list/exhibition/{exhibitionId}")
-    public CommonResponseEntity<List<Long>> findProductIdListByExhibitionIdV1(
+    public BaseResponse<List<Long>> findProductIdListByExhibitionIdV1(
             @PathVariable("exhibitionId") Long exhibitionId){
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 productService.findProductIdListByExhibitionId(exhibitionId)
         );
     }
@@ -139,16 +121,14 @@ public class ProductController {
      */
 
     @Operation(summary = "상품 리스트 조회 [필터링, 정렬] ",
-            description = "[Slice] 필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격] 해당 상품들의 id만 가져옴")
+            description = "[Slice] 필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격] 해당 상품들의 id만 가져옴", tags = {"상품"})
     @GetMapping("/list")
-    public CommonResponseEntity<Slice<Long>> searchProductIdsV1(
+    public BaseResponse<Slice<Long>> searchProductIdsV1(
             ProductCondition productCondition, Pageable pageable ){
 
         Slice<Long> productIds =
                 productService.searchProductIdsV1(productCondition, pageable);
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 productIds
         );
     }
@@ -156,32 +136,27 @@ public class ProductController {
     /**
      *  상품 위시리스트 관련
      */
-    @Operation(summary = "상품 위시리스트 활성,비활성", description = "토글방식으로 동작")
+    @Operation(summary = "상품 위시리스트 활성,비활성", description = "토글방식으로 동작", tags = {"위시리스트"})
     @PostMapping("/wish")
-    public CommonResponseEntity<Void> updateWishStatusV1(
-            // todo 팀장님 나중에 productId만 @RequestBody로 쓰시고 memberUid는 시큐리티에서 뽑아요
-            @RequestParam("memberUid") String memberUid,
+    public BaseResponse<Void> updateWishStatusV1(
+            @AuthenticationPrincipal AuthUserDetail authUserDetail,
             @RequestParam("productId") Long productId
     )
     {
-        productService.updateWishStatus(memberUid , productId);
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        productService.updateWishStatus(authUserDetail.getUsername(), productId);
+        return new BaseResponse<>(
                 null
         );
     }
 
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
-            summary = "상품 위시리스트 조회", description = "[Slice] 회원이 위시리스트한 상품만 조회")
+            summary = "상품 위시리스트 조회", description = "[Slice] 회원이 위시리스트한 상품만 조회", tags = {"위시리스트"})
     @GetMapping("/wish/list")
-    public CommonResponseEntity<Slice<Long>> searchWishProductIdsV1(
-                Pageable pageable, @RequestParam("memberUid") String memberUid ){
+    public BaseResponse<Slice<Long>> searchWishProductIdsV1(
+                Pageable pageable, @AuthenticationPrincipal AuthUserDetail authUserDetail){
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                productService.searchWishProductIdsV1(pageable,memberUid)
+        return new BaseResponse<>(
+                productService.searchWishProductIdsV1(pageable,authUserDetail.getUsername())
         );
     }
 
@@ -189,50 +164,40 @@ public class ProductController {
      * 상품 최근검색어
      */
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
-                summary = "최근 검색어 등록", description = "최근 검색어 등록")
+                summary = "최근 검색어 등록", description = "최근 검색어 등록", tags = {"최근검색어"})
     @PostMapping("/search/word")
-    public CommonResponseEntity<Void> addSearchWordV1(
+    public BaseResponse<Void> addSearchWordV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail ,@RequestBody String searchWord ){
         redisService.addSearchWord(authUserDetail.getLoginId(), searchWord);
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                null
-        );
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
-            summary = "최근 검색어 조회", description = "회원의 최근 검색어 조회")
+            summary = "최근 검색어 조회", description = "회원의 최근 검색어 조회", tags = {"최근검색어"})
     @GetMapping("/search/list")
-    public CommonResponseEntity<RecentSearchResponseVo> getRecentSearchV1(
+    public BaseResponse<RecentSearchResponseVo> getRecentSearchV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail ){
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 redisService.getRecentSearchDto(authUserDetail.getLoginId()).toVo()
         );
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
-            summary = "최근 검색어 개별 삭제", description = "회원의 최근 검색어 개별 삭제")
+            summary = "최근 검색어 개별 삭제", description = "회원의 최근 검색어 개별 삭제", tags = {"최근검색어"})
     @PostMapping("/search/word/delete")
-    public CommonResponseEntity<Void> deleteSearchWordV1(
+    public BaseResponse<Void> deleteSearchWordV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail ,@RequestBody String searchWord ){
         redisService.deleteSearchWord(authUserDetail.getLoginId(), searchWord);
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                null
+        return new BaseResponse<>(
+                BaseResponseStatus.SUCCESS
         );
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
-            summary = "최근 검색어 전체 삭제", description = "회원의 최근 검색어 전체 삭제")
+            summary = "최근 검색어 전체 삭제", description = "회원의 최근 검색어 전체 삭제", tags = {"최근검색어"})
     @PostMapping("/search/word/delete-all")
-    public CommonResponseEntity<Void> deleteUserSearchKeyV1(
+    public BaseResponse<Void> deleteUserSearchKeyV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail){
         redisService.deleteUserSearchKey(authUserDetail.getLoginId());
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                null
+        return new BaseResponse<>(
+                BaseResponseStatus.SUCCESS
         );
     }
 

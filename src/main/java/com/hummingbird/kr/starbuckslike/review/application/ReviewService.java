@@ -1,11 +1,7 @@
 package com.hummingbird.kr.starbuckslike.review.application;
 
-import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewCommentRequestDto;
-import com.hummingbird.kr.starbuckslike.review.dto.in.AddReviewRequestDto;
-import com.hummingbird.kr.starbuckslike.review.dto.in.DeleteReviewCommentRequestDto;
-import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewCommentResponseDto;
-import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListImageResponseDto;
-import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListInfoResponseDto;
+import com.hummingbird.kr.starbuckslike.review.dto.in.*;
+import com.hummingbird.kr.starbuckslike.review.dto.out.*;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.condition.ReviewCondition;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -19,7 +15,7 @@ public interface ReviewService {
      * Select
      */
     Slice<Long> searchReviewListById(Pageable pageable, Long productId, ReviewCondition reviewCondition);
-    Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String memberUuid);
+    Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String memberUID);
     // 리뷰 이미지 조회
     ReviewListImageResponseDto findReviewImageById(Long reviewId);
     // 리뷰 내용 조회

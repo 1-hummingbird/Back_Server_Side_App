@@ -25,7 +25,7 @@ public interface ReviewSearch {
      * 회원이 쓴 리뷰 페이징
      */
     // 회원이 쓴 리뷰
-    Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String uuid);
+    Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String memberUID);
 
     // 이미 작성된 리뷰인지 확인
     Boolean exists(String memberUuid, String purchaseCode, Long optionId);

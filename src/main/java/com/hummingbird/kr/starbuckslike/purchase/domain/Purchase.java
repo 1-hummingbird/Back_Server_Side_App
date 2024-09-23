@@ -43,8 +43,8 @@ public class Purchase extends BaseEntity {
     private String userName;
 
     @Comment("회원 uuid")
-    @Column(name = "user_uuid" , nullable = false, length = 100)
-    private String userUuid;
+    @Column(name = "memberUID" , nullable = false, length = 40)
+    private String memberUID;
 
     @Comment("배송 요청사항")
     @Column(name = "memo" , length = 150)
@@ -58,7 +58,7 @@ public class Purchase extends BaseEntity {
 
     @Builder
     public Purchase(String code, Long totalPrice, Long totalDiscount, String address, String primaryPhone, String secondaryPhone,
-                    String userName, String userUuid, String memo, Boolean isDelete) {
+                    String userName, String memberUID, String memo, Boolean isDelete) {
         this.code = code;
         this.totalPrice = totalPrice;
         this.totalDiscount = totalDiscount;
@@ -66,7 +66,7 @@ public class Purchase extends BaseEntity {
         this.primaryPhone = primaryPhone;
         this.secondaryPhone = secondaryPhone;
         this.userName = userName;
-        this.userUuid = userUuid;
+        this.memberUID = memberUID;
         this.memo = memo;
         this.isDelete = isDelete;
     }

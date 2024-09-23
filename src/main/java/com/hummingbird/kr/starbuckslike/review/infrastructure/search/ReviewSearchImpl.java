@@ -73,12 +73,12 @@ public class ReviewSearchImpl implements ReviewSearch{
     }
 
     @Override
-    public Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String uuid) {
+    public Slice<Long> searchReviewListByMemberUuid(Pageable pageable, String memberUID) {
         List<Long> fetch = queryFactory
                 .select(review.id)
                 .from(review)
                 .where(
-                        review.memberUID.eq(uuid)
+                        review.memberUID.eq(memberUID)
                         .and(review.isDeleted.isFalse())
                 )
                 .orderBy(review.createdAt.desc())

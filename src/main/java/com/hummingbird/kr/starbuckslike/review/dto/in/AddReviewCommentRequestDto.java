@@ -34,11 +34,11 @@ public class AddReviewCommentRequestDto {
     }
 
     // vo -> dto
-    public static AddReviewCommentRequestDto of(AddReviewCommentRequestVo vo) {
+    public static AddReviewCommentRequestDto of(AddReviewCommentRequestVo vo, String memberUID) {
         return AddReviewCommentRequestDto.builder()
                 .reviewId(vo.getReviewId())
                 .nickname(vo.getNickname())
-                .memberUID(vo.getMemberUID())
+                .memberUID(memberUID)
                 .content(vo.getContent())
                 .build();
     }

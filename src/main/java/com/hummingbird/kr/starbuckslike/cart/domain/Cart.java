@@ -24,8 +24,8 @@ public class Cart extends BaseEntity {
     @Column(name = "id")
     private Long id; // 장바구니 아이템 id
 
-    @Column(name = "user_uuid" , nullable = false, length = 100)
-    private String userUid; // 유저 uuid
+    @Column(name = "member_uid" , nullable = false, length = 40)
+    private String memberUID; // 유저 uuid
 
     @Column(name="product_id")
     private Long productId; // 상품
@@ -57,9 +57,9 @@ public class Cart extends BaseEntity {
     }
 
     @Builder
-    public Cart(String userUid, Long productId, ProductOption productOption, Integer qty, String inputData,
+    public Cart(String memberUID, Long productId, ProductOption productOption, Integer qty, String inputData,
                 Boolean isChecked, Boolean isDeleted) {
-        this.userUid = userUid;
+        this.memberUID = memberUID;
         this.productId = productId;
         this.productOption = productOption;
         this.qty = qty;

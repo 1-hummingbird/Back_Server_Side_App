@@ -9,7 +9,5 @@ public class AddReviewCommentRequestVo {
 
     private String nickname;
 
-    private String memberUID;
-
     private String content;
 }

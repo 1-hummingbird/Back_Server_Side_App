@@ -32,7 +32,7 @@ public class AddPurchaseRequestDto {
     private String primaryPhone;
     private String secondaryPhone;
     private String userName;
-    private String userUuid;
+    private String memberUID;
     private String memo; // 요청사항
     private List<AddPurchaseItemRequestDto> purchaseProducts; // 주문 상품옵션
 
@@ -46,7 +46,7 @@ public class AddPurchaseRequestDto {
                 .primaryPhone(primaryPhone)
                 .secondaryPhone(secondaryPhone)
                 .userName(userName)
-                .userUuid(userUuid)
+                .memberUID(memberUID)
                 .memo(memo)
                 .isDelete(false)
                 .build();
@@ -70,7 +70,7 @@ public class AddPurchaseRequestDto {
                                         .collect(Collectors.toList());
     }
     // vo -> dto
-    public static AddPurchaseRequestDto of(AddPurchaseRequestVo vo) {
+    public static AddPurchaseRequestDto of(AddPurchaseRequestVo vo, String memberUid) {
         return AddPurchaseRequestDto.builder()
                 .totalDiscount(vo.getTotalPrice())
                 .totalDiscount(vo.getTotalDiscount())
@@ -78,7 +78,7 @@ public class AddPurchaseRequestDto {
                 .primaryPhone(vo.getPrimaryPhone())
                 .secondaryPhone(vo.getSecondaryPhone())
                 .userName(vo.getUserName())
-                .userUuid(vo.getUserUuid())
+                .memberUID(memberUid)
                 .memo(vo.getMemo())
                 .purchaseProducts(
                         vo.getPurchaseProducts()

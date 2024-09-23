@@ -1,10 +1,9 @@
-package com.hummingbird.kr.starbuckslike.cart.vo;
+package com.hummingbird.kr.starbuckslike.cart.vo.in;
 
 import lombok.Getter;
 
 @Getter
 public class RequestAddCartItemVo {
-    private String memberUID; // 유저 정보
 
     private Long productId; // 상품 id
 

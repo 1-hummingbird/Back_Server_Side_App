@@ -6,12 +6,11 @@ import com.hummingbird.kr.starbuckslike.category.dto.in.MiddleCategoryRequestDto
 import com.hummingbird.kr.starbuckslike.category.dto.in.TopCategoryRequestDto;
 import com.hummingbird.kr.starbuckslike.category.dto.out.*;
 import com.hummingbird.kr.starbuckslike.category.vo.*;
-import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseEntity;
-import com.hummingbird.kr.starbuckslike.common.entity.CommonResponseMessage;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponse;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import io.swagger.v3.oas.annotations.Operation;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
@@ -28,23 +27,19 @@ public class CategoryController {
     // 메인 카테고리 조회
     @Operation(summary = "메인 카테고리 조회", description = "메인 카테고리(코드,이름,이미지) 조회")
     @GetMapping("/main")
-    public CommonResponseEntity<List<MainCategoryResponseVo>> findMainCategoryResponseDtoV1() {
+    public BaseResponse<List<MainCategoryResponseVo>> findMainCategoryResponseDtoV1() {
         List<MainCategoryResponseVo> res = categoryService.findMainCategoryResponseDto()
                 .stream()
                 .map(MainCategoryResponseDto::toVo)
                 .toList();
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                res
-        );
+        return new BaseResponse<>(res);
     }
 
     // 대 카테고리 생성
     @PostMapping("/top-category")
     @Operation(summary = "대 카테고리 생성", description = "대 카테고리 생성 카테고리명, 소개 입력")
-    public CommonResponseEntity<Void> createTopCategory(
+    public BaseResponse<Void> createTopCategory(
             @RequestBody TopCategoryRequestVo topCategoryRequestVo) {
 
         log.info("topCategoryRequestVo : {}", topCategoryRequestVo);
@@ -53,26 +48,20 @@ public class CategoryController {
                 .topCategoryDescription(topCategoryRequestVo.getTopCategoryDescription())
                 .build();
         categoryService.createTopCategory(topCategoryRequestDto);
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                null);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
     @Operation(summary = "대 카테고리 조회", description = "카테고리 코드로 대 카테고리 단건 조회")
     @GetMapping("/top-category/{topCategoryCode}")
-    public CommonResponseEntity<TopCategoryResponseVo> getTopCategory(
+    public BaseResponse<TopCategoryResponseVo> getTopCategory(
             @PathVariable("topCategoryCode") String topCategoryCode) {
         log.info("topCategoryCode : {}", topCategoryCode);
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                categoryService.getTopCategoryByCategoryCode(topCategoryCode).toVo());
+        return new BaseResponse<>(categoryService.getTopCategoryByCategoryCode(topCategoryCode).toVo());
     }
 
     @Operation(summary = "중 카테고리 생성", description = "중 카테고리 생성 카테고리명, 소개 , 대 카테고리 코드 입력")
     @PostMapping("/middle-category")
-    public CommonResponseEntity<Void> createMiddleCategory(
+    public BaseResponse<Void> createMiddleCategory(
             @RequestBody MiddleCategoryRequestVo middleCategoryRequestVo) {
 
         log.info("middleCategoryRequestVo : {}", middleCategoryRequestVo);
@@ -84,24 +73,18 @@ public class CategoryController {
         log.info("middleCategoryRequestDto : {}", middleCategoryRequestDto);
         categoryService.createMiddleCategory(middleCategoryRequestDto);
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                null);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
     @GetMapping("/middle-category/{middleCategoryCode}")
-    public CommonResponseEntity<MiddleCategoryResponseVo> getMiddleCategory(
+    public BaseResponse<MiddleCategoryResponseVo> getMiddleCategory(
             @PathVariable("middleCategoryCode") String middleCategoryCode) {
         log.info("middleCategoryCode : {}", middleCategoryCode);
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                categoryService.getMiddleCategoryByCategoryCode(middleCategoryCode).toVo());
+        return new BaseResponse<>(categoryService.getMiddleCategoryByCategoryCode(middleCategoryCode).toVo());
     }
 
     @PostMapping("/bottom-category")
-    public CommonResponseEntity<Void> createBottomCategory(
+    public BaseResponse<Void> createBottomCategory(
             @RequestBody BottomCategoryRequestVo bottomCategoryRequestVo) {
 
         log.info("bottomCategoryRequestVo : {}", bottomCategoryRequestVo);
@@ -113,28 +96,20 @@ public class CategoryController {
         log.info("bottomCategoryRequestDto : {}", bottomCategoryRequestDto);
         categoryService.createBottomCategory(bottomCategoryRequestDto);
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                null);
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
     @GetMapping("/bottom-category/{bottomCategoryCode}")
-    public CommonResponseEntity<BottomCategoryResponseVo> getBottomCategory(
+    public BaseResponse<BottomCategoryResponseVo> getBottomCategory(
             @PathVariable("bottomCategoryCode") String bottomCategoryCode) {
         log.info("bottomCategoryCode : {}", bottomCategoryCode);
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
-                categoryService.getBottomCategoryByCategoryCode(bottomCategoryCode).toVo());
+        return new BaseResponse<>(categoryService.getBottomCategoryByCategoryCode(bottomCategoryCode).toVo());
     }
 
     @GetMapping("/top-categories")
-    public CommonResponseEntity<List<TopCategoryResponseVo>> getTopCategories() {
+    public BaseResponse<List<TopCategoryResponseVo>> getTopCategories() {
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 categoryService.getTopCategories()
                         .stream()
                         .map(TopCategoryResponseDto::toVo)
@@ -142,12 +117,10 @@ public class CategoryController {
     }
 
     @GetMapping("/middle-categories/{topCategoryName}")
-    public CommonResponseEntity<List<MiddleCategoryResponseVo>> getMiddleCategories(
+    public BaseResponse<List<MiddleCategoryResponseVo>> getMiddleCategories(
             @PathVariable String topCategoryName) {
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 categoryService.getMiddleCategories(topCategoryName)
                         .stream()
                         .map(MiddleCategoryResponseDto::toVo)
@@ -155,12 +128,10 @@ public class CategoryController {
     }
 
     @GetMapping("/bottom-categories/{middleCategoryCode}")
-    public CommonResponseEntity<List<BottomCategoryResponseVo>> getBottomCategories(
+    public BaseResponse<List<BottomCategoryResponseVo>> getBottomCategories(
             @PathVariable String middleCategoryCode) {
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 categoryService.getBottomCategories(middleCategoryCode)
                         .stream()
                         .map(BottomCategoryResponseDto::toVo)
@@ -169,12 +140,10 @@ public class CategoryController {
 
     @Operation(summary = "대 카테고리의 자식 카테고리 조회", description = "중 카테고리의 자식까지만 조회됨. 하 카테고리는 조회안됨")
     @GetMapping("/top-category/child/{categoryCode}")
-    public CommonResponseEntity<List<ChildCategoryResponseVo>> findChildCategoriesByTopCategoryV1(
+    public BaseResponse<List<ChildCategoryResponseVo>> findChildCategoriesByTopCategoryV1(
             @PathVariable("categoryCode") String categoryCode) {
 
-        return new CommonResponseEntity<>(
-                HttpStatus.OK,
-                CommonResponseMessage.SUCCESS.getMessage(),
+        return new BaseResponse<>(
                 categoryService.findChildCategoriesByTopCategory(categoryCode)
                         .stream()
                         .map(ChildCategoryResponseDto::toVo)

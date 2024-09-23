@@ -43,11 +43,11 @@ public class CustomCartRepositoryImpl implements  CustomCartRepository{
     }
 
     @Override
-    public void removeAllCartItemsByUserUid(String userUid) {
+    public void removeAllCartItemsByMemberUID(String memberUID) {
         long count = queryFactory
                         .update(cart)
                         .set(cart.isDeleted, true)
-                        .where(cart.userUid.eq(userUid))
+                        .where(cart.memberUID.eq(memberUID))
                         .execute();
         em.clear();
     }

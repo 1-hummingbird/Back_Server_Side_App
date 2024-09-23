@@ -22,6 +22,6 @@ public interface CustomCartRepository {
     public void removeCartItem(Long cartId);
 
     // 장바구니 전체 삭제
-    public void removeAllCartItemsByUserUid(String userUid);
+    public void removeAllCartItemsByMemberUID(String memberUID);
 
 }

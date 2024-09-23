@@ -1,11 +1,10 @@
 package com.hummingbird.kr.starbuckslike.product.dto.out;
 
-import com.hummingbird.kr.starbuckslike.product.vo.ProductListImageResponseVo;
+import com.hummingbird.kr.starbuckslike.product.vo.out.ProductListImageResponseVo;
 import com.querydsl.core.annotations.QueryProjection;
 import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
-import org.springframework.data.jpa.repository.Query;
 
 /**
  * 상품 리스트 이미지 DTO

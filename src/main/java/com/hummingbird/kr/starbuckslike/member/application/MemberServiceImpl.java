@@ -7,6 +7,8 @@ import com.hummingbird.kr.starbuckslike.member.infrastructrue.MemberRepository;
 import com.hummingbird.kr.starbuckslike.member.domain.*;
 import com.hummingbird.kr.starbuckslike.member.dto.out.*;
 import com.hummingbird.kr.starbuckslike.member.dto.in.*;
+import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import java.time.LocalDateTime;
 import java.time.temporal.ChronoUnit;
 
@@ -22,7 +24,7 @@ public class MemberServiceImpl implements MemberService {
 
     @Override
     public PassageResponseDTO passage(String memberUID) {
-        Member member = memberRepository.findByMemberUID(memberUID).orElseThrow(() -> new RuntimeException("Member not found"));
+        Member member = memberRepository.findByMemberUID(memberUID).orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
         LocalDateTime createdAt = member.getCreatedAt();
         LocalDateTime currentTime = LocalDateTime.now();
         long daysBetween = ChronoUnit.DAYS.between(createdAt, currentTime);
@@ -32,7 +34,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public void update(MemberUpdateRequestDTO requestDTO) {
         Member oldMember = memberRepository.findByMemberUID(requestDTO.getMemberUID())
-            .orElseThrow(() -> new RuntimeException("Member not found"));
+            .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER));
         
         Member updatedMember = oldMember.toBuilder()
             .name(requestDTO.getName() != null ? requestDTO.getName() : oldMember.getName())
@@ -48,7 +50,7 @@ public class MemberServiceImpl implements MemberService {
     @Override
     public MemberInfoResponseDTO info(String memberUID) {
         MemberInfo memberInfo = new MemberInfo(memberRepository.findByMemberUID(memberUID)
-            .orElseThrow(() -> new RuntimeException("Member not found")));
+            .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER)));
         return new MemberInfoResponseDTO(memberInfo);
     }
 

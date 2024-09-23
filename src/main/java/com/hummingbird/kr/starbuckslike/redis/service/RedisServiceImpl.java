@@ -95,4 +95,21 @@ public class RedisServiceImpl implements  RedisService{
     public boolean isTokenBlocked(String token){
         return redisTemplate.hasKey(token);
     }
+
+    @Override
+    public void recordAuthChallenge(String media, String code, Date expires) {
+        redisTemplate.opsForValue().set(media, code,
+                expires.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public void recordAuthChallengeSuccess(String media, Date expires) {
+        redisTemplate.opsForValue().set(media, "Success",
+                expires.getTime() - System.currentTimeMillis(), TimeUnit.MILLISECONDS);
+    }
+
+    @Override
+    public String getAuthChallenge(String media) {
+        return redisTemplate.opsForValue().get(media);
+    }
 }

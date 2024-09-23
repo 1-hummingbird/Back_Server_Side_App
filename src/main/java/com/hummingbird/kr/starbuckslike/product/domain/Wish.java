@@ -20,7 +20,7 @@ public class Wish extends BaseEntity {
     private Long id;
 
     @Comment("회원 uuid")
-    @Column(nullable = false, length = 50)
+    @Column(nullable = false, length = 40)
     private String memberUid;
 
     @Comment("상품 id")

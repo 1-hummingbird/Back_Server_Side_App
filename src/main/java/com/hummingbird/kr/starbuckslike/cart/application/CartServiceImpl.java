@@ -2,21 +2,21 @@ package com.hummingbird.kr.starbuckslike.cart.application;
 
 import com.hummingbird.kr.starbuckslike.cart.domain.Cart;
 import com.hummingbird.kr.starbuckslike.cart.domain.CartAdjustType;
-import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAddCartItemDto;
-import com.hummingbird.kr.starbuckslike.cart.dto.in.RequestAdjustCartItemDto;
-import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemDto;
-import com.hummingbird.kr.starbuckslike.cart.dto.out.ResponseCartItemImageDto;
+import com.hummingbird.kr.starbuckslike.cart.dto.in.*;
+import com.hummingbird.kr.starbuckslike.cart.dto.out.*;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.CartRepository;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.custom.CustomCartRepository;
 import com.hummingbird.kr.starbuckslike.cart.infrastructure.search.CartSearch;
 import com.hummingbird.kr.starbuckslike.product.domain.ProductOption;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductOptionRepository;
+import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
+import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
+
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
-import java.util.NoSuchElementException;
 
 @Service
 @Log4j2
@@ -47,7 +47,7 @@ public class CartServiceImpl implements CartService{
         if(cartOptionCount == 0L){
             ProductOption selectOption = productOptionRepository
                                             .findById(requestAddCartItemDto.getOptionId())
-                                            .orElseThrow(() -> new NoSuchElementException("상품 옵션을 찾을 수 없습니다. " ));
+                                            .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_INTEREST));
             cartRepository.save(requestAddCartItemDto.toEntity(selectOption)); // 신규 장바구니 상품 저장 완료
         }
         // 이미 장바구니에 담긴 옵션, 수량만 더해주면 됨
@@ -59,7 +59,7 @@ public class CartServiceImpl implements CartService{
         }
         else{
             // 같은 사람의 장바구니에 같은 상품이 2개가 담겼다. 문제있음 에러처리
-            throw new IllegalStateException("동일한 상품이 장바구니에 담길 수 없습니다.");
+            throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
         }
     }
 
@@ -78,7 +78,7 @@ public class CartServiceImpl implements CartService{
             // 처음 장바구니에 담는 상품
             ProductOption selectOption = productOptionRepository
                     .findById(requestAddCartItemDto.getOptionId())
-                    .orElseThrow(() -> new NoSuchElementException("상품 옵션을 찾을 수 없습니다. " ));
+                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_INTEREST));
             cartRepository.save(requestAddCartItemDto.toEntity(selectOption)); // 신규 장바구니 상품 저장 완료
         }
     }
@@ -88,10 +88,10 @@ public class CartServiceImpl implements CartService{
         // 회원이 담을 수 있는 장바구니 아이템은 20개 까지다
         Long totalCount = cartSearch.findCartItemCountByMember(requestAddCartItemDto.getMemberUID());
         if(totalCount >= 20)
-            throw new IllegalStateException("장바구니에는 최대 20종류의 상품까지 담을 수 있습니다.");
+            throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
         // 최소 수량 검증
         if(requestAddCartItemDto.getQty() < 1)
-            throw new IllegalStateException("장바구니에 담길 상품의 최소 수량은 1개 이상이어야 합니다.");
+            throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
     }
 
 
@@ -99,7 +99,11 @@ public class CartServiceImpl implements CartService{
     public void adjustCartItemQuantity(RequestAdjustCartItemDto requestAdjustCartItemDto) {
         Cart cart = cartRepository
                 .findById(requestAdjustCartItemDto.getCartId())
-                .orElseThrow(() -> new NoSuchElementException("장바구니가 존재하지 않습니다."));
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_INTEREST));
+        // 장바구니 소유자 검증
+        if(!cart.getMemberUID().equals(requestAdjustCartItemDto.getMemberUID())){
+            throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
+        }
         int currentQty = cart.getQty();
         // 수량 조정 타입에 따른 처리
         if (requestAdjustCartItemDto.getCartAdjustType() == CartAdjustType.INCREASE) {
@@ -107,34 +111,48 @@ public class CartServiceImpl implements CartService{
         }
         else if (requestAdjustCartItemDto.getCartAdjustType() == CartAdjustType.DECREASE) {
             if (currentQty <= 1) {
-                throw new IllegalStateException("최소 선택수량은 1개 이상입니다.");
+                throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
             }
             cart.changeQty(currentQty - 1); // 수량 감소
         } else {
-            throw new IllegalArgumentException("잘못된 장바구니 수량 조정 타입입니다.");
+            throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
         }
         cartRepository.save(cart); // 변경된 상태 저장
     }
 
     @Override
-    public void removeCartItem(Long cartId) {
-        customCartRepository.removeCartItem(cartId);
+    public void removeCartItem(RequestRemoveCartItemDto requestRemoveCartItemDto) {
+        Cart cart = cartRepository
+                .findById(requestRemoveCartItemDto.getCartId())
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_INTEREST));
+        // 장바구니 소유자 검증
+        if(!cart.getMemberUID().equals(requestRemoveCartItemDto.getMemberUID())){
+            throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
+        }
+        customCartRepository.removeCartItem(requestRemoveCartItemDto.getCartId());
     }
 
     @Override
-    public void removeAllCartItemsByUserUid(String userUid) {
-        customCartRepository.removeAllCartItemsByUserUid(userUid);
+    public void removeAllCartItemsByMemberUID(String memberUID) {
+        customCartRepository.removeAllCartItemsByMemberUID(memberUID);
     }
 
     @Override
-    public void selectCartItem(Long cartId) {
-        customCartRepository.selectCartItem(cartId);
+    public void selectCartItem(RequestSelectCartItemDto requestSelectCartItemDto) {
+        Cart cart = cartRepository
+                .findById(requestSelectCartItemDto.getCartId())
+                .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_INTEREST));
+        // 장바구니 소유자 검증
+        if(!cart.getMemberUID().equals(requestSelectCartItemDto.getMemberUID())){
+            throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
+        }
+        customCartRepository.selectCartItem(requestSelectCartItemDto.getCartId());
     }
 
 
     @Override
-    public void selectAllCartItems(List<Long> cartIds) {
-        List<Cart> carts = customCartRepository.findCartItemsByCartIds(cartIds);
+    public void selectAllCartItems(RequestCartItemSelectAllDto requestCartItemSelectAllDto) {
+        List<Cart> carts = customCartRepository.findCartItemsByCartIds(requestCartItemSelectAllDto.getCartIds());
         // todo 이것도 dto로 처리한다면 carts 가 아니라 DTO 리스트를 받은 다음 장바구니 객체를 생성해 바꿔주면 되는거죠??
         carts.forEach(Cart::toggleSelect); // 전체 선택 처리
         cartRepository.saveAll(carts);
@@ -142,8 +160,8 @@ public class CartServiceImpl implements CartService{
 
 
     @Override
-    public List<Long> findAllCartIdByUserUid(String userUid) {
-        return cartSearch.findAllCartIdByUserUid(userUid);
+    public ResponseFindAllCartDto findAllCartIdByMemberUID(String memberUID) {
+        return new ResponseFindAllCartDto(cartSearch.findAllCartIdByMemberUID(memberUID));
     }
 
     @Override
