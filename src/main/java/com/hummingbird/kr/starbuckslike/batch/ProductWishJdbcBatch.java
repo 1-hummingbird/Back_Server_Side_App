@@ -86,7 +86,7 @@ public class ProductWishJdbcBatch {
                         "VALUES (:productId, :wishCount, SYSDATE(), SYSDATE()) " +
                         // 상품 id 중복 시 insert 않고  업데이트 수행 (통계성 데이터를 만들 계획이 아니므로 필요 X)
                         "ON DUPLICATE KEY UPDATE wish_count = :wishCount, updated_at = SYSDATE()")
-                // WishCountDto의 필드 값 파라미터에 매핑
+                // WishCountDto 의 필드 값 파라미터에 매핑
                 .itemSqlParameterSourceProvider(new BeanPropertyItemSqlParameterSourceProvider<>())
                 .build();
     }
