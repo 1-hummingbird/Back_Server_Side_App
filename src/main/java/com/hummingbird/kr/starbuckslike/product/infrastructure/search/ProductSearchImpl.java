@@ -191,14 +191,14 @@ public class ProductSearchImpl implements ProductSearch {
     }
 
     @Override
-    public Slice<Long> searchWishProductIdsV1(Pageable pageable , String memberUid) {
+    public Slice<Long> searchWishProductIdsV1(Pageable pageable , String memberUID) {
         List<Long> fetch = queryFactory
                 .select(wish.productId)
                 .from(wish)
                 .join(product).on(wish.productId.eq(product.id))
                 .where(
                         product.isDeleted.isFalse()
-                        .and(wish.memberUid.eq(memberUid))
+                        .and(wish.memberUID.eq(memberUID))
                         .and(wish.isWished.isTrue())
                 )
                 .orderBy(wish.updatedAt.desc())

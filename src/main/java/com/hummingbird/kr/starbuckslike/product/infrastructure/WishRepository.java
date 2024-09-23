@@ -1,4 +1,4 @@
-package com.hummingbird.kr.starbuckslike.purchase.infrastructure;
+package com.hummingbird.kr.starbuckslike.product.infrastructure;
 
 import com.hummingbird.kr.starbuckslike.product.domain.Wish;
 import org.springframework.data.jpa.repository.JpaRepository;

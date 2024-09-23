@@ -8,7 +8,7 @@ import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.search.ProductSearch;
-import com.hummingbird.kr.starbuckslike.purchase.infrastructure.WishRepository;
+import com.hummingbird.kr.starbuckslike.product.infrastructure.WishRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -90,10 +90,10 @@ public class ProductServiceImpl implements  ProductService{
     }
 
     @Override
-    public void updateWishStatus(String memberUid, Long productId) {
+    public void updateWishStatus(String memberUID, Long productId) {
         productRepository.findById(productId).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
-        Optional<Wish> existingWish = wishRepository.findWishByMemberUIDAndProductId(memberUid, productId);
+        Optional<Wish> existingWish = wishRepository.findWishByMemberUIDAndProductId(memberUID, productId);
         if (existingWish.isPresent()) { // 기존에 위시 등록한 상품인지 확인
             // 이미 존재하면 isWished 값을 토글
             Wish wish = existingWish.get();
@@ -102,7 +102,7 @@ public class ProductServiceImpl implements  ProductService{
         }
         else { // 없으면 새로 추가
             Wish newWish = Wish.builder()
-                    .memberUid(memberUid)
+                    .memberUID(memberUID)
                     .productId(productId)
                     .isWished(true) // 최초 추가 시 true
                     .build();

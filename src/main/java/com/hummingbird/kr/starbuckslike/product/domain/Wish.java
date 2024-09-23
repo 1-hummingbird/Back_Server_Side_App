@@ -21,7 +21,7 @@ public class Wish extends BaseEntity {
 
     @Comment("회원 uuid")
     @Column(nullable = false, length = 40)
-    private String memberUid;
+    private String memberUID;
 
     @Comment("상품 id")
     @Column(nullable = false, length = 50)
@@ -36,8 +36,8 @@ public class Wish extends BaseEntity {
     }
 
     @Builder
-    public Wish(String memberUid, Long productId, Boolean isWished) {
-        this.memberUid = memberUid;
+    public Wish(String memberUID, Long productId, Boolean isWished) {
+        this.memberUID = memberUID;
         this.productId = productId;
         this.isWished = isWished;
     }
