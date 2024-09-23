@@ -255,7 +255,7 @@ public class ProductSearchImpl implements ProductSearch {
                     .from(cart)
                     .where(
                             cart.isDeleted.isFalse()
-                            .and(cart.userUid.eq(memberUid))
+                            .and(cart.memberUID.eq(memberUid))
                             .and(cart.productId.eq(productId))
                     ).fetchOne();
         }

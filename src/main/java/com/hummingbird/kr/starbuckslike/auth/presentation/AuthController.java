@@ -46,7 +46,7 @@ public class AuthController {
         authService.register(registerRequestVO.toDTO());
         return new BaseResponse<>();
     }
-    @Operation(summary = "PW re_init API", description = "PW reset API", tags = {"Auth"})
+    @Operation(summary = "PW re_init API", description = "PW reset API, email 인증 필요 합니다", tags = {"Auth"})
     @PostMapping("/resetPW")
     public BaseResponse<Void> resetPW(@RequestBody ResetPWRequestVO resetPWRequestVO) {
         authService.resetPW(resetPWRequestVO.toDTO());
@@ -70,7 +70,7 @@ public class AuthController {
         authService.logout(logoutRequestVO.toDTO());
         return new BaseResponse<>();
     }
-    @Operation(summary = "Member Find ID API", description = "Member Find ID API", tags = {"Auth"})
+    @Operation(summary = "Member Find ID API", description = "Member Find ID API, 이메일 인증 필요합니다", tags = {"Auth"})
     @PostMapping("/findID")
     public BaseResponse<FindIDResponseVO> findID(@RequestBody FindIDRequestVO findIDRequestVO) {
         FindIDResponseDTO responseDTO = authService.findID(findIDRequestVO.toDTO());

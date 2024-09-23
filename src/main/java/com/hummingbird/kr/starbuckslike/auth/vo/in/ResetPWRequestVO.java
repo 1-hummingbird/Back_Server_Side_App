@@ -9,9 +9,10 @@ import lombok.Getter;
 public class ResetPWRequestVO {
     private String loginID;
     private String password;
+    private String email;
 
     public ResetPWRequestDTO toDTO() {
-        return new ResetPWRequestDTO(this.loginID, this.password);
+        return new ResetPWRequestDTO(this.loginID, this.password, this.email);
     }
 
 }
