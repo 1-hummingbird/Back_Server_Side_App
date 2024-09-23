@@ -68,7 +68,7 @@ public class SecurityConfig {
                                 )
                                 .permitAll() */
                                 .anyRequest()
-				.premitAll()
+				.permitAll()
                                 //.authenticated()
                 )
                 .sessionManagement(
