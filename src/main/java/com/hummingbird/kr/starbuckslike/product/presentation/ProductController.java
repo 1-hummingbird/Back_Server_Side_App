@@ -154,7 +154,7 @@ public class ProductController {
 
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
             summary = "상품 위시리스트 조회", description = "[Slice] 회원이 위시리스트한 상품만 조회", tags = {"위시리스트"})
-    @GetMapping("/wish/list")
+    @PostMapping("/wish/list")
     public BaseResponse<Slice<Long>> searchWishProductIdsV1(
                 Pageable pageable, @AuthenticationPrincipal AuthUserDetail authUserDetail){
 
