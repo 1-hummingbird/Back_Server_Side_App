@@ -92,7 +92,7 @@ public class CartController {
 
     // 장바구니 ID 리스트 조회
     @Operation(summary = "장바구니 ID 리스트 조회", description = "", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-    @GetMapping("/items/member")
+    @PostMapping("/items/member")
     public BaseResponse<ResponseFindAllCartVo> findAllCartIdByUserUidV1(@AuthenticationPrincipal AuthUserDetail authUserDetail){
         return new BaseResponse<>(
                 cartService.findAllCartIdByMemberUID(authUserDetail.getUsername()).toVo()
@@ -113,8 +113,8 @@ public class CartController {
 
     // 장바구니 옵션상품 정보(옵션가격,수량,옵션명 등등) 조회
     @Operation(summary = "장바구니 옵션정보 조회", description = "옵션상품 정보(옵션가격,수량,옵션명 등등) 조회", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-    @GetMapping("/item/info/{cartId}")
-    public BaseResponse<ResponseCartItemVo> findCartItemDtoByIdV1(@PathVariable("cartId") Long cartId){
+    @PostMapping("/item/info")
+    public BaseResponse<ResponseCartItemVo> findCartItemDtoByIdV1(@RequestBody Long cartId){
         return new BaseResponse<>(
                 cartService.findCartItemDtoById(cartId).toVo()
         );
