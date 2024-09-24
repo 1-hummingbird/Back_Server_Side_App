@@ -308,9 +308,6 @@ public class ProductSearchImpl implements ProductSearch {
                 )
                 .orderBy(productImage.seq.asc())
                 .fetch();
-;
-
-
     }
 
     @Override
@@ -323,7 +320,7 @@ public class ProductSearchImpl implements ProductSearch {
                 .from(productOption)
                 .where(
                         productOption.product.id.eq(productId)
-                        .and(productOption.isAvailable.isTrue() )
+                        .and(productOption.isAvailable.isTrue())
                         .and(productOption.isHidden.isFalse())
                         .and(productOption.isDeleted.isFalse())
                 )
