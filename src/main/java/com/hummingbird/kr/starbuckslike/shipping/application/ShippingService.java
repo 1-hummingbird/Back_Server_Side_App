@@ -70,3 +70,5 @@ public interface ShippingService {
 
     ShippingDefaultIDResponseDTO defaultID(String memberUID);
 }
+
+// ...
