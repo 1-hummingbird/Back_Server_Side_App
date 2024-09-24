@@ -2,6 +2,7 @@ package com.hummingbird.kr.starbuckslike.product.application;
 
 import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
+import com.hummingbird.kr.starbuckslike.common.utils.CursorPage;
 import com.hummingbird.kr.starbuckslike.product.domain.Product;
 import com.hummingbird.kr.starbuckslike.product.domain.Wish;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
@@ -78,6 +79,11 @@ public class ProductServiceImpl implements  ProductService{
     public Slice<Long> searchProductIdsV1(ProductCondition productCondition, Pageable pageable) {
         return productSearch.searchProductIdsV1(productCondition,pageable);
 
+    }
+
+    @Override
+    public CursorPage<Long> searchProductIdsCursorBase(ProductCondition productCondition, Long lastId, Integer pageSize, Integer page) {
+        return productSearch.searchProductIdsCursorBase(productCondition, lastId, pageSize, page);
     }
 
     @Override
