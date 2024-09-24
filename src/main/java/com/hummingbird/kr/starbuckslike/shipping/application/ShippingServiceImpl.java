@@ -38,6 +38,10 @@ public class ShippingServiceImpl implements ShippingService {
         }
         shippingAddressRepository.save(requestDTO.toEntity());
         shippingSetting.countShippingPlus();
+        if (requestDTO.getWillDefault()){
+            Long addressid = shippingAddressRepository.findIdByAllArgument(requestDTO.getAddressNickname(),requestDTO.getName(),requestDTO.getAddress(), requestDTO.getPhone(), requestDTO.getMemberUID(), requestDTO.getMemo());
+            shippingSetting.setDefaultShippingAddressID(addressid);
+        }
         shippingSettingRepository.save(shippingSetting);
     }
 

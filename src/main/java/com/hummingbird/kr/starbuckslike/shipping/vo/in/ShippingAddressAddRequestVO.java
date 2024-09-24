@@ -12,6 +12,7 @@ public class ShippingAddressAddRequestVO {
     private String address;
     private String phone;
     private String memo;
+    private Boolean willDefault;
 
     public ShippingAddressAddRequestDTO toDTO(String memberUID) {
         return ShippingAddressAddRequestDTO.builder()
@@ -21,6 +22,7 @@ public class ShippingAddressAddRequestVO {
                 .phone(this.phone)
                 .memo(this.memo)
                 .memberUID(memberUID)
+                .willDefault(this.willDefault)
                 .build();
     }
 
