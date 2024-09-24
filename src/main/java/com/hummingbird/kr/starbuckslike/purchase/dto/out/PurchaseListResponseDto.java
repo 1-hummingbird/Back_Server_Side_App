@@ -19,24 +19,28 @@ import java.util.List;
 @Setter
 @EqualsAndHashCode(of = "purchaseId")
 public class PurchaseListResponseDto {
+    private String purchaseCode; // 주문코드
     private Long purchaseId; // 구매 id
     private LocalDateTime purchaseDate; // 구매 날짜
     private Long totalPrice; // 총 주문 금액
     private List<PurchaseItemResponseDto> purchaseItems; // 주문 상품들
 
     @QueryProjection
-    public PurchaseListResponseDto(Long purchaseId, LocalDateTime purchaseDate, Long totalPrice) {
+    public PurchaseListResponseDto(String purchaseCode, Long purchaseId, LocalDateTime purchaseDate, Long totalPrice) {
+        this.purchaseCode = purchaseCode;
         this.purchaseId = purchaseId;
         this.purchaseDate = purchaseDate;
         this.totalPrice = totalPrice;
     }
 
     @QueryProjection
-    public PurchaseListResponseDto(Long purchaseId, LocalDateTime purchaseDate,
+    public PurchaseListResponseDto(String purchaseCode, Long purchaseId, LocalDateTime purchaseDate,
                                    Long totalPrice, List<PurchaseItemResponseDto> purchaseItems) {
+        this.purchaseCode = purchaseCode;
         this.purchaseId = purchaseId;
         this.purchaseDate = purchaseDate;
         this.totalPrice = totalPrice;
+
         this.purchaseItems = purchaseItems;
     }
 
@@ -44,6 +48,7 @@ public class PurchaseListResponseDto {
         List<PurchaseItemResponseVo> purchaseItemVo = purchaseItems != null ?
                 purchaseItems.stream().map(PurchaseItemResponseDto::toVo).toList() : new ArrayList<>();
         return PurchaseListResponseVo.builder()
+                .purchaseCode(purchaseCode)
                 .purchaseId(purchaseId)
                 .purchaseDate(purchaseDate)
                 .totalPrice(totalPrice)

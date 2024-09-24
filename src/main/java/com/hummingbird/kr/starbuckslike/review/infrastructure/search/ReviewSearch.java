@@ -3,6 +3,7 @@ package com.hummingbird.kr.starbuckslike.review.infrastructure.search;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewCommentResponseDto;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListImageResponseDto;
 import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewListInfoResponseDto;
+import com.hummingbird.kr.starbuckslike.review.dto.out.ReviewSummaryResponseDto;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.condition.ReviewCondition;
 import com.hummingbird.kr.starbuckslike.review.vo.out.ReviewListImageResponseVo;
 import org.springframework.data.domain.Pageable;
@@ -35,4 +36,7 @@ public interface ReviewSearch {
 
     // 리뷰 댓글 보기 (order by)
     List<ReviewCommentResponseDto> findReviewCommentByIdTest(Long reviewId);
+
+    // 상품 리뷰 통계성 정보
+    ReviewSummaryResponseDto findReviewSummaryDtoById(Long productId);
 }

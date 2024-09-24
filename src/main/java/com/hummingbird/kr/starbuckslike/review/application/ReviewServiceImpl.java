@@ -3,6 +3,8 @@ package com.hummingbird.kr.starbuckslike.review.application;
 
 import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
+import com.hummingbird.kr.starbuckslike.purchase.domain.PurchaseProduct;
+import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseProductRepository;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.search.PurchaseSearch;
 import com.hummingbird.kr.starbuckslike.redis.facade.ReviewLockFacade;
 import com.hummingbird.kr.starbuckslike.review.domain.Review;
@@ -33,6 +35,7 @@ public class ReviewServiceImpl implements ReviewService{
     private final ReviewImageRepository reviewImageRepository;
     private final PurchaseSearch purchaseSearch;
     private final ReviewCommentRepository reviewCommentRepository;
+    private final PurchaseProductRepository purchaseProductRepository;
     @Override
     public Slice<Long> searchReviewListById(Pageable pageable, Long productId, ReviewCondition reviewCondition) {
         return reviewSearch.searchReviewListById(pageable, productId, reviewCondition);
@@ -59,6 +62,11 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
+    public ReviewSummaryResponseDto findReviewSummaryDtoById(Long productId) {
+        return reviewSearch.findReviewSummaryDtoById(productId);
+    }
+
+    @Override
     public void increaseCommentCountWithLock(AddReviewCommentRequestDto dto) {
         // 비관적 락을 사용하여 리뷰 조회
         Review review = reviewRepository.findByIdWithPessimisticLock(dto.getReviewId());
@@ -70,34 +78,36 @@ public class ReviewServiceImpl implements ReviewService{
     }
 
     @Override
-    public void addReview(AddReviewRequestDto addReviewRequestDto) {
+    public void addReview(AddReviewRequestDto dto) {
         // 정상적인 리뷰 저장인지 확인
-        checkValidReview(addReviewRequestDto);
+        checkValidReview(dto);
         // 리뷰 생성
-        Review review = addReviewRequestDto.toReview();
+        Review review = dto.toReview();
         reviewRepository.save(review);
         // 리뷰 이미지 생성
-        reviewImageRepository.saveAll(addReviewRequestDto.toReviewImage(review));
-
+        reviewImageRepository.saveAll(dto.toReviewImage(review));
+        // 주문상품에 리뷰 작성되었다 처리
+        purchaseProductRepository.updatePurchaseProductReview(dto.getPurchaseProductId());
     }
 
-    private void checkValidReview(AddReviewRequestDto addReviewRequestDto) {
+    private void checkValidReview(AddReviewRequestDto dto) {
         // 1. 유효한 주문코드 확인
-        if(!purchaseSearch.exists(addReviewRequestDto.getPurchaseCode())){
+        if(!purchaseSearch.exists(dto.getPurchaseCode())){
             throw new BaseException(BaseResponseStatus.NO_EXIST_INTEREST);
         }
         // 2. 이미 해당 주문에 상품옵션 리뷰가 있는지 확인
-        Boolean reviewExists = reviewSearch.exists(addReviewRequestDto.getMemberUID(),
-                                            addReviewRequestDto.getPurchaseCode(),
-                                            addReviewRequestDto.getOptionId());
+        Boolean reviewExists = reviewSearch.exists(dto.getMemberUID(),
+                                            dto.getPurchaseCode(),
+                                            dto.getOptionId());
         if(reviewExists){
             throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
         }
         // 3. 리뷰 이미지 최대 개수 확인
-        if(addReviewRequestDto.getReviewImages().size() > 5){
+        if(dto.getReviewImages().size() > 5){
             throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
         }
     }
+
 
     @Override
     public void deleteReview(Long reviewId) {

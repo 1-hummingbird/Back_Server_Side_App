@@ -17,4 +17,6 @@ public class ProductInfoResponseVo {
     private Float discountRate; // 할인율
 
     private Long cartCount; // 해당 상품이 장바구니에 몇개 담겼는지
+
+    private Long wishCount; // 해당 상품의 좋아요 개수
 }

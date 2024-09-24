@@ -3,6 +3,7 @@ package com.hummingbird.kr.starbuckslike.purchase.domain;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
 import jakarta.persistence.*;
 import lombok.*;
+import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
 
 import static jakarta.persistence.FetchType.LAZY;
@@ -57,25 +58,27 @@ public class PurchaseProduct extends BaseEntity { // 주문 상품
     @Column(name="purchase_status" , nullable = false)
     private PurchaseStatus purchaseStatus;
 
-//    @Comment("배송시작 여부")
-//    @Column(name="is_shipped" , nullable = false)
-//	private Boolean isShipped;
-//    @Comment("배송완료 여부")
-//    @Column(name="is_delivered" , nullable = false)
-//    private Boolean isDelivered;
-//    @Comment("구매확정 여부")
-//    @Column(name="is_confirmed" , nullable = false)
-//    private Boolean isConfirmed;
+    @Comment("리뷰 작성 여부")
+    @ColumnDefault("false")
+    @Column(nullable = false)
+    private Boolean isReviewed;
 
+    //    @Comment("배송시작 여부")
+    //    @Column(name="is_shipped" , nullable = false)
+    //	  private Boolean isShipped;
+    //    @Comment("배송완료 여부")
+    //    @Column(name="is_delivered" , nullable = false)
+    //    private Boolean isDelivered;
+    //    @Comment("구매확정 여부")
+    //    @Column(name="is_confirmed" , nullable = false)
+    //    private Boolean isConfirmed;
     // 택배사 구분번호
     // 운송장 번호
 
-
     @Builder
-
     public PurchaseProduct(Purchase purchase, Integer qty, Long price, Long discountPrice, String inputData,
                            Long productId, String productName, Long optionId, String optionName,
-                           PurchaseStatus purchaseStatus) {
+                           PurchaseStatus purchaseStatus, Boolean isReviewed) {
         this.purchase = purchase;
         this.qty = qty;
         this.price = price;
@@ -86,8 +89,6 @@ public class PurchaseProduct extends BaseEntity { // 주문 상품
         this.optionId = optionId;
         this.optionName = optionName;
         this.purchaseStatus = purchaseStatus;
-//        this.isShipped = isShipped;
-//        this.isDelivered = isDelivered;
-//        this.isConfirmed = isConfirmed;
+        this.isReviewed = isReviewed;
     }
 }

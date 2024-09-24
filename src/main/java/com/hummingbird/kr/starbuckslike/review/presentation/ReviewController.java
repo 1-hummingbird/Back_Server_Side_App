@@ -72,6 +72,16 @@ public class ReviewController {
                 reviewService.findReviewInfoById(productId).toVo()
         );
     }
+    @Operation(summary = "리뷰 통계 조회", description = "상품 id 로 리뷰 통계 조회 ", tags = {"리뷰"})
+    @GetMapping("/summary/{productId}")
+    public BaseResponse<ReviewSummaryResponseVo> findReviewSummaryDtoByIdV1(
+            @PathVariable("productId") Long productId
+    ){
+        return new BaseResponse<>(
+                reviewService.findReviewSummaryDtoById(productId).toVo()
+        );
+    }
+
 
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
                 summary = "리뷰 작성", description = "리뷰 작성 하기", tags = {"리뷰"})

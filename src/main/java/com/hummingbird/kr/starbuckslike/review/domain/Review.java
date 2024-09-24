@@ -2,8 +2,6 @@ package com.hummingbird.kr.starbuckslike.review.domain;
 
 import com.hummingbird.kr.starbuckslike.common.entity.BaseEntity;
 import jakarta.persistence.*;
-import jakarta.validation.constraints.Max;
-import jakarta.validation.constraints.Min;
 import lombok.*;
 import org.hibernate.annotations.ColumnDefault;
 import org.hibernate.annotations.Comment;
@@ -24,6 +22,10 @@ public class Review extends BaseEntity {
     @Comment("주문 코드")
     @Column(nullable = false, length = 30)
     private String purchaseCode;
+
+    @Comment("주문상품 Id")
+    @Column(nullable = false)
+    private Long purchaseProductId;
 
     @Comment("회원 닉네임")
     @Column(length = 40)
@@ -46,8 +48,7 @@ public class Review extends BaseEntity {
     private String content;
 
     @Comment("별점")
-    @Column(nullable = false, columnDefinition = "TINYINT CHECK (star BETWEEN 1 AND 5)")
-    @Min(1) @Max(5)
+    @Column(nullable = false)
     private Integer star;
 
     @Comment("리뷰 댓글 개수")
@@ -73,11 +74,14 @@ public class Review extends BaseEntity {
     }
 
     @Builder
-    public Review(String purchaseCode, String nickname, String memberUID, Long productId, Long optionId,
-                  String content, Integer star, Integer commentCount, Boolean isPhoto, Boolean isDeleted) {
+
+    public Review(String purchaseCode, String nickname, String memberUID, Long purchaseProductId,
+                  Long productId, Long optionId, String content, Integer star,
+                  Integer commentCount, Boolean isPhoto, Boolean isDeleted) {
         this.purchaseCode = purchaseCode;
         this.nickname = nickname;
         this.memberUID = memberUID;
+        this.purchaseProductId = purchaseProductId;
         this.productId = productId;
         this.optionId = optionId;
         this.content = content;

@@ -26,7 +26,6 @@ public class BatchSchedule {
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void runProductReviewStarJdbcJob() throws Exception {
 
-
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = dateFormat.format(new Date());
 
@@ -40,7 +39,6 @@ public class BatchSchedule {
     // 매일 01시 마다 실행
     @Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
     public void runProductWishJdbcJob() throws Exception {
-
 
         SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
         String date = dateFormat.format(new Date());

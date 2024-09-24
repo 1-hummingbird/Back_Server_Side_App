@@ -54,7 +54,7 @@ public class ProductController {
      * 상품 디테일
      */
     // 상품 디테일 상품 상품명 가격 등 조회
-    @Operation(summary = "상품 디테일(상품명,가격,할인 등) 조회", description = "상품 id로 상품 디테일(상품명,가격,할인 등) 조회")
+    @Operation(summary = "상품 디테일(상품명,가격,할인 등) 조회", description = "상품 id로 상품 디테일(상품명,가격,할인 등) 조회", tags = {"상품"})
     @GetMapping("/info/{productId}")
     public BaseResponse<ProductInfoResponseVo> findProductInfoByIdV2(
             @PathVariable("productId") Long productId , @AuthenticationPrincipal AuthUserDetail authUserDetail){
@@ -176,9 +176,10 @@ public class ProductController {
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
             summary = "최근 검색어 조회", description = "회원의 최근 검색어 조회", tags = {"최근검색어"})
-    @GetMapping("/search/list")
+    @PostMapping("/search/list")
     public BaseResponse<RecentSearchResponseVo> getRecentSearchV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail ){
+        log.info(authUserDetail.getLoginId());
         return new BaseResponse<>(
                 redisService.getRecentSearchDto(authUserDetail.getLoginId()).toVo()
         );

@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.product.infrastructure.search;
 
+import com.hummingbird.kr.starbuckslike.batch.entity.QWishProduct;
 import com.hummingbird.kr.starbuckslike.cart.domain.QCart;
 import com.hummingbird.kr.starbuckslike.category.domain.QCategoryProductList;
 import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
@@ -12,6 +13,7 @@ import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.PriceTy
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
+import com.querydsl.core.types.Projections;
 import com.querydsl.core.types.dsl.BooleanExpression;
 import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
@@ -34,6 +36,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Optional;
 
+import static com.hummingbird.kr.starbuckslike.batch.entity.QWishProduct.wishProduct;
 import static com.hummingbird.kr.starbuckslike.cart.domain.QCart.cart;
 import static com.hummingbird.kr.starbuckslike.category.domain.QCategoryProductList.categoryProductList;
 import static com.hummingbird.kr.starbuckslike.exhibition.domain.QExhibitionProduct.exhibitionProduct;
@@ -178,18 +181,26 @@ public class ProductSearchImpl implements ProductSearch {
 
     @Override
     public ProductListInfoResponseDto findProductListInfoResponseDtoById(Long productId) {
-        return queryFactory
+        ProductListInfoResponseDto dto = queryFactory
                 .select(new QProductListInfoResponseDto(
-                        product.name,
-                        new CaseBuilder() // sql case문
-                                .when(isNewCondition).then(true)
-                                .otherwise(false),
-                        product.isDiscounted, product.discountRate
+                                product.name,
+                                new CaseBuilder() // sql case문
+                                        .when(isNewCondition).then(true)
+                                        .otherwise(false),
+                                product.isDiscounted, product.price, product.discountRate
                         )
                 )
                 .from(product)
                 .where(product.id.eq(productId))
                 .fetchOne();
+        // 해당 상품의 좋아요 개수 ,  배치 실행 전이라 집계 안되면 0 return
+        Long wishCount = queryFactory.select(wishProduct.wishCount.coalesce(0L))
+                .from(wishProduct)
+                .where(wishProduct.productId.eq(productId))
+                .fetchOne();
+        dto.setWishCount(wishCount);
+
+        return dto;
     }
 
     @Override
@@ -245,12 +256,12 @@ public class ProductSearchImpl implements ProductSearch {
                 .from(product)
                 .where(
                         product.id.eq(productId)
-                                .and(product.isDeleted.eq(false))
+                        .and(product.isDeleted.eq(false))
                 )
                 .fetchOne();
         // 해당 상품이 장바구니 담긴 개수
         Long cartItemQuantity = 0L;
-        if(memberUid != null && !memberUid.isEmpty()){
+        if(memberUid != null && !memberUid.isEmpty()){ // 로그인 상태일 경우 쿼리 실행
             cartItemQuantity = queryFactory.select(cart.count())
                     .from(cart)
                     .where(
@@ -261,7 +272,12 @@ public class ProductSearchImpl implements ProductSearch {
         }
         assert productInfoResponseDto != null;
         productInfoResponseDto.setCartCount(cartItemQuantity);
-
+        // 해당 상품의 좋아요 개수 ,  배치 실행 전이라 집계 안되면 0 return
+        Long wishCount = queryFactory.select(wishProduct.wishCount.coalesce(0L))
+                                     .from(wishProduct)
+                                     .where(wishProduct.productId.eq(productId))
+                                     .fetchOne();
+        productInfoResponseDto.setWishCount(wishCount);
         return productInfoResponseDto;
     }
 
@@ -304,9 +320,9 @@ public class ProductSearchImpl implements ProductSearch {
                 .from(productOption)
                 .where(
                         productOption.product.id.eq(productId)
-                        .and(productOption.isAvailable.eq(true))
-                        .and(productOption.isHidden.eq(false))
-                        .and(productOption.isDeleted.eq(false))
+                        .and(productOption.isAvailable.isTrue())
+                        .and(productOption.isHidden.isFalse())
+                        .and(productOption.isDeleted.isFalse())
                 )
                 .orderBy(productOption.createdAt.desc())
                 .fetch();

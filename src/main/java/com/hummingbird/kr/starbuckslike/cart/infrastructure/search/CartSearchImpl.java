@@ -71,7 +71,7 @@ public class CartSearchImpl implements CartSearch {
     public ResponseCartItemDto findCartItemDtoById(Long cartId) {
         return queryFactory
                 .select(new QResponseCartItemDto(
-                                Expressions.asNumber(cartId).as("cartId"),
+                                Expressions.asNumber(cartId).as("cartId"), cart.isChecked ,
                                 cart.inputData, productOption.product.id, productOption.product.name,
                                 productOption.id, productOption.name,
                                 cart.qty, productOption.price, productOption.discountRate
@@ -80,7 +80,7 @@ public class CartSearchImpl implements CartSearch {
                 .from(productOption)
                 .join(cart).on(productOption.id.eq(cart.productOption.id))
                 .where(
-                        cart.id.eq(cartId)
+                    cart.id.eq(cartId)
                 )
                 .fetchOne();
     }
