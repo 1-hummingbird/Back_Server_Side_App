@@ -1,6 +1,7 @@
 package com.hummingbird.kr.starbuckslike.purchase.application;
 
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
+import com.hummingbird.kr.starbuckslike.purchase.dto.in.PurchaseDetailRequestDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseDetailResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseListResponseDto;
 import org.springframework.data.domain.Pageable;
@@ -22,7 +23,7 @@ public interface PurchaseService {
 
 
     // 주문 디테일 조회
-    PurchaseDetailResponseDto findPurchaseDetailById(String purchaseCode);
+    PurchaseDetailResponseDto findPurchaseDetailById(PurchaseDetailRequestDto purchaseDetailRequestDto);
 
     /**
      * Create , Update, Delete

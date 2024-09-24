@@ -41,8 +41,8 @@ public class PurchaseServiceImpl implements PurchaseService{
     }
 
     @Override
-    public PurchaseDetailResponseDto findPurchaseDetailById(String purchaseCode) {
-        return purchaseSearch.findPurchaseDetailById(purchaseCode);
+    public PurchaseDetailResponseDto findPurchaseDetailById(PurchaseDetailRequestDto purchaseDetailRequestDto) {
+        return purchaseSearch.findPurchaseDetailById(purchaseDetailRequestDto.getPurchaseCode());
     }
 
     @Override
