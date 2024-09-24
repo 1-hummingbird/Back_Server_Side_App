@@ -6,8 +6,10 @@ import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;
 import com.hummingbird.kr.starbuckslike.purchase.application.PurchaseService;
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.in.DeletePurchaseRequestDto;
+import com.hummingbird.kr.starbuckslike.purchase.dto.in.PurchaseDetailRequestDto;
 import com.hummingbird.kr.starbuckslike.purchase.dto.out.PurchaseListResponseDto;
 import com.hummingbird.kr.starbuckslike.purchase.vo.in.AddPurchaseRequestVo;
+import com.hummingbird.kr.starbuckslike.purchase.vo.in.PurchaseDetailRequestVo;
 import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseDetailResponseVo;
 import com.hummingbird.kr.starbuckslike.purchase.vo.out.PurchaseListResponseVo;
 import io.swagger.v3.oas.annotations.Operation;
@@ -27,7 +29,7 @@ public class PurchaseController {
     private final PurchaseService purchaseService;
 
     @Operation(summary = "회원 주문목록 조회 리스트 [페이징]", description = "회원 uuid로 주문목록 리스트 조회 ", tags = {"주문"}, security = @SecurityRequirement(name = "Bearer Auth"))
-    @GetMapping("/list")
+    @PostMapping("/list")
     public BaseResponse<Slice<PurchaseListResponseVo>> searchPurchaseByUuidV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail,
             Pageable pageable,
@@ -52,13 +54,13 @@ public class PurchaseController {
     }
 
     @Operation(summary = "회원 주문목록 디테일", description = "주문목록 디테일 조회", security = @SecurityRequirement(name = "Bearer Auth"), tags = {"주문"})
-    @GetMapping("/{purchaseCode}")
+    @PostMapping("/detail")
     public BaseResponse<PurchaseDetailResponseVo> findPurchaseDetailByV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail,
-            @PathVariable("purchaseCode") String purchaseCode
-    ){
+            @RequestBody PurchaseDetailRequestVo purchaseDetailRequestVo
+            ){
         return new BaseResponse<>(
-                purchaseService.findPurchaseDetailById(purchaseCode).toVo()
+                purchaseService.findPurchaseDetailById(PurchaseDetailRequestDto.from(purchaseDetailRequestVo)).toVo()
         );
     }
     @Operation(summary = "주문 삭제", description = "주문 삭제", security = @SecurityRequirement(name = "Bearer Auth"), tags = {"주문"})
