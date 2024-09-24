@@ -20,4 +20,5 @@ public interface ReviewRepository extends JpaRepository<Review,Long> {
     @Lock(LockModeType.PESSIMISTIC_WRITE)
     @Query("SELECT r FROM Review r WHERE r.id = :id")
     Review findByIdWithPessimisticLock(@Param("id") Long id);
+
 }

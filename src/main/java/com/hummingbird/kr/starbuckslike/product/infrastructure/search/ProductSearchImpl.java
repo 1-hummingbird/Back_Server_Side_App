@@ -3,6 +3,7 @@ package com.hummingbird.kr.starbuckslike.product.infrastructure.search;
 import com.hummingbird.kr.starbuckslike.batch.entity.QWishProduct;
 import com.hummingbird.kr.starbuckslike.cart.domain.QCart;
 import com.hummingbird.kr.starbuckslike.category.domain.QCategoryProductList;
+import com.hummingbird.kr.starbuckslike.common.utils.CursorPage;
 import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductImage;
 import com.hummingbird.kr.starbuckslike.product.domain.QProductOption;
@@ -11,6 +12,7 @@ import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.OrderCondition;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.PriceType;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
+import com.querydsl.core.BooleanBuilder;
 import com.querydsl.core.types.Order;
 import com.querydsl.core.types.OrderSpecifier;
 import com.querydsl.core.types.Projections;
@@ -19,7 +21,6 @@ import com.querydsl.core.types.dsl.CaseBuilder;
 import com.querydsl.core.types.dsl.Expressions;
 import com.querydsl.jpa.impl.JPAQuery;
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import jakarta.persistence.EntityManager;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
 import org.springframework.data.domain.Page;
@@ -27,10 +28,8 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.data.domain.SliceImpl;
 import org.springframework.data.support.PageableExecutionUtils;
-import org.springframework.expression.spel.ast.Projection;
 import org.springframework.stereotype.Repository;
 
-import java.lang.reflect.Constructor;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -48,6 +47,7 @@ import static com.hummingbird.kr.starbuckslike.product.domain.QWish.wish;
 /**
  * 상품 조회  (querydsl 등 조회 쿼리, JpaRepository와 따로 두었음)
  * 지금은 엔티티로 받는데 나중에 DTO나 VO로 받는 부분 추가해야 함
+ *
  * @author 허정현
  */
 @Repository
@@ -56,6 +56,9 @@ import static com.hummingbird.kr.starbuckslike.product.domain.QWish.wish;
 public class ProductSearchImpl implements ProductSearch {
 
     private final JPAQueryFactory queryFactory;
+    private static final int DEFAULT_PAGE_SIZE = 20;
+    private static final int DEFAULT_PAGE_NUMBER = 0;
+
 
     @Override
     public List<Long> findProductIdListByExhibitionId(Long exhibitionId) {
@@ -67,7 +70,7 @@ public class ProductSearchImpl implements ProductSearch {
                 // 특정 기획전 상품에 (exhibitionId) 에 해당하는 상품만 조회
                 .where(
                         exhibitionProduct.exhibition.id.eq(exhibitionId)
-                        .and(product.isDeleted.eq(false))
+                                .and(product.isDeleted.eq(false))
                 )
                 .fetch();
     }
@@ -75,19 +78,19 @@ public class ProductSearchImpl implements ProductSearch {
     @Override
     public ProductListResponseDto findProductListDtoByProductId(Long productId) {
         return queryFactory
-                .select( new QProductListResponseDto( Expressions.asNumber(productId).as("id") ,
+                .select(new QProductListResponseDto(Expressions.asNumber(productId).as("id"),
                         productImage.imageUrl, product.name, product.price,
                         new CaseBuilder()
                                 .when(isNewCondition)
-                                    .then(true)
-                                    .otherwise(false),
+                                .then(true)
+                                .otherwise(false),
                         product.isDiscounted, product.discountRate, product.isAvailable
                 ))
                 .from(product)
                 .leftJoin(productImage)
                 .on(
-                    product.id.eq(productImage.product.id)
-                    .and(productImage.seq.eq(0)) // 상품의 대표이미지만 가져옴
+                        product.id.eq(productImage.product.id)
+                                .and(productImage.seq.eq(0)) // 상품의 대표이미지만 가져옴
                 )
                 .where(product.id.eq(productId))
                 .fetchOne();
@@ -129,20 +132,22 @@ public class ProductSearchImpl implements ProductSearch {
                 .where(
                         priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
                         topCategoryCodeCondition(productCondition.getTopCode()),  // 상 카테고리 필터링
-                        middleCategoryCodeCondition(productCondition.getMiddleCode()) , // 중 카테고리 필터링
+                        middleCategoryCodeCondition(productCondition.getMiddleCode()), // 중 카테고리 필터링
                         product.isDeleted.eq(false)
                 );
 
-        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne) ;
+        return PageableExecutionUtils.getPage(fetch, pageable, countQuery::fetchOne);
     }
 
     @Override
     public Slice<Long> searchProductIdsV1(ProductCondition productCondition, Pageable pageable) {
         List<Long> fetch = queryFactory
-                .select(categoryProductList.id)
+                //.select(categoryProductList.id)
+                .select(categoryProductList.product.id)
                 .from(categoryProductList)
                 .join(categoryProductList).on(categoryProductList.product.id.eq(product.id))
                 .where(
+                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
                         topCategoryCodeCondition(productCondition.getTopCode()),  // 상 카테고리 필터링
                         middleCategoryCodeCondition(productCondition.getMiddleCode()), // 중 카테고리 필터링
                         productNameCondition(productCondition.getProductName()), // %상품명% 필터링
@@ -166,10 +171,75 @@ public class ProductSearchImpl implements ProductSearch {
     }
 
     @Override
+    public CursorPage<Long> searchProductIdsCursorBase(ProductCondition productCondition,  Long lastId,
+                                                                                           Integer pageSize,
+                                                                                           Integer page)
+    {
+
+//        // 페이지와 페이지 크기 기본값 설정
+        int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
+        int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
+//        // todo lastId 커서 조건 추가
+//        List<Long> content = queryFactory
+//                .select(categoryProductList.product.id)
+//                .from(categoryProductList)
+//                .join(categoryProductList).on(categoryProductList.product.id.eq(product.id))
+//                .where(
+//                        priceRangeCondition(productCondition.getPriceType()), // 가격 필터링
+//                        topCategoryCodeCondition(productCondition.getTopCode()),  // 상 카테고리 필터링
+//                        middleCategoryCodeCondition(productCondition.getMiddleCode()), // 중 카테고리 필터링
+//                        productNameCondition(productCondition.getProductName()), // %상품명% 필터링
+//                        product.isDeleted.eq(false)
+
+//                )
+//                .orderBy(
+//                        getOrderSpecifier(productCondition.getOrderCondition()) // 정렬 조건
+//                )
+//                .limit(currentPageSize + 1) // 다음 페이지가 있는지 확인하기 위해 1개 더 가져옴
+//                .fetch();
+
+        BooleanBuilder builder = new BooleanBuilder();
+        // 가격 조건
+        builder.and(priceRangeCondition(productCondition.getPriceType()));
+        // 상위 카테고리 코드 조건
+        builder.and(topCategoryCodeCondition(productCondition.getTopCode()));
+        // 중위 카테고리 코드 조건
+        builder.and(middleCategoryCodeCondition(productCondition.getMiddleCode()));
+        // 상품명 조건
+        builder.and(productNameCondition(productCondition.getProductName()));
+        // 삭제되지 않은 상품 조건
+        builder.and(product.isDeleted.eq(false));
+        // lastId가 있을 경우 커서 조건 추가
+        Optional.ofNullable(lastId)
+                .ifPresent(id -> builder.and(categoryProductList.id.gt(id)));
+
+        // 데이터 페칭 (pageSize + 1로 가져와서 다음 페이지 확인)
+        List<Long> content = queryFactory
+                .select(categoryProductList.product.id)
+                .from(categoryProductList)
+                .join(categoryProductList).on(categoryProductList.product.id.eq(product.id))
+                .where(builder)
+                .orderBy(getOrderSpecifier(productCondition.getOrderCondition())) // 정렬 조건
+                .limit(currentPageSize + 1) // 다음 페이지가 있는지 확인하기 위해 1개 더 가져옴
+                .fetch();
+        Long nextCursor = null;
+        boolean hasNext = false;
+
+        if (content.size() > currentPageSize) {
+            hasNext = true;
+            content = content.subList(0, currentPageSize);  // 실제 페이지 사이즈 만큼 자르기
+            nextCursor = content.get(content.size() - 1);  // 마지막 항목의 ID를 커서로 설정
+        }
+
+        // CursorPage 객체 반환
+        return new CursorPage<>(content, nextCursor, hasNext, currentPageSize, currentPage);
+    }
+
+    @Override
     public ProductListImageResponseDto findProductListImageResponseDtoById(Long productId) {
         return queryFactory
                 .select(new QProductListImageResponseDto(
-                                Expressions.asNumber(productId).as("productId"), productImage.imageUrl )
+                        Expressions.asNumber(productId).as("productId"), productImage.imageUrl)
                 )
                 .from(productImage)
                 .where(
@@ -204,7 +274,7 @@ public class ProductSearchImpl implements ProductSearch {
     }
 
     @Override
-    public Slice<Long> searchWishProductIdsV1(Pageable pageable , String memberUID) {
+    public Slice<Long> searchWishProductIdsV1(Pageable pageable, String memberUID) {
         List<Long> fetch = queryFactory
                 .select(wish.productId)
                 .from(wish)
@@ -231,11 +301,11 @@ public class ProductSearchImpl implements ProductSearch {
     public ProductInfoResponseDto findProductInfoById(Long productId) {
         return queryFactory
                 .select(new QProductInfoResponseDto(product.name,
-                            new CaseBuilder() // sql case문
+                        new CaseBuilder() // sql case문
                                 .when(isNewCondition).then(true)
                                 .otherwise(false),
-                            product.shortDescription, product.isDiscounted , product.discountRate
-                        ))
+                        product.shortDescription, product.isDiscounted, product.discountRate
+                ))
                 .from(product)
                 .where(
                         product.id.eq(productId)
@@ -256,27 +326,27 @@ public class ProductSearchImpl implements ProductSearch {
                 .from(product)
                 .where(
                         product.id.eq(productId)
-                        .and(product.isDeleted.eq(false))
+                                .and(product.isDeleted.eq(false))
                 )
                 .fetchOne();
         // 해당 상품이 장바구니 담긴 개수
         Long cartItemQuantity = 0L;
-        if(memberUid != null && !memberUid.isEmpty()){ // 로그인 상태일 경우 쿼리 실행
+        if (memberUid != null && !memberUid.isEmpty()) { // 로그인 상태일 경우 쿼리 실행
             cartItemQuantity = queryFactory.select(cart.count())
                     .from(cart)
                     .where(
                             cart.isDeleted.isFalse()
-                            .and(cart.memberUID.eq(memberUid))
-                            .and(cart.productId.eq(productId))
+                                    .and(cart.memberUID.eq(memberUid))
+                                    .and(cart.productId.eq(productId))
                     ).fetchOne();
         }
         assert productInfoResponseDto != null;
         productInfoResponseDto.setCartCount(cartItemQuantity);
         // 해당 상품의 좋아요 개수 ,  배치 실행 전이라 집계 안되면 0 return
         Long wishCount = queryFactory.select(wishProduct.wishCount.coalesce(0L))
-                                     .from(wishProduct)
-                                     .where(wishProduct.productId.eq(productId))
-                                     .fetchOne();
+                .from(wishProduct)
+                .where(wishProduct.productId.eq(productId))
+                .fetchOne();
         productInfoResponseDto.setWishCount(wishCount);
         return productInfoResponseDto;
     }
@@ -287,7 +357,7 @@ public class ProductSearchImpl implements ProductSearch {
                 .from(product)
                 .where(
                         product.id.eq(productId)
-                        .and(product.isDeleted.eq(false))
+                                .and(product.isDeleted.eq(false))
                 )
                 .fetchOne();
 
@@ -296,15 +366,15 @@ public class ProductSearchImpl implements ProductSearch {
     @Override
     public List<ProductImageResponseDto> findProductImageDtoById(Long productId) {
         return queryFactory.select(new QProductImageResponseDto(productImage.imageUrl,
-                                        new CaseBuilder()
-                                                .when(isMainCondition).then(true)
-                                                .otherwise(false)
-                                        )
+                                new CaseBuilder()
+                                        .when(isMainCondition).then(true)
+                                        .otherwise(false)
+                        )
                 )
                 .from(productImage)
                 .where(
                         productImage.product.id.eq(productId)
-                        .and(product.isDeleted.eq(false))
+                                .and(product.isDeleted.eq(false))
                 )
                 .orderBy(productImage.seq.asc())
                 .fetch();
@@ -314,15 +384,15 @@ public class ProductSearchImpl implements ProductSearch {
     public List<ProductOptionResponseDto> findProductOptionDtoById(Long productId) {
         //return null;
         return queryFactory.select(
-                    new QProductOptionResponseDto(productOption.id,productOption.name,
-                            productOption.price,productOption.discountRate, productOption.isInputOption)
+                        new QProductOptionResponseDto(productOption.id, productOption.name,
+                                productOption.price, productOption.discountRate, productOption.isInputOption)
                 )
                 .from(productOption)
                 .where(
                         productOption.product.id.eq(productId)
-                        .and(productOption.isAvailable.isTrue())
-                        .and(productOption.isHidden.isFalse())
-                        .and(productOption.isDeleted.isFalse())
+                                .and(productOption.isAvailable.isTrue())
+                                .and(productOption.isHidden.isFalse())
+                                .and(productOption.isDeleted.isFalse())
                 )
                 .orderBy(productOption.createdAt.desc())
                 .fetch();
@@ -333,8 +403,14 @@ public class ProductSearchImpl implements ProductSearch {
      * 상품 조회의 모든 검색조건
      */
 
+//    private BooleanExpression lastIdCondition(Long lastId) {
+//        // Optional을 사용하여 lastId가 null이 아닐 경우에만 조건을 추가
+//        return Optional.ofNullable(lastId)
+//                .map(categoryProductList.product.id::lt)
+//                .orElse(null); // lastId가 null이면 조건 무시
+//    }
     // new 상품 조건
-    private final BooleanExpression  isNewCondition = product.createdAt.after(LocalDateTime.now().minusDays(30));
+    private final BooleanExpression isNewCondition = product.createdAt.after(LocalDateTime.now().minusDays(30));
 
     // 가격대별 조회 조건
     private BooleanExpression priceRangeCondition(PriceType priceType) {
@@ -353,6 +429,7 @@ public class ProductSearchImpl implements ProductSearch {
         // 상 카테고리 코드
         return categoryProductList.topCategoryCode.eq(topCode);
     }
+
     // 중 카테고리 검색 조건
     private BooleanExpression middleCategoryCodeCondition(List<String> middleCode) {
         if (middleCode == null || middleCode.isEmpty()) {
@@ -361,6 +438,7 @@ public class ProductSearchImpl implements ProductSearch {
         // 중 카테고리 코드
         return categoryProductList.middleCategoryCode.in(middleCode);
     }
+
     // 상품명으로 검색
     private BooleanExpression productNameCondition(String productName) {
         if (productName == null || productName.isEmpty()) {
@@ -375,15 +453,15 @@ public class ProductSearchImpl implements ProductSearch {
 //                exhibitionProduct.exhibition.id.in(exhibitionIds);
 //    }
     // 상품 대표이미지 조건
-    private final BooleanExpression  isMainCondition = productImage.seq.eq(0);
+    private final BooleanExpression isMainCondition = productImage.seq.eq(0);
+
     // 정렬 조건
     private OrderSpecifier<?>[] getOrderSpecifier(OrderCondition orderCondition) {
         List<OrderSpecifier<?>> orderSpecifiers = new ArrayList<>();
         // todo : 이상한 값 들어오면 예외처리
-        if (orderCondition==null) { // 기본 정렬 (최신순)
+        if (orderCondition == null) { // 기본 정렬 (최신순)
             orderSpecifiers.add(new OrderSpecifier<>(Order.DESC, product.createdAt));
-        }
-        else {
+        } else {
             switch (orderCondition) {
                 case NEWEST -> // 최신순 (내림차순)
                         orderSpecifiers.add(new OrderSpecifier<>(Order.DESC, product.createdAt));

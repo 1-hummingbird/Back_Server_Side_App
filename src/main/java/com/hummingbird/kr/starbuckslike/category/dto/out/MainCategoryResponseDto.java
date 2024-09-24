@@ -23,9 +23,10 @@ public class MainCategoryResponseDto {
     }
 
     @QueryProjection
-    public MainCategoryResponseDto(String categoryCode, String imageUrl, String categoryName) {
+    public MainCategoryResponseDto(String categoryCode,  String categoryName, String imageUrl) {
         this.categoryCode = categoryCode;
-        this.imageUrl = imageUrl;
         this.categoryName = categoryName;
+        this.imageUrl = imageUrl;
+
     }
 }

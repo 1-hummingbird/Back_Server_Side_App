@@ -64,7 +64,6 @@ public class CategoryController {
     public BaseResponse<Void> createMiddleCategory(
             @RequestBody MiddleCategoryRequestVo middleCategoryRequestVo) {
 
-        log.info("middleCategoryRequestVo : {}", middleCategoryRequestVo);
         MiddleCategoryRequestDto middleCategoryRequestDto = MiddleCategoryRequestDto.builder()
                 .middleCategoryName(middleCategoryRequestVo.getMiddleCategoryName())
                 .middleCategoryDescription(middleCategoryRequestVo.getMiddleCategoryDescription())
@@ -118,7 +117,7 @@ public class CategoryController {
 
     @GetMapping("/middle-categories/{topCategoryName}")
     public BaseResponse<List<MiddleCategoryResponseVo>> getMiddleCategories(
-            @PathVariable String topCategoryName) {
+            @PathVariable("topCategoryName") String topCategoryName) {
 
         return new BaseResponse<>(
                 categoryService.getMiddleCategories(topCategoryName)
@@ -126,10 +125,9 @@ public class CategoryController {
                         .map(MiddleCategoryResponseDto::toVo)
                         .collect(Collectors.toList()));
     }
-
     @GetMapping("/bottom-categories/{middleCategoryCode}")
     public BaseResponse<List<BottomCategoryResponseVo>> getBottomCategories(
-            @PathVariable String middleCategoryCode) {
+            @PathVariable("middleCategoryCode") String middleCategoryCode) {
 
         return new BaseResponse<>(
                 categoryService.getBottomCategories(middleCategoryCode)

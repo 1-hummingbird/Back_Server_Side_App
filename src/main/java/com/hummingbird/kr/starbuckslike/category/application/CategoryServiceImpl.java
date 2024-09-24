@@ -15,6 +15,7 @@ import com.hummingbird.kr.starbuckslike.common.utils.CategoryCodeGenerator;
 import com.hummingbird.kr.starbuckslike.common.Exception.BaseException;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
 import lombok.RequiredArgsConstructor;
+import lombok.extern.java.Log;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -244,7 +245,6 @@ public class CategoryServiceImpl implements CategoryService{
         try {
             TopCategory topCategory = topCategoryRepository.findByCategoryName(topCategoryName)
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY));
-
             log.info("topCategory : {}", topCategory);
 
             List<MiddleCategoryResponseDto> middleCategoryResponseDtos = middleCategoryRepository
@@ -279,7 +279,6 @@ public class CategoryServiceImpl implements CategoryService{
                     .orElseThrow(
                     () -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY)
             );
-            log.info("middleCategory : {}", middleCategory);
             List<BottomCategory> bottomCategories = bottomCategoryRepository
                     .findByMiddleCategoryCategoryCode(middleCategory.getCategoryCode());
             log.info("bottomCategories : {}", bottomCategories);

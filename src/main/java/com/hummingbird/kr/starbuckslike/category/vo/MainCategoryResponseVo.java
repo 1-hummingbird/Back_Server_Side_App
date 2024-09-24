@@ -9,7 +9,8 @@ import lombok.*;
 public class MainCategoryResponseVo {
     private String categoryCode;
 
+    private String categoryName;
     private String imageUrl;
 
-    private String categoryName;
+
 }

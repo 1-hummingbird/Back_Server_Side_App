@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.product.application;
 
+import com.hummingbird.kr.starbuckslike.common.utils.CursorPage;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
 import org.springframework.data.domain.Page;
@@ -37,8 +38,11 @@ public interface ProductService {
      *  메인 상품 리스트 필터링[카테고리,가격] , 정렬 조건 적용
      */
     Page<ProductListResponseDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable);
-
     Slice<Long> searchProductIdsV1(ProductCondition productCondition, Pageable pageable);
+    CursorPage<Long> searchProductIdsCursorBase(ProductCondition productCondition, Long lastId,
+                                                Integer pageSize,
+                                                Integer page);
+
     // 상품아이디로 상품 이미지 단건 조회
     ProductListImageResponseDto findProductListImageResponseDtoById(Long productId);
     // 상품아이디로 상품 리스트 정보 단건 조회
