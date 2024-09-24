@@ -176,7 +176,7 @@ public class ProductController {
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
             summary = "최근 검색어 조회", description = "회원의 최근 검색어 조회", tags = {"최근검색어"})
-    @GetMapping("/search/list")
+    @PostMapping("/search/list")
     public BaseResponse<RecentSearchResponseVo> getRecentSearchV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail ){
         log.info(authUserDetail.getLoginId());
