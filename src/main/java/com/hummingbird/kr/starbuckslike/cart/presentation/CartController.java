@@ -52,6 +52,15 @@ public class CartController {
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
+    @Operation(summary = "장바구니 아이템 수량 업데이트", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
+    @PostMapping("/update-quantity")
+    public BaseResponse<Void> updateCartItemQuantityV1(
+            @RequestBody RequestCartQtyVo vo , @AuthenticationPrincipal AuthUserDetail authUserDetail){
+
+        cartService.updateCartItemQuantity(RequestCartQtyDto.toDto(vo) , authUserDetail.getUuid());
+        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+    }
+
     // 장바구니 단건 삭제 V1
     @Operation(summary = "장바구니 단건 삭제", description = "장바구니 id로 장바구니 단건 삭제", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
     @PostMapping("/delete")
