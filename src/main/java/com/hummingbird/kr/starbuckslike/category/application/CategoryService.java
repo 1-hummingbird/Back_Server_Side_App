@@ -40,5 +40,5 @@ public interface CategoryService {
     List<BottomCategoryResponseDto> getBottomCategories(String middleCategoryCode);
 
     // 대 카테고리의 자식 카테고리(중) 조회
-    List<ChildCategoryResponseDto> findChildCategoriesByTopCategory (String middleCategoryCode);
+    List<ChildCategoryResponseDto> findChildCategoriesByTopCategory (String categoryCode);
 }

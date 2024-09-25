@@ -19,6 +19,9 @@ public interface CartService {
     @Transactional
     public void adjustCartItemQuantity(RequestAdjustCartItemDto requestAdjustCartItemDto);
 
+    // 개선 : 장바구니 수량 업데이트
+    @Transactional
+    public void updateCartItemQuantity(RequestCartQtyDto requestCartQtyDto, String memberUid);
     // 장바구니 단건 삭제 (soft)
     @Transactional
     public void removeCartItem(RequestRemoveCartItemDto requestRemoveCartItemDto);

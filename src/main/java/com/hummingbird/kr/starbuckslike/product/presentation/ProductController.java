@@ -107,6 +107,15 @@ public class ProductController {
                 responseVoList
         );
     }
+    @Operation(summary = "상품 디테일 상품 wish 여부", description = "상품 id, 회원 uuid 로 상품 wish 여부 조회", tags = {"상품"})
+    @GetMapping("/detail/wish/{productId}")
+    public BaseResponse<ProductIsWishedResponseVo> findProductIsWishedResponseDtoByIdV1(
+            @PathVariable("productId") Long productId , @AuthenticationPrincipal AuthUserDetail authUserDetail){
+        String memberUid = (authUserDetail != null) ? authUserDetail.getUuid() : "";
+        return new BaseResponse<>(
+                productService.findProductIsWishedResponseDtoById(productId, memberUid).toVo()
+        );
+    }
     /**
      * 기획전에 해당하는 상품 리스트
      */

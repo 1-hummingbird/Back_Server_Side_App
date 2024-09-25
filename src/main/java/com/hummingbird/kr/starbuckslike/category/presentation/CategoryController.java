@@ -125,6 +125,7 @@ public class CategoryController {
                         .map(MiddleCategoryResponseDto::toVo)
                         .collect(Collectors.toList()));
     }
+
     @GetMapping("/bottom-categories/{middleCategoryCode}")
     public BaseResponse<List<BottomCategoryResponseVo>> getBottomCategories(
             @PathVariable("middleCategoryCode") String middleCategoryCode) {
