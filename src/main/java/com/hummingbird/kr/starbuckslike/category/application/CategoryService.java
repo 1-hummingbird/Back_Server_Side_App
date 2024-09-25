@@ -36,7 +36,7 @@ public interface CategoryService {
     BottomCategoryResponseDto getBottomCategoryByCategoryCode(String bottomCategoryCode);
 
     List<TopCategoryResponseDto> getTopCategories();
-    List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryName);
+    List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryCode); // name -> code
     List<BottomCategoryResponseDto> getBottomCategories(String middleCategoryCode);
 
     // 대 카테고리의 자식 카테고리(중) 조회

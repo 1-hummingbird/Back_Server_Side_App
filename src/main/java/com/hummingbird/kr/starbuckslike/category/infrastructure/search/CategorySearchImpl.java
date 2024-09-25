@@ -3,10 +3,7 @@ package com.hummingbird.kr.starbuckslike.category.infrastructure.search;
 import com.hummingbird.kr.starbuckslike.category.domain.QMiddleCategory;
 import com.hummingbird.kr.starbuckslike.category.domain.QTopCategory;
 import com.hummingbird.kr.starbuckslike.category.domain.TopCategory;
-import com.hummingbird.kr.starbuckslike.category.dto.out.ChildCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.MainCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.QChildCategoryResponseDto;
-import com.hummingbird.kr.starbuckslike.category.dto.out.QMainCategoryResponseDto;
+import com.hummingbird.kr.starbuckslike.category.dto.out.*;
 import com.hummingbird.kr.starbuckslike.category.infrastructure.TopCategoryRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import lombok.RequiredArgsConstructor;
@@ -46,6 +43,8 @@ public class CategorySearchImpl implements  CategorySearch{
                 .where(middleCategory.topCategory.id.eq(parent_id))
                 .fetch();
     }
+
+
 
 
 }

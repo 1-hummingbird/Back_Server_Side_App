@@ -1,14 +1,15 @@
 package com.hummingbird.kr.starbuckslike.category.dto.out;
 
 import com.hummingbird.kr.starbuckslike.category.vo.MiddleCategoryResponseVo;
+import com.querydsl.core.annotations.QueryProjection;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 
+
 @Getter
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
 public class MiddleCategoryResponseDto {
 
@@ -25,5 +26,12 @@ public class MiddleCategoryResponseDto {
                 .topCategoryCode(topCategoryCode)
                 .build();
     }
-
+    @QueryProjection
+    public MiddleCategoryResponseDto(String middleCategoryName, String middleCategoryDescription,
+                                     String middleCategoryCode, String topCategoryCode) {
+        this.middleCategoryName = middleCategoryName;
+        this.middleCategoryDescription = middleCategoryDescription;
+        this.middleCategoryCode = middleCategoryCode;
+        this.topCategoryCode = topCategoryCode;
+    }
 }

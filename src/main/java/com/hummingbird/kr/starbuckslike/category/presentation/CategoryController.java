@@ -115,12 +115,12 @@ public class CategoryController {
                         .collect(Collectors.toList()));
     }
 
-    @GetMapping("/middle-categories/{topCategoryName}")
+    @GetMapping("/middle-categories/{topCategoryCode}")
     public BaseResponse<List<MiddleCategoryResponseVo>> getMiddleCategories(
-            @PathVariable("topCategoryName") String topCategoryName) {
+            @PathVariable("topCategoryCode") String topCategoryCode) {
 
         return new BaseResponse<>(
-                categoryService.getMiddleCategories(topCategoryName)
+                categoryService.getMiddleCategories(topCategoryCode)
                         .stream()
                         .map(MiddleCategoryResponseDto::toVo)
                         .collect(Collectors.toList()));
