@@ -12,7 +12,6 @@ import org.hibernate.annotations.DynamicUpdate;
 @Getter
 @NoArgsConstructor
 @DynamicUpdate
-@Table(name = "ShippingAddress")
 public class ShippingAddress {
 
     @Id
