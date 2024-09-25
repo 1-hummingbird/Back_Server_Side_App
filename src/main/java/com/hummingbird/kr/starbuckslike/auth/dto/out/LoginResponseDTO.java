@@ -10,9 +10,9 @@ public class LoginResponseDTO {
     private String accessToken;
     //    private String refreshToken;
     private String name;
-    private String uuid;
+    private String nickName;
 
     public LoginResponseVO toVO(){
-        return new LoginResponseVO(this.accessToken, this.name, this.uuid);
+        return new LoginResponseVO(this.accessToken, this.name, this.nickName);
     }
 }

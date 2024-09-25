@@ -105,7 +105,7 @@ public class AuthServiceImpl implements AuthService{
         {
             Authentication authentication = authenticate(member, loginRequestDTO.getPassword());
             String token = createToken(authentication);
-            return new LoginResponseDTO(token,member.getName(),member.getMemberUID());
+            return new LoginResponseDTO(token,member.getName(),member.getNickname());
 
         } catch (Exception e) {
             throw new BaseException(BaseResponseStatus.INTERNAL_SERVER_ERROR);
