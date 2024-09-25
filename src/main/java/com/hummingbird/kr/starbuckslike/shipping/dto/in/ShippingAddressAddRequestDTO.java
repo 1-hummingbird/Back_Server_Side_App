@@ -17,6 +17,7 @@ public class ShippingAddressAddRequestDTO {
     private String address;
     private String phone;
     private String memo;
+    private Boolean willDefault;
 
     public ShippingAddress toEntity() {
         return ShippingAddress.builder()

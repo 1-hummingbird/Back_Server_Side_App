@@ -4,6 +4,7 @@ package com.hummingbird.kr.starbuckslike.product.presentation;
 import com.hummingbird.kr.starbuckslike.auth.domain.AuthUserDetail;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponse;
 import com.hummingbird.kr.starbuckslike.common.entity.BaseResponseStatus;
+import com.hummingbird.kr.starbuckslike.common.utils.CursorPage;
 import com.hummingbird.kr.starbuckslike.product.application.ProductService;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
@@ -118,7 +119,6 @@ public class ProductController {
                 productService.findProductIdListByExhibitionId(exhibitionId)
         );
     }
-
     /**
      *  메인 상품 리스트 필터링[카테고리,가격] , 정렬 조건 적용
      */
@@ -135,6 +135,19 @@ public class ProductController {
                 productIds
         );
     }
+//    @Operation(summary = "상품 리스트 조회 [필터링, 정렬] Cursor",
+//            description = "필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격] 해당 상품들의 id만 가져옴", tags = {"상품"})
+//    @GetMapping("/list2")
+//    public BaseResponse<CursorPage<Long>> searchProductIdsCursorBaseV1(
+//            ProductCondition productCondition,
+//            @RequestParam( value = "lastId", required = false ) Long lastId,
+//            @RequestParam( value = "pageSize", required = false ) Integer pageSize,
+//            @RequestParam( value = "page", required = false ) Integer page
+//    ){
+//        return new BaseResponse<>(
+//                productService.searchProductIdsCursorBase(productCondition, lastId, pageSize, page)
+//        );
+//    }
 
     /**
      *  상품 위시리스트 관련

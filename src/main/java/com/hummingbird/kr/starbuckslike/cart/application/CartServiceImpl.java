@@ -170,8 +170,8 @@ public class CartServiceImpl implements CartService{
     }
 
     @Override
-    public ResponseCartItemDto findCartItemDtoById(Long cartId) {
-        return cartSearch.findCartItemDtoById(cartId);
+    public ResponseCartItemDto findCartItemDtoById(RequestCartInfoDto requestCartInfoDto) {
+        return cartSearch.findCartItemDtoById(requestCartInfoDto.getCartId());
     }
 
 }

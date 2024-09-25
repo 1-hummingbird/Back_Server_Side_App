@@ -114,9 +114,9 @@ public class CartController {
     // 장바구니 옵션상품 정보(옵션가격,수량,옵션명 등등) 조회
     @Operation(summary = "장바구니 옵션정보 조회", description = "옵션상품 정보(옵션가격,수량,옵션명 등등) 조회", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
     @PostMapping("/item/info")
-    public BaseResponse<ResponseCartItemVo> findCartItemDtoByIdV1(@RequestBody Long cartId){
+    public BaseResponse<ResponseCartItemVo> findCartItemDtoByIdV1(@RequestBody RequestCartInfoVo vo){
         return new BaseResponse<>(
-                cartService.findCartItemDtoById(cartId).toVo()
+                cartService.findCartItemDtoById(RequestCartInfoDto.from(vo)).toVo()
         );
     }
 
