@@ -131,9 +131,7 @@ import java.util.Map;
 /**
  * group by O
  */
-// 1만건 : 0.2초, 0.08초, 0.08초
-// 5만건 : 0.2초, 0.1초
-// 100만건(상품3개) : 0.8초, 1.07초 , 0.78초, 0.7초
+// 4만건 기준 523ms
 @Configuration
 @RequiredArgsConstructor
 @Log4j2

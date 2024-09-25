@@ -48,7 +48,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         authorizeRequests -> authorizeRequests
-                               /* .requestMatchers(
+                                .requestMatchers(
                                         "/api/v1/product/detail/**",
                                         "/api/v1/product/images/**",
                                         "/api/v1/product/info/**",
@@ -65,17 +65,15 @@ public class SecurityConfig {
 
                                         "/api/v1/review/**",
                                         "/api/v1/purchase/**",
-                                        "/api/v1/product/list2/**",
 
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**",
                                         "/error",
                                         "/api/v1/batch/**"
                                 )
-                                .permitAll() */
+                                .permitAll()
                                 .anyRequest()
-				.permitAll()
-                                //.authenticated()
+                                .authenticated()
                 )
                 .sessionManagement(
                         sessionManagement -> sessionManagement

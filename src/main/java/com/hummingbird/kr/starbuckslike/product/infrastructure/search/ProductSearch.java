@@ -33,7 +33,6 @@ public interface ProductSearch {
      CursorPage<Long> searchProductIdsCursorBase(ProductCondition productCondition,  Long lastId,
                                                                                      Integer pageSize,
                                                                                      Integer page);
-
      // 상품아이디로 상품 리스트 이미지 단건 조회
      ProductListImageResponseDto findProductListImageResponseDtoById(Long productId);
      // 상품아이디로 상품 리스트 정보 단건 조회
@@ -62,5 +61,7 @@ public interface ProductSearch {
     // 상품의 옵션 조회
     List<ProductOptionResponseDto> findProductOptionDtoById(Long productId);
 
+    // 상품 좋아요 여부 조회
+    ProductIsWishedResponseDto findProductIsWishedResponseDtoById(Long productId, String memberUid);
 
 }

@@ -46,8 +46,6 @@ import static com.hummingbird.kr.starbuckslike.product.domain.QWish.wish;
 
 /**
  * 상품 조회  (querydsl 등 조회 쿼리, JpaRepository와 따로 두었음)
- * 지금은 엔티티로 받는데 나중에 DTO나 VO로 받는 부분 추가해야 함
- *
  * @author 허정현
  */
 @Repository
@@ -175,11 +173,10 @@ public class ProductSearchImpl implements ProductSearch {
                                                                                            Integer pageSize,
                                                                                            Integer page)
     {
-
+        // todo 커서 기반 페이지네이션 완성할것. (작업중)
 //        // 페이지와 페이지 크기 기본값 설정
         int currentPage = Optional.ofNullable(page).orElse(DEFAULT_PAGE_NUMBER);
         int currentPageSize = Optional.ofNullable(pageSize).orElse(DEFAULT_PAGE_SIZE);
-//        // todo lastId 커서 조건 추가
 //        List<Long> content = queryFactory
 //                .select(categoryProductList.product.id)
 //                .from(categoryProductList)
@@ -398,17 +395,30 @@ public class ProductSearchImpl implements ProductSearch {
                 .fetch();
     }
 
+    @Override
+    public ProductIsWishedResponseDto findProductIsWishedResponseDtoById(Long productId, String memberUid) {
+        // 로그인 했으면 wish 테이블에 회원이 해당상품 좋아요 했는지 체크
+        if(memberUid == null || memberUid.isEmpty()){
+            return new ProductIsWishedResponseDto(false); // 비회원은 위시리스트 불가
+        }
+        else {
+            Integer res = queryFactory.selectOne()
+                    .from(wish)
+                    .where(
+                            wish.memberUID.eq(memberUid)
+                            .and(wish.productId.eq(productId))
+                            .and(wish.isWished.isTrue())
+                    ).fetchFirst();
+            log.info("res : "+res);
+            return new ProductIsWishedResponseDto(res != null);
+        }
+    }
+
 
     /**
      * 상품 조회의 모든 검색조건
      */
 
-//    private BooleanExpression lastIdCondition(Long lastId) {
-//        // Optional을 사용하여 lastId가 null이 아닐 경우에만 조건을 추가
-//        return Optional.ofNullable(lastId)
-//                .map(categoryProductList.product.id::lt)
-//                .orElse(null); // lastId가 null이면 조건 무시
-//    }
     // new 상품 조건
     private final BooleanExpression isNewCondition = product.createdAt.after(LocalDateTime.now().minusDays(30));
 

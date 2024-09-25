@@ -59,6 +59,11 @@ public class ProductServiceImpl implements  ProductService{
     }
 
     @Override
+    public ProductIsWishedResponseDto findProductIsWishedResponseDtoById(Long productId, String memberUid) {
+        return productSearch.findProductIsWishedResponseDtoById(productId,memberUid);
+    }
+
+    @Override
     public List<Long> findProductIdListByExhibitionId(Long exhibitionId) {
         return productSearch.findProductIdListByExhibitionId(exhibitionId);
     }
