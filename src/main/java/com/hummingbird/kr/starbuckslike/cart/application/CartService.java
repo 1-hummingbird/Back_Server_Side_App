@@ -48,7 +48,7 @@ public interface CartService {
     ResponseCartItemImageDto findCartMainImageDtoById(Long cartId);
 
     // 장바구니 옵션상품 정보(옵션가격,수량,옵션명 등등) 조회
-    ResponseCartItemDto findCartItemDtoById(Long cartId);
+    ResponseCartItemDto findCartItemDtoById(RequestCartInfoDto requestCartInfoDto);
 
 
 
