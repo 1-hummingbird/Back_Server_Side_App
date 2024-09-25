@@ -34,23 +34,23 @@ public class CartController {
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
-    // 장바구니 아이템 (증가 또는 감소) V1
-    @Operation(summary = "장바구니 아이템 수량 조정", description = "증가 또는 감소", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-    @PostMapping("/adjust-quantity")
-    public BaseResponse<Void> adjustCartItemQuantityV1(
-            @Parameter(name = "CartAdjustType",
-                    description = "cartAdjustType : INCREASE(증가), DECREASE(감소)", required = true)
-            @RequestBody RequestAdjustCartItemVo requestAdjustCartItemVo){
-
-        RequestAdjustCartItemDto requestAdjustCartItemDto =
-                                            RequestAdjustCartItemDto.builder()
-                                                    .cartId(requestAdjustCartItemVo.getCartId())
-                                                    .cartAdjustType(requestAdjustCartItemVo.getCartAdjustType())
-                                                    .build();
-        cartService.adjustCartItemQuantity(requestAdjustCartItemDto);
-
-        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
-    }
+//    // 장바구니 아이템 (증가 또는 감소) V1
+//    @Operation(summary = "장바구니 아이템 수량 조정", description = "증가 또는 감소", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
+//    @PostMapping("/adjust-quantity")
+//    public BaseResponse<Void> adjustCartItemQuantityV1(
+//            @Parameter(name = "CartAdjustType",
+//                    description = "cartAdjustType : INCREASE(증가), DECREASE(감소)", required = true)
+//            @RequestBody RequestAdjustCartItemVo requestAdjustCartItemVo){
+//
+//        RequestAdjustCartItemDto requestAdjustCartItemDto =
+//                                            RequestAdjustCartItemDto.builder()
+//                                                    .cartId(requestAdjustCartItemVo.getCartId())
+//                                                    .cartAdjustType(requestAdjustCartItemVo.getCartAdjustType())
+//                                                    .build();
+//        cartService.adjustCartItemQuantity(requestAdjustCartItemDto);
+//
+//        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
+//    }
     @Operation(summary = "장바구니 아이템 수량 업데이트", description = "", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
     @PostMapping("/adjust-quantity")
     public BaseResponse<Void> updateCartItemQuantityV1(
@@ -120,8 +120,10 @@ public class CartController {
 
     // 장바구니 옵션상품 정보(옵션가격,수량,옵션명 등등) 조회
     @Operation(summary = "장바구니 옵션정보 조회", description = "옵션상품 정보(옵션가격,수량,옵션명 등등) 조회", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-    @PostMapping("/item/info")
-    public BaseResponse<ResponseCartItemVo> findCartItemDtoByIdV1(@RequestBody RequestCartInfoVo vo){
+    @GetMapping("/item/info/{cartId}")
+    public BaseResponse<ResponseCartItemVo> findCartItemDtoByIdV1(@PathVariable("cartId") Long cartId, @AuthenticationPrincipal AuthUserDetail authUserDetail){
+        RequestCartInfoVo vo = new RequestCartInfoVo();
+        vo.setCartId(cartId);
         return new BaseResponse<>(
                 cartService.findCartItemDtoById(RequestCartInfoDto.from(vo)).toVo()
         );
