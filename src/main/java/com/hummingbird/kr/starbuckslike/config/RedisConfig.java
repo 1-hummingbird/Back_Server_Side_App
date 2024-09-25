@@ -36,6 +36,7 @@ public class RedisConfig  {
         redisConfiguration.setHostName(host);
         redisConfiguration.setPort(port);
         return new LettuceConnectionFactory(redisConfiguration);
+
     }
 
     @Bean

@@ -17,6 +17,7 @@ import lombok.extern.log4j.Log4j2;
 import org.springframework.stereotype.Service;
 
 import java.util.List;
+import java.util.Optional;
 
 @Service
 @Log4j2
@@ -118,6 +119,13 @@ public class CartServiceImpl implements CartService{
             throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);
         }
         cartRepository.save(cart); // 변경된 상태 저장
+    }
+
+    @Override
+    public void updateCartItemQuantity(RequestCartQtyDto dto, String memberUid) {
+        // todo 유저가 남의 cartId 넣는 경우 보완해야 함
+        Cart cart = cartRepository.findById(dto.getCartId()).orElseThrow();
+        cartRepository.save(dto.toCart(cart));
     }
 
     @Override

@@ -32,7 +32,7 @@ public class Review extends BaseEntity {
     private String nickname;
 
     @Comment("회원 UUID")
-    @Column(nullable = false, length = 40)
+    @Column(nullable = false, length = 50)
     private String memberUID;
 
     @Comment("상품 id")

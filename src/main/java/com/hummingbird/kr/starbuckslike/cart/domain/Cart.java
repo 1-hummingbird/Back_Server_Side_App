@@ -17,6 +17,7 @@ import static jakarta.persistence.FetchType.LAZY;
 @AllArgsConstructor
 @NoArgsConstructor(access = AccessLevel.PROTECTED)
 @DynamicUpdate //
+@Builder
 @Table(name = "cart")
 public class Cart extends BaseEntity {
     @Id
@@ -56,15 +57,16 @@ public class Cart extends BaseEntity {
         this.isChecked = !this.isChecked;
     }
 
-    @Builder
-    public Cart(String memberUID, Long productId, ProductOption productOption, Integer qty, String inputData,
-                Boolean isChecked, Boolean isDeleted) {
-        this.memberUID = memberUID;
-        this.productId = productId;
-        this.productOption = productOption;
-        this.qty = qty;
-        this.inputData = inputData;
-        this.isChecked = isChecked;
-        this.isDeleted = isDeleted;
-    }
+//    @Builder
+//    public Cart(Long id, String memberUID, Long productId, ProductOption productOption, Integer qty, String inputData,
+//                Boolean isChecked, Boolean isDeleted) {
+//        this.id = id;
+//        this.memberUID = memberUID;
+//        this.productId = productId;
+//        this.productOption = productOption;
+//        this.qty = qty;
+//        this.inputData = inputData;
+//        this.isChecked = isChecked;
+//        this.isDeleted = isDeleted;
+//    }
 }
