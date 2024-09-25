@@ -73,6 +73,15 @@ public class AuthServiceImpl implements AuthService{
         //if (redisService.getAuthChallenge(phone).equals("Success") &&
         //        redisService.getAuthChallenge(email).equals("Success")){
         if (redisService.getAuthChallenge(email).equals("Success")){
+            if (authRepository.findByLoginID(registerRequestDTO.getLoginID()).isPresent()){
+                throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+            }
+            if (authRepository.findByEmail(email).isPresent()){
+                throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+            }
+            if (authRepository.findByPhone(phone).isPresent()){
+                throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
+            }
             try {
                 authRepository.save(registerRequestDTO.toEntity(passwordEncoder));
            } catch (Exception e) {
