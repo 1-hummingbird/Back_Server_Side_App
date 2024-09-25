@@ -33,7 +33,7 @@ public class RequestCartQtyDto {
                 .memberUID(cart.getMemberUID())
                 .productId(cart.getProductId())
                 .productOption(cart.getProductOption())
-                .qty(cart.getQty())
+                .qty(qty)
                 .inputData(cart.getInputData())
                 .isChecked(cart.getIsChecked())
                 .isDeleted(cart.getIsDeleted())

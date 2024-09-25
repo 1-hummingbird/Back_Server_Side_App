@@ -33,6 +33,7 @@ public class CategoryServiceImpl implements CategoryService{
     private final BottomCategoryRepository bottomCategoryRepository;
     private final CategorySearch categorySearch;
 
+
     private static final int MAX_CODE_TRIES = 5;  // 최대 재시도 횟수
 
     @Transactional(readOnly = true)
@@ -240,17 +241,17 @@ public class CategoryServiceImpl implements CategoryService{
 
     @Transactional(readOnly = true)
     @Override
-    public List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryName) {
+    public List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryCode) {
 
         try {
 //            TopCategory topCategory = topCategoryRepository.findByCategoryName(topCategoryName)
 //                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY));
-            TopCategory topCategory = topCategoryRepository.findByCategoryCode(topCategoryName)
+            TopCategory topCategory = topCategoryRepository.findByCategoryCode(topCategoryCode)
                     .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY));
             log.info("topCategory : {}", topCategory);
 
             List<MiddleCategoryResponseDto> middleCategoryResponseDtos = middleCategoryRepository
-                    .findByTopCategoryCategoryName(topCategoryName)
+                    .findByTopCategoryCategoryCode(topCategoryCode)
                     .stream()
                     .map(middleCategory -> MiddleCategoryResponseDto.builder()
                             .middleCategoryName(middleCategory.getCategoryName())
