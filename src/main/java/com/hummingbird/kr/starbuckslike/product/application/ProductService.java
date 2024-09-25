@@ -25,7 +25,8 @@ public interface ProductService {
     List<ProductImageResponseDto> findProductImageDtoById(Long productId);
     // 상품에 포함된 옵션 정보 조회
     List<ProductOptionResponseDto> findProductOptionDtoById(Long productId);
-
+    // 상품 좋아요 여부 조회
+    ProductIsWishedResponseDto findProductIsWishedResponseDtoById(Long productId, String memberUid);
     /**
      *  기획전 상품 리스트
      */

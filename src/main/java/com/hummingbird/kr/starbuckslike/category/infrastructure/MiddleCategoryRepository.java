@@ -9,7 +9,7 @@ import java.util.Optional;
 public interface MiddleCategoryRepository extends JpaRepository<MiddleCategory, Integer> {
 
     List<MiddleCategory> findByTopCategoryCategoryCode(String topCategoryCode);
-    List<MiddleCategory> findByTopCategoryCategoryName(String topCategoryName);
+    List<MiddleCategory> findByTopCategoryCategoryName(String topCategoryCode);
     Optional<MiddleCategory> findByCategoryCode(String categoryCode);
     boolean existsByCategoryCode(String categoryCode);
     boolean existsByCategoryName(String categoryName);
