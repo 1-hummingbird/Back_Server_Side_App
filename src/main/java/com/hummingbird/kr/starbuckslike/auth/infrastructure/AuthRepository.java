@@ -19,6 +19,13 @@ public interface AuthRepository extends JpaRepository<Member, Long> {
   @Query("SELECT m FROM Member m WHERE m.email = :email")
   Optional<Member> findByEmail(@Param("email") String email);
 
+  Boolean existsByPhone(String phone);
+
+  Boolean existsByEmail(String email);
+
+  Boolean existsByLoginID(String loginID);
+
+
   @Query("SELECT m FROM Member m WHERE m.phone = :phone")
   Optional<Member> findByPhone(@Param("phone") String phone);
 

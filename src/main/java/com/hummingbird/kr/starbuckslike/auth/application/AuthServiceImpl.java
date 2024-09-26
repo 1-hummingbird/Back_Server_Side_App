@@ -185,64 +185,42 @@ public class AuthServiceImpl implements AuthService{
         else{throw new BaseException(BaseResponseStatus.DISALLOWED_ACTION);}
     }
 
-    // todo: oauth register and login need to check kakao token vaildation and register need to prevent duplicated user
     @Override
     public void oauthRegister(OauthRegisterRequestDTO oauthRegisterRequestDTO) {
         log.info("oauthRegisterRequestDTO : {}", oauthRegisterRequestDTO);
-        if (OauthTokenCheck(oauthRegisterRequestDTO.getOauthToken())){
             try {
                 OauthInfo oauthInfo = oauthRegisterRequestDTO.toEntity();
                 oauthInfoRepository.save(oauthInfo);
             } catch (Exception e) {
                 throw new BaseException(BaseResponseStatus.DUPLICATED_USER);
             }
-        }
-        else{throw new BaseException(BaseResponseStatus.TOKEN_NOT_VALID);}
-
     }
 
     @Override
     public LoginResponseDTO oauthLogin(OauthLoginRequestDTO oauthLoginRequestDTO) {
-        OauthInfo oauthInfo = oauthInfoRepository.findByOauthIDAndOauthType(oauthLoginRequestDTO.getOauthID(), oauthLoginRequestDTO.getOauthType()).orElseThrow(
+        OauthInfo oauthInfo = oauthInfoRepository.findByOauthIDAndOauthType(oauthLoginRequestDTO.getOauthID(),
+                oauthLoginRequestDTO.getOauthType()).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
         );
         Member member = authRepository.findByMemberUID(oauthInfo.getMemberUID()).orElseThrow(
                 () -> new BaseException(BaseResponseStatus.NO_EXIST_USER)
         );
-        if (OauthTokenCheck(oauthLoginRequestDTO.getOauthToken())){
-            String token = createToken(oAuthAuthenticate(member.getMemberUID()));
-            return new LoginResponseDTO(token,member.getName(),member.getMemberUID());}
-        else{throw new BaseException(BaseResponseStatus.TOKEN_NOT_VALID);}
-    }
+        String token = createToken(oAuthAuthenticate(member.getMemberUID()));
+        return new LoginResponseDTO(token,member.getName(),member.getMemberUID());}
 
     @Override
     public CheckEmailResponseDTO checkEmail(CheckEmailRequestDTO checkEmailRequestDTO) {
-        Optional<Member> member = authRepository.findByEmail(checkEmailRequestDTO.getEmail());
-        if (member.isPresent()) {
-            return new CheckEmailResponseDTO(false);
-        } else {
-            return new CheckEmailResponseDTO(true);
-        }
+        return new CheckEmailResponseDTO(!authRepository.existsByEmail(checkEmailRequestDTO.getEmail()));
     }
 
     @Override
     public CheckPhoneResponseDTO checkPhone(CheckPhoneRequestDTO checkPhoneRequestDTO) {
-        Optional<Member> member = authRepository.findByPhone(checkPhoneRequestDTO.getPhone());
-        if (member.isPresent()) {
-            return new CheckPhoneResponseDTO(false);
-        } else {
-            return new CheckPhoneResponseDTO(true);
-        }
+        return new CheckPhoneResponseDTO(!authRepository.existsByPhone(checkPhoneRequestDTO.getPhone()));
     }
 
     @Override
     public CheckLoginIDResponseDTO checkLoginID(CheckLoginIDRequestDTO checkLoginIDRequestDTO) {
-        Optional<Member> member = authRepository.findByLoginID(checkLoginIDRequestDTO.getLoginID());
-        if (member.isPresent()) {
-            return new CheckLoginIDResponseDTO(false);
-        } else {
-            return new CheckLoginIDResponseDTO(true);
-        }
+        return new CheckLoginIDResponseDTO(!authRepository.existsByLoginID(checkLoginIDRequestDTO.getLoginID()));
     }
 
     @Override
@@ -292,11 +270,6 @@ public class AuthServiceImpl implements AuthService{
                         null
                 )
         );
-    }
-
-    private boolean OauthTokenCheck(String token){
-
-        return true;
     }
 
 }
