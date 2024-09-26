@@ -8,7 +8,7 @@ import com.hummingbird.kr.starbuckslike.shipping.vo.in.*;
 import com.hummingbird.kr.starbuckslike.shipping.vo.out.*;
 import com.hummingbird.kr.starbuckslike.shipping.dto.in.*;
 import com.hummingbird.kr.starbuckslike.shipping.dto.out.*;
-
+import com.hummingbird.kr.starbuckslike.shipping.dto.ShippingAddressDTO;
 import lombok.extern.slf4j.Slf4j;
 import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
@@ -19,6 +19,8 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
+
+import java.util.List;
 
 @RestController
 @Slf4j
@@ -66,27 +68,29 @@ public class ShippingAddressController {
     @Operation(security = @SecurityRequirement(name = "Bearer Auth"),
             summary = "배송지 목록",
             description = "배송지 목록을 조회합니다.", tags = {"Shipping"})
-    public BaseResponse<ShippingAddressListResponseVO> list(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
-        ShippingAddressListResponseDTO responseDTO = shippingService.list(authUserDetail.getUsername());
-        return new BaseResponse<>(new ShippingAddressListResponseVO(responseDTO));
+    public BaseResponse<List<ShippingAddressDTO>> shippingList(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        List<ShippingAddressDTO> responseDTO = shippingService.shippingList(authUserDetail.getUsername());
+        return new BaseResponse<>(responseDTO);
     }
 
     @PostMapping("/set-default")
     @Operation(security = @SecurityRequirement(name = "Bearer Auth"),
             summary = "기본 배송지 설정",
             description = "기본 배송지를 설정합니다.", tags = {"Shipping"})
-    public BaseResponse<Void> setDefault(@RequestBody ShippingAddressSetDefaultRequestVO requestVO, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
-        ShippingAddressSetDefaultRequestDTO requestDTO = requestVO.toDTO(authUserDetail.getUsername());
-        shippingService.setDefault(requestDTO);
+    public BaseResponse<Void> setDefault(@RequestBody ShippingAddressSetDefaultRequestVO requestVO,
+            @AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        shippingService.setDefault(requestVO.toDTO(authUserDetail.getUsername()));
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
-    @PostMapping("/get-default")
+    @PostMapping("/get-detail")
     @Operation(security = @SecurityRequirement(name = "Bearer Auth"),
-            summary = "기본 배송지 조회",
-            description = "기본 배송지를 조회합니다.", tags = {"Shipping"})
-    public BaseResponse<ShippingAddressGetDefaultResponseVO> getDefault(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
-        ShippingAddressGetDefaultResponseDTO responseDTO = shippingService.getDefault(authUserDetail.getUsername());
+            summary = "배송지 조회",
+            description = "배송지 정보를 조회합니다.", tags = {"Shipping"})
+    public BaseResponse<ShippingAddressGetDetailResponseVO> getDetail(@RequestBody ShippingAddressGetDetailRequestVO requestVO,
+             @AuthenticationPrincipal AuthUserDetail authUserDetail) {
+        ShippingAddressGetDetailResponseDTO responseDTO = shippingService
+                .getDetail(ShippingAddressGetDetailRequestDTO.from(requestVO, authUserDetail.getUsername()));
         return new BaseResponse<>(responseDTO.toVO());
     }
 
@@ -95,7 +99,7 @@ public class ShippingAddressController {
                summary = "기본 배송지 ID 확인",
             description = "기본 배송지의 id를 가져옵니다", tags = {"Shipping"})
     public BaseResponse<ShippingDefaultIDResponseVO> defaultID(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
-        return new BaseResponse<>(shippingService.defaultID(authUserDetail.getUsername()).toVO());
+        return new BaseResponse<>(shippingService.getDefaultID(authUserDetail.getUsername()).toVO());
     }
 
     
