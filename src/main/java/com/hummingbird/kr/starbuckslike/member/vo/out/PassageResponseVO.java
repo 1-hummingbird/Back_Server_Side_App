@@ -4,11 +4,9 @@ import lombok.Getter;
 
 @Getter
 public class PassageResponseVO {
-    private String memberUID;
     private long dateDiff;
 
-    public PassageResponseVO(String memberUID, long dateDiff) {
-        this.memberUID = memberUID;
+    public PassageResponseVO(long dateDiff) {
         this.dateDiff = dateDiff;
     }
 }

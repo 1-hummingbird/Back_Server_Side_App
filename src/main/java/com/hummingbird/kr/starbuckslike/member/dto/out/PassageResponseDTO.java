@@ -5,15 +5,13 @@ import lombok.Getter;
 
 @Getter
 public class PassageResponseDTO {
-    private String memberUID;
     private long dateDiff;
 
-    public PassageResponseDTO(String memberUID, Long dateDiff) {
-        this.memberUID = memberUID;
+    public PassageResponseDTO(Long dateDiff) {
         this.dateDiff = dateDiff;
     }
 
     public PassageResponseVO toVO() {
-        return new PassageResponseVO(memberUID, dateDiff);
+        return new PassageResponseVO(dateDiff);
     }
 }

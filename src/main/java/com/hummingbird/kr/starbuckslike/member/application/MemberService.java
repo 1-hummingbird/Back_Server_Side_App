@@ -7,7 +7,7 @@ public interface MemberService {
 
     /**
      * 회원 가입 후 경과 기간 확인
-     * @param String memberUID
+     * @param memberUID
      * @return DTO that has memberUID and DateDiff
      */
     PassageResponseDTO passage(String memberUID);
@@ -20,17 +20,10 @@ public interface MemberService {
 
     /**
      * 회원 정보 조회
-     * @param String memberUID
+     * @param memberUID
      * @return DTO that has memberUID and MemberInfo
      */
     MemberInfoResponseDTO info(String memberUID);
 
-    /**
-    *  관리자용) 회원 조회
-    * @param requestDTO
-    * @return DTO that has list of MemberInfo
-    */  
-    FindMemberResponseDTO findMember(FindMemberRequestDTO requestDTO);
 
-    
 }
