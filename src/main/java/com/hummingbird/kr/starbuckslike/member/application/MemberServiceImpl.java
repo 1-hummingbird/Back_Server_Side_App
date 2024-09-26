@@ -28,7 +28,7 @@ public class MemberServiceImpl implements MemberService {
         LocalDateTime createdAt = member.getCreatedAt();
         LocalDateTime currentTime = LocalDateTime.now();
         long daysBetween = ChronoUnit.DAYS.between(createdAt, currentTime);
-        return new PassageResponseDTO(member.getMemberUID(), daysBetween);
+        return new PassageResponseDTO(daysBetween);
     }
 
     @Override
@@ -52,10 +52,5 @@ public class MemberServiceImpl implements MemberService {
         MemberInfo memberInfo = new MemberInfo(memberRepository.findByMemberUID(memberUID)
             .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_USER)));
         return new MemberInfoResponseDTO(memberInfo);
-    }
-
-    @Override
-    public FindMemberResponseDTO findMember(FindMemberRequestDTO requestDTO) {
-        return null;
     }
 }
