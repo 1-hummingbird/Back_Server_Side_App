@@ -254,12 +254,14 @@ public class AuthServiceImpl implements AuthService{
 
     private Authentication authenticate(Member member, String inputPassword) {
         AuthUserDetail authUserDetail = new AuthUserDetail(member);
-        return authenticationManager.authenticate(
-                new UsernamePasswordAuthenticationToken(
-                        authUserDetail.getUsername(),
-                        inputPassword
-                )
-        );
+        if (passwordEncoder.matches(inputPassword, authUserDetail.getPassword()))
+        {
+            return authenticationManager.authenticate(
+                    new UsernamePasswordAuthenticationToken(
+                            authUserDetail.getUsername(),null)
+            );
+        } else {throw new BaseException(BaseResponseStatus.FAILED_TO_LOGIN);}
+
     }
 
     private Authentication oAuthAuthenticate(String memberUID) {
