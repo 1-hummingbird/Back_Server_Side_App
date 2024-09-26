@@ -34,7 +34,7 @@ public record BaseResponse<T>(HttpStatusCode httpStatus, Boolean isSuccess, Stri
      * @param status
      */
     public BaseResponse(BaseResponseStatus status) {
-        this(status.getHttpStatusCode(), false, status.getMessage(), status.getCode(), null);
+        this(status.getHttpStatusCode(), status.isSuccess(), status.getMessage(), status.getCode(), null);
     }
 
 }
