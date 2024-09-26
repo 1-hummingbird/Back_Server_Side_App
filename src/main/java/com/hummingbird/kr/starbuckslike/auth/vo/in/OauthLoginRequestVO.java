@@ -9,13 +9,11 @@ public class OauthLoginRequestVO {
 
     private String oauthID;
     private String oauthType;
-    private String oauthToken;
 
     public OauthLoginRequestDTO toDTO() {
         return OauthLoginRequestDTO.builder()
                 .oauthID(this.oauthID)
                 .oauthType(this.oauthType)
-                .oauthToken(this.oauthToken)
                 .build();
     }
 }
