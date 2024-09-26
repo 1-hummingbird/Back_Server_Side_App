@@ -1,7 +1,7 @@
 package com.hummingbird.kr.starbuckslike.shipping.dto.in;
 
 import lombok.Getter;
-import com.hummingbird.kr.starbuckslike.shipping.vo.in.ShippingAddressGedDetailRequestVO;
+import com.hummingbird.kr.starbuckslike.shipping.vo.in.ShippingAddressGetDetailRequestVO;
 
 @Getter
 public class ShippingAddressGetDetailRequestDTO {
@@ -13,7 +13,7 @@ public class ShippingAddressGetDetailRequestDTO {
         this.memberUID = memberUID;
     }
 
-    public static ShippingAddressGetDetailRequestDTO from(ShippingAddressGedDetailRequestVO requestVO, String memberUID) {
+    public static ShippingAddressGetDetailRequestDTO from(ShippingAddressGetDetailRequestVO requestVO, String memberUID) {
         return new ShippingAddressGetDetailRequestDTO(requestVO.getId(), memberUID);
     }
 }

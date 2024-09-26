@@ -9,6 +9,6 @@ import lombok.AllArgsConstructor;
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
-public class ShippingAddressGedDetailRequestVO {
+public class ShippingAddressGetDetailRequestVO {
     private Long id;
 }
