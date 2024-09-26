@@ -25,14 +25,9 @@ public interface ProductSearch {
      * 필터링 조건[카테고리,가격,기획전] , 정렬 조건(최신순, 높은 가격, 낮은 가격)
      * offset based
      */
-     // 몽땅 DTO로  가져옴 V1
-     Page<ProductListResponseDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable);
      // api 단건으로 분리
      Slice<Long> searchProductIdsV1(ProductCondition productCondition, Pageable pageable);
-     // todo 커서 페이지 네이션
-     CursorPage<Long> searchProductIdsCursorBase(ProductCondition productCondition,  Long lastId,
-                                                                                     Integer pageSize,
-                                                                                     Integer page);
+
      // 상품아이디로 상품 리스트 이미지 단건 조회
      ProductListImageResponseDto findProductListImageResponseDtoById(Long productId);
      // 상품아이디로 상품 리스트 정보 단건 조회
@@ -65,12 +60,13 @@ public interface ProductSearch {
     ProductIsWishedResponseDto findProductIsWishedResponseDtoById(Long productId, String memberUid);
 
     /**
-     * 베스트 상품, 추천 상품
+     * 베스트 상품, 관심 상품
      * 베스트 상품 조회 : 리뷰 통계 테이블 TOP 30
-     * 추천 상품 조회 : wish 통계 테이블 TOP 30
+     * 관심 상품 조회 : wish 통계 테이블 TOP 10
      */
-    //Slice<Long> searchBestProductIds();
+    // 관심 상품 조회
+    List<Long> searchMostWishedProductIds();
 
-
-
+    // 카테고리 별  베스트 상품 조회
+    List<Long> searchBestProductIds(String topCategoryCode);
 }

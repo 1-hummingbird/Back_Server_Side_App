@@ -16,6 +16,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -32,7 +33,7 @@ public class PurchaseController {
     @PostMapping("/list")
     public BaseResponse<Slice<PurchaseListResponseVo>> searchPurchaseByUuidV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail,
-            Pageable pageable,
+            @ParameterObject Pageable pageable,
             @RequestParam(value = "year", required = false) Integer year
     ){
         Slice<PurchaseListResponseDto> purchaseListSlice =
