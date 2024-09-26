@@ -78,7 +78,8 @@ public class CartSearchImpl implements CartSearch {
                         )
                 )
                 .from(productOption)
-                .join(cart).on(productOption.id.eq(cart.productOption.id))
+                //.join(cart).on(productOption.id.eq(cart.productOption.id))
+                .join(cart).on(productOption.id.eq(cart.productOptionId))
                 .where(
                     cart.id.eq(cartId)
                 )
@@ -90,7 +91,8 @@ public class CartSearchImpl implements CartSearch {
         return queryFactory
                 .selectFrom(cart)
                 .where(
-                        cart.memberUID.eq(memberUID).and(cart.productOption.id.eq(optionId))
+                        //cart.memberUID.eq(memberUID).and(cart.productOption.id.eq(optionId))
+                        cart.memberUID.eq(memberUID).and(cart.productOptionId.eq(optionId))
                 )
                 .fetchOne();
     }
@@ -102,7 +104,8 @@ public class CartSearchImpl implements CartSearch {
                 .from(cart)
                 .where(
                         cart.memberUID.eq(memberUID)
-                        .and(cart.productOption.id.eq(optionId))
+                        //.and(cart.productOption.id.eq(optionId))
+                        .and(cart.productOptionId.eq(optionId))
                         .and(cart.isDeleted.eq(false))
                 )
                 .fetchOne();
@@ -115,7 +118,8 @@ public class CartSearchImpl implements CartSearch {
                 .from(cart)
                 .where(
                         cart.memberUID.eq(memberUID)
-                        .and(cart.productOption.id.eq(optionId))
+                        //.and(cart.productOption.id.eq(optionId))
+                        .and(cart.productOptionId.eq(optionId))
                         .and(cart.isDeleted.isFalse())
                 )
                 .fetchFirst();

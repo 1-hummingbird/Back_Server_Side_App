@@ -75,20 +75,11 @@ public class ProductServiceImpl implements  ProductService{
         return productSearch.findProductListDtoByProductId(product.getId());
     }
 
-    @Override
-    public Page<ProductListResponseDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable) {
-        return productSearch.searchProductListPageV1(productCondition,pageable);
-    }
 
     @Override
     public Slice<Long> searchProductIdsV1(ProductCondition productCondition, Pageable pageable) {
         return productSearch.searchProductIdsV1(productCondition,pageable);
 
-    }
-
-    @Override
-    public CursorPage<Long> searchProductIdsCursorBase(ProductCondition productCondition, Long lastId, Integer pageSize, Integer page) {
-        return productSearch.searchProductIdsCursorBase(productCondition, lastId, pageSize, page);
     }
 
     @Override
@@ -129,6 +120,16 @@ public class ProductServiceImpl implements  ProductService{
     @Override
     public Slice<Long> searchWishProductIdsV1(Pageable pageable, String memberUid) {
         return productSearch.searchWishProductIdsV1(pageable,memberUid);
+    }
+
+    @Override
+    public List<Long> searchMostWishedProductIds() {
+        return productSearch.searchMostWishedProductIds();
+    }
+
+    @Override
+    public List<Long> searchBestProductIds(String topCategoryCode) {
+        return productSearch.searchBestProductIds(topCategoryCode);
     }
 
 }

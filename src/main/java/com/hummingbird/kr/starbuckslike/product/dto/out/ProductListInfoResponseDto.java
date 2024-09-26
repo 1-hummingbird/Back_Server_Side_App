@@ -21,7 +21,7 @@ public class ProductListInfoResponseDto {
     private Integer price; // 상품 가격
     private Float discountRate; // 할인율
 
-    private Long wishCount; // 상품 별 좋아요 개수
+    private Long wishCount; // 상품 별 좋아요 개수 todo 빼야함
 
     public ProductListInfoResponseVo toVo(){
         return ProductListInfoResponseVo

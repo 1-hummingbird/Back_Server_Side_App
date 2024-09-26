@@ -17,8 +17,6 @@ public interface WishRepository extends JpaRepository<Wish,Long> {
             "FROM Wish w WHERE w.isWished = true GROUP BY w.productId")
     Page<WishCountDto> findWishCountGroupedByProductId(Pageable pageable); // Pageable 인자 추가
 
-
-
     Page<Wish> findByIsWishedTrue(Pageable pageable);
 
 }

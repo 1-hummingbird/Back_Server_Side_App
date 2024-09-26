@@ -39,5 +39,11 @@ class ProductSearchTest {
         log.info("dto : "+dto);
     }
 
+    @Test
+    void searchBestProductIds(){
+        String topCategoryCode = "tumbler";
+        productSearch.searchBestProductIds(topCategoryCode).forEach(log::info);
+    }
+
 
 }

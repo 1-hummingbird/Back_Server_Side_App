@@ -30,35 +30,6 @@ import static com.hummingbird.kr.starbuckslike.review.domain.QReview.review;
 @Log4j2
 public class PurchaseSearchImpl implements PurchaseSearch{
     private final JPAQueryFactory queryFactory;
-    @Override
-    public List<PurchaseListResponseDto> findPurchaseByUuid(String memberUID, Integer year) {
-        // 주문목록 Dto 를 상품목록 필드는 비워두고 조회
-        List<PurchaseListResponseDto> purchaseData =
-                queryFactory
-                        .select(new QPurchaseListResponseDto(purchase.code, purchase.id, purchase.createdAt, purchase.totalPrice))
-                        .from(purchase)
-                        .where(
-                                purchase.memberUID.eq(memberUID)
-                                .and(searchYearCondition(year))
-                        )
-                        .orderBy(purchase.createdAt.desc())
-                        .fetch();
-        // 구매번호만 뽑음
-        List<Long>purchaseIds = purchaseData
-                                    .stream()
-                                    .map(PurchaseListResponseDto::getPurchaseId)
-                                    .toList();
-        // 구매번호에 맞는 상품들을 가져옴
-        List<PurchaseItemResponseDto> purchaseItems = getPurchaseItems(purchaseIds);
-        // 구매번호 : 구매한상품들 그룹핑
-        Map<Long, List<PurchaseItemResponseDto>>
-                       purchaseItemMap = purchaseItems
-                                            .stream()
-                                            .collect(Collectors.groupingBy(PurchaseItemResponseDto::getPurchaseId));
-        // 주문 <-> 주문상품들 조립
-        purchaseData.forEach(plist-> plist.setPurchaseItems(purchaseItemMap.get(plist.getPurchaseId())));
-        return purchaseData;
-    }
 
     @Override
     public Slice<PurchaseListResponseDto> searchPurchaseByUuid(Pageable pageable, String memberUID, Integer year) {
@@ -108,7 +79,7 @@ public class PurchaseSearchImpl implements PurchaseSearch{
     @Override
     public PurchaseDetailResponseDto findPurchaseDetailById(String purchaseCode) {
         return queryFactory
-                .select(new QPurchaseDetailResponseDto(purchase.createdAt, purchase.code,
+                .select( new QPurchaseDetailResponseDto(purchase.createdAt, purchase.code,
                                 purchase.totalPrice, purchase.totalDiscount,
                                 purchase.userName, purchase.address, purchase.primaryPhone,
                                 new CaseBuilder()

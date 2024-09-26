@@ -4,6 +4,8 @@ import com.hummingbird.kr.starbuckslike.common.utils.PurchaseCodeGenerator;
 import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
 import com.hummingbird.kr.starbuckslike.product.domain.Wish;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.WishRepository;
+import com.hummingbird.kr.starbuckslike.purchase.domain.Purchase;
+import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseRepository;
 import com.hummingbird.kr.starbuckslike.review.domain.Review;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewRepository;
 import com.querydsl.jpa.impl.JPAQueryFactory;
@@ -16,6 +18,7 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.Random;
 import java.util.UUID;
 
 import static com.hummingbird.kr.starbuckslike.product.domain.QProduct.*;
@@ -40,9 +43,12 @@ public class LoadTestData {
     @Bean
     CommandLineRunner initDatabase(
             WishRepository wishRepository,
-            ReviewRepository reviewRepository
+            ReviewRepository reviewRepository,
+            PurchaseRepository purchaseRepository
     ) {
         return args -> {
+
+
 //            Long maxProductId = queryFactory.select(product.id)
 //                    .from(product)
 //                    .orderBy(product.id.desc())

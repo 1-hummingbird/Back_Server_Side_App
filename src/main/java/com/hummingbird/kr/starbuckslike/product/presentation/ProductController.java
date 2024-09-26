@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -136,7 +137,7 @@ public class ProductController {
             description = "[Slice] 필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격] 해당 상품들의 id만 가져옴", tags = {"상품"})
     @GetMapping("/list")
     public BaseResponse<Slice<Long>> searchProductIdsV1(
-            ProductCondition productCondition, Pageable pageable ){
+            @ParameterObject ProductCondition productCondition, @ParameterObject Pageable pageable ){
 
         Slice<Long> productIds =
                 productService.searchProductIdsV1(productCondition, pageable);
@@ -144,19 +145,6 @@ public class ProductController {
                 productIds
         );
     }
-//    @Operation(summary = "상품 리스트 조회 [필터링, 정렬] Cursor",
-//            description = "필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격] 해당 상품들의 id만 가져옴", tags = {"상품"})
-//    @GetMapping("/list2")
-//    public BaseResponse<CursorPage<Long>> searchProductIdsCursorBaseV1(
-//            ProductCondition productCondition,
-//            @RequestParam( value = "lastId", required = false ) Long lastId,
-//            @RequestParam( value = "pageSize", required = false ) Integer pageSize,
-//            @RequestParam( value = "page", required = false ) Integer page
-//    ){
-//        return new BaseResponse<>(
-//                productService.searchProductIdsCursorBase(productCondition, lastId, pageSize, page)
-//        );
-//    }
 
     /**
      *  상품 위시리스트 관련
@@ -173,15 +161,21 @@ public class ProductController {
                 null
         );
     }
-
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
             summary = "상품 위시리스트 조회", description = "[Slice] 회원이 위시리스트한 상품만 조회", tags = {"위시리스트"})
-    @PostMapping("/wish/list")
+    @GetMapping("/wish/list")
     public BaseResponse<Slice<Long>> searchWishProductIdsV1(
-                Pageable pageable, @AuthenticationPrincipal AuthUserDetail authUserDetail){
+            @ParameterObject Pageable pageable, @AuthenticationPrincipal AuthUserDetail authUserDetail){
 
         return new BaseResponse<>(
                 productService.searchWishProductIdsV1(pageable,authUserDetail.getUsername())
+        );
+    }
+    @Operation(summary = "관심 상품 목록 조회", description = "회원들이 많이 Wish한 상품조회", tags = {"위시리스트"})
+    @GetMapping("/most-wish/list")
+    public BaseResponse<List<Long>> searchMostLikedProductIdsV1(){
+        return new BaseResponse<>(
+                productService.searchMostWishedProductIds()
         );
     }
 
@@ -224,6 +218,17 @@ public class ProductController {
         redisService.deleteUserSearchKey(authUserDetail.getLoginId());
         return new BaseResponse<>(
                 BaseResponseStatus.SUCCESS
+        );
+    }
+
+    /**
+     * 베스트 상품 조회
+     */
+    @Operation(summary = "베스트 상품 목록 조회", description = "카테고리별 베스트 상품 목록 조회", tags = {"상품"})
+    @GetMapping("/best-list/{topCategoryCode}")
+    public BaseResponse<List<Long>> searchBestProductIdsV1(@PathVariable("topCategoryCode") String topCategoryCode){
+        return new BaseResponse<>(
+                productService.searchBestProductIds(topCategoryCode)
         );
     }
 

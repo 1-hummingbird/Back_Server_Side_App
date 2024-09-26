@@ -38,11 +38,7 @@ public interface ProductService {
     /**
      *  메인 상품 리스트 필터링[카테고리,가격] , 정렬 조건 적용
      */
-    Page<ProductListResponseDto> searchProductListPageV1(ProductCondition productCondition, Pageable pageable);
     Slice<Long> searchProductIdsV1(ProductCondition productCondition, Pageable pageable);
-    CursorPage<Long> searchProductIdsCursorBase(ProductCondition productCondition, Long lastId,
-                                                Integer pageSize,
-                                                Integer page);
 
     // 상품아이디로 상품 이미지 단건 조회
     ProductListImageResponseDto findProductListImageResponseDtoById(Long productId);
@@ -60,6 +56,9 @@ public interface ProductService {
     // 회원의 위시리스트 상품 조회
     Slice<Long> searchWishProductIdsV1(Pageable pageable, String memberUid);
 
+    // 관심상품 (위시 Top 10)
+    List<Long> searchMostWishedProductIds();
+    List<Long> searchBestProductIds(String topCategoryCode);
 
 
 

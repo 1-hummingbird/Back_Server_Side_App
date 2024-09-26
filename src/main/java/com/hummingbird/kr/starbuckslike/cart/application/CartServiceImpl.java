@@ -124,8 +124,7 @@ public class CartServiceImpl implements CartService{
     @Override
     public void updateCartItemQuantity(RequestCartQtyDto dto, String memberUid) {
         // todo 유저가 남의 cartId 넣는 경우 보완해야 함
-        Cart cart = cartRepository.findById(dto.getCartId()).orElseThrow();
-        cartRepository.save(dto.toCart(cart));
+        cartRepository.save(dto.toCart(cartRepository.findById(dto.getCartId()).orElseThrow()));
     }
 
     @Override

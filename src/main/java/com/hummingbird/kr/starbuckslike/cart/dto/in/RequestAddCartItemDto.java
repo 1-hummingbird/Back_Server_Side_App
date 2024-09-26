@@ -33,7 +33,7 @@ public class RequestAddCartItemDto {
         return Cart.builder()
                 .memberUID(memberUID)
                 .productId(productId)
-                .productOption(productOption)
+                .productOptionId(productOption.getId())
                 .qty(qty)
                 .inputData(inputData)
                 .isChecked(false)
