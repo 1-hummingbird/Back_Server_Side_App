@@ -31,9 +31,8 @@ public class Cart extends BaseEntity {
     @Column(name="product_id")
     private Long productId; // 상품
 
-    @ManyToOne(fetch = LAZY)
-    @JoinColumn(name="option_id")
-    private ProductOption productOption; // 상품 옵션
+    @Column(name="option_id", nullable = false)
+    private Long productOptionId;
 
     @Column(name = "qty" , nullable = false)
     private Integer qty; // 수량

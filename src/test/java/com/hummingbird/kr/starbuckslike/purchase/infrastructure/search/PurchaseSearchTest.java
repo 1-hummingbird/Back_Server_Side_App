@@ -19,13 +19,6 @@ class PurchaseSearchTest {
     PurchaseSearch purchaseSearch;
     @Autowired
     MemberRepository memberRepository;
-    @Test
-    void findPurchaseByUuidTest(){
-         String uuid = memberRepository.findById(1L).orElseThrow().getMemberUID();
 
-        List<PurchaseListResponseDto> res = purchaseSearch.findPurchaseByUuid(uuid,2024);
-        res.forEach(log::info);
-
-    }
 
 }

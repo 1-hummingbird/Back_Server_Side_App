@@ -64,4 +64,13 @@ public interface ProductSearch {
     // 상품 좋아요 여부 조회
     ProductIsWishedResponseDto findProductIsWishedResponseDtoById(Long productId, String memberUid);
 
+    /**
+     * 베스트 상품, 추천 상품
+     * 베스트 상품 조회 : 리뷰 통계 테이블 TOP 30
+     * 추천 상품 조회 : wish 통계 테이블 TOP 30
+     */
+    //Slice<Long> searchBestProductIds();
+
+
+
 }

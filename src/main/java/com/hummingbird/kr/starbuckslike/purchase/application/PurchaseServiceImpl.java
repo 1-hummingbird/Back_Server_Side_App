@@ -30,10 +30,6 @@ public class PurchaseServiceImpl implements PurchaseService{
 
     private static final int MAX_CODE_TRIES = 10;  // 최대 재시도 횟수
 
-    @Override
-    public List<PurchaseListResponseDto> findPurchaseByUuid(String memberUID, Integer year) {
-        return purchaseSearch.findPurchaseByUuid(memberUID, year);
-    }
 
     @Override
     public Slice<PurchaseListResponseDto> searchPurchaseByUuid(Pageable pageable, String memberUID, Integer year) {

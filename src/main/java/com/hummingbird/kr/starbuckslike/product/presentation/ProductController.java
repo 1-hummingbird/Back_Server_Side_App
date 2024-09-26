@@ -15,6 +15,7 @@ import io.swagger.v3.oas.annotations.Operation;
 import io.swagger.v3.oas.annotations.security.SecurityRequirement;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.log4j.Log4j2;
+import org.springdoc.core.annotations.ParameterObject;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
 import org.springframework.security.core.annotation.AuthenticationPrincipal;
@@ -136,7 +137,7 @@ public class ProductController {
             description = "[Slice] 필터링[카테고리(상,하), 가격] 정렬[최신순,할인순,높은가격,낮은가격] 해당 상품들의 id만 가져옴", tags = {"상품"})
     @GetMapping("/list")
     public BaseResponse<Slice<Long>> searchProductIdsV1(
-            ProductCondition productCondition, Pageable pageable ){
+            @ParameterObject ProductCondition productCondition, @ParameterObject Pageable pageable ){
 
         Slice<Long> productIds =
                 productService.searchProductIdsV1(productCondition, pageable);
