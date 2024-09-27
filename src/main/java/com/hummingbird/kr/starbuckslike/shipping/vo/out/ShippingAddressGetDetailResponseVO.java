@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 @Getter
 @Builder
 @AllArgsConstructor
-public class ShippingAddressGetDefaultResponseVO {
+public class ShippingAddressGetDetailResponseVO {
 
     private String addressNickname;
     private String name;

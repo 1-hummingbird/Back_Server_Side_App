@@ -1,7 +1,10 @@
 package com.hummingbird.kr.starbuckslike.shipping.application;
 
+import java.util.List;
+
 import org.springframework.transaction.annotation.Transactional;
 
+import com.hummingbird.kr.starbuckslike.shipping.dto.ShippingAddressDTO;
 import com.hummingbird.kr.starbuckslike.shipping.dto.in.*;
 import com.hummingbird.kr.starbuckslike.shipping.dto.out.*;
 
@@ -45,7 +48,7 @@ public interface ShippingService {
      * @return DTO that contain List of ShippingAddress
      */
 
-    ShippingAddressListResponseDTO list(String memberUID);
+    List<ShippingAddressDTO> shippingList(String memberUID);
 
     /*
      * 5. setDefaultShippingAddress
@@ -58,9 +61,10 @@ public interface ShippingService {
      * 6. getDefaultShippingAddress
      * @param String memberUID
      * @return DTO that contain default ShippingAddress
-     */
+     todo 이거를 동적 API화 하는 것도 방법
+     * */
     @Transactional
-    ShippingAddressGetDefaultResponseDTO getDefault(String memberUID);
+    ShippingAddressGetDetailResponseDTO getDetail(ShippingAddressGetDetailRequestDTO requestDTO);
 
     /*
      * 7. defaultid
@@ -68,5 +72,7 @@ public interface ShippingService {
      * @return DTO that contain default ShippingAddress's ID
      */
 
-    ShippingDefaultIDResponseDTO defaultID(String memberUID);
+    ShippingDefaultIDResponseDTO getDefaultID(String memberUID);
+
+    // todo: 다른 거 하나를 가져와 주는 API 필요 할 거 같아요
 }
