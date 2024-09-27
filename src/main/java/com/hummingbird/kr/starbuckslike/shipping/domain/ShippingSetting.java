@@ -1,5 +1,6 @@
 package com.hummingbird.kr.starbuckslike.shipping.domain;
 
+import lombok.AllArgsConstructor;
 import lombok.NoArgsConstructor;
 import org.hibernate.annotations.DynamicUpdate;
 
@@ -13,6 +14,7 @@ import lombok.Getter;
 @Entity
 @Getter
 @DynamicUpdate
+@AllArgsConstructor
 @NoArgsConstructor
 public class ShippingSetting {
 
@@ -38,6 +40,8 @@ public class ShippingSetting {
     public void countShippingMinus(){
         this.countShipping--;
     }
+
+
 
     public void setDefaultShippingAddressID(Long defaultShippingAddressID) {
         this.defaultShippingAddressID = defaultShippingAddressID;
