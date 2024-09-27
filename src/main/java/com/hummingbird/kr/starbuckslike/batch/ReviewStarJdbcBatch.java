@@ -58,7 +58,7 @@ public class ReviewStarJdbcBatch {
                 .name("reviewStarJdbcReader")
                 .dataSource(dataSource)
                 .selectClause("SELECT product_id, COUNT(*) as review_count, SUM(star) as total_star, " +
-                        "AVG(star) as average_star, SUM(CASE WHEN is_photo = true THEN 1 ELSE 0 END) as photo_review_count")
+                              "AVG(star) as average_star, SUM(CASE WHEN is_photo = true THEN 1 ELSE 0 END) as photo_review_count")
                 .fromClause("FROM review")
                 .whereClause("WHERE is_deleted = false") // 삭제되지 않은 리뷰만 선택
                 .groupClause("GROUP BY product_id")

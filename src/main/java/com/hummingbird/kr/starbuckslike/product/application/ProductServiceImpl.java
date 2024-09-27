@@ -25,12 +25,6 @@ public class ProductServiceImpl implements  ProductService{
     private final ProductSearch productSearch;
     private final ProductRepository productRepository;
     private final WishRepository wishRepository;
-    @Override
-    public ProductInfoResponseDto findProductInfoById(Long productId) {
-        Product product = productRepository.findById(productId).orElseThrow(
-                () -> new BaseException(BaseResponseStatus.NO_EXIST_PRODUCT));
-        return productSearch.findProductInfoById(product.getId());
-    }
 
     @Override
     public ProductInfoResponseDto findProductInfoByIdV2(Long productId, String memberUid) {
@@ -61,6 +55,11 @@ public class ProductServiceImpl implements  ProductService{
     @Override
     public ProductIsWishedResponseDto findProductIsWishedResponseDtoById(Long productId, String memberUid) {
         return productSearch.findProductIsWishedResponseDtoById(productId,memberUid);
+    }
+
+    @Override
+    public ProductCartQtyResponseDto findProductCartQtyResponseDto(Long productId, String memberUid) {
+        return productSearch.findProductCartQtyResponseDto(productId,memberUid);
     }
 
     @Override

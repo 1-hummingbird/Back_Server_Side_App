@@ -3,6 +3,7 @@ package com.hummingbird.kr.starbuckslike.product.infrastructure.search;
 import com.hummingbird.kr.starbuckslike.common.utils.CursorPage;
 import com.hummingbird.kr.starbuckslike.product.dto.out.*;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.condition.ProductCondition;
+import com.hummingbird.kr.starbuckslike.product.vo.out.ProductCartQtyResponseVo;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Slice;
@@ -44,7 +45,6 @@ public interface ProductSearch {
      *  상품 디테일 정보 (상품상세 , 상품의 이미지)
      */
     //상품 디테일 상품 이미지+상품명 가격 등 조회
-    ProductInfoResponseDto findProductInfoById(Long productId);
     ProductInfoResponseDto findProductInfoByIdV2(Long productId, String memberUid); // 개선 :  장바구니 개수, 좋아요 개수 포함
 
     // 상품 id로 상품 상세정보(에티터 html)  조회
@@ -58,6 +58,8 @@ public interface ProductSearch {
 
     // 상품 좋아요 여부 조회
     ProductIsWishedResponseDto findProductIsWishedResponseDtoById(Long productId, String memberUid);
+    // 장바구니에 상품을 담은 수량
+    ProductCartQtyResponseDto findProductCartQtyResponseDto(Long productId, String memberUid);
 
     /**
      * 베스트 상품, 관심 상품
