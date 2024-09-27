@@ -37,7 +37,7 @@ public class ShippingAddress {
     @Column(length = 200)
     private String memo;
 
-    @Builder(toBuilder = true)
+    @Builder
     public ShippingAddress(
                            Long id,
                            String addressNickname,

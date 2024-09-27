@@ -24,19 +24,10 @@ public class ShippingSetting {
     
     @Column(nullable = true)
     private Long defaultShippingAddressID;
-    
-    private int countShipping;
-
-    public ShippingSetting(String memberUID, int countShipping) {
+     
+    public ShippingSetting(String memberUID, Long defaultShippingAddressID) {
         this.memberUID = memberUID;
-        this.countShipping = countShipping;
-    }
-
-    public void countShippingPlus(){
-        this.countShipping++;
-    }
-    public void countShippingMinus(){
-        this.countShipping--;
+        this.defaultShippingAddressID = defaultShippingAddressID;
     }
 
     public void setDefaultShippingAddressID(Long defaultShippingAddressID) {

@@ -57,7 +57,7 @@ public class Member extends BaseEntity {
     @Column(nullable = false, length = 40)
     private String memberUID;
 
-    @Builder(toBuilder = true)
+    @Builder
     public Member(Long id,String loginID, String name, String nickname, LocalDate birthdate, String phone, String email, String password, String memberUID) {
         this.id = id;
         this.loginID = loginID;

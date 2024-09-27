@@ -1,10 +1,10 @@
 package com.hummingbird.kr.starbuckslike.member.vo.out;
 
-import com.hummingbird.kr.starbuckslike.member.domain.MemberInfo;
 import java.time.LocalDateTime;
 import java.time.LocalDate;
 
 import lombok.Getter;
+import lombok.Builder;
 
 @Getter
 public class MemberInfoResponseVO {
@@ -18,14 +18,15 @@ public class MemberInfoResponseVO {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
     
-    public MemberInfoResponseVO(MemberInfo memberInfo) {
-        this.loginID = memberInfo.getLoginID();
-        this.name = memberInfo.getName();
-        this.nickname = memberInfo.getNickname();
-        this.birthDate = memberInfo.getBirthdate();
-        this.phone = memberInfo.getPhone();
-        this.email = memberInfo.getEmail();
-        this.createdAt = memberInfo.getCreatedAt();
-        this.updatedAt = memberInfo.getUpdatedAt();
+    @Builder
+    public MemberInfoResponseVO(String loginID, String name, String nickname, LocalDate birthDate, String phone, String email, LocalDateTime createdAt, LocalDateTime updatedAt) {
+        this.loginID = loginID;
+        this.name = name;
+        this.nickname = nickname;
+        this.birthDate = birthDate;
+        this.phone = phone;
+        this.email = email;
+        this.createdAt = createdAt;
+        this.updatedAt = updatedAt;
     }
 }

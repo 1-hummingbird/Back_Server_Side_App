@@ -46,7 +46,7 @@ public class MemberController {
     public BaseResponse<MemberInfoResponseVO> info(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
         log.info("info memberUID: {}", authUserDetail.getUsername());
         MemberInfoResponseDTO memberInfoResponseDTO = memberService.info(authUserDetail.getUsername());
-        return new BaseResponse<>(memberInfoResponseDTO.toVO());
+        return new BaseResponse<>(MemberInfoResponseDTO.toVO(memberInfoResponseDTO));
     }
 
     @PostMapping("update")
@@ -54,14 +54,7 @@ public class MemberController {
             , summary = "Member information update API", description = "Member information update API", tags = {"Member"})
     public BaseResponse<Void> update(@RequestBody MemberUpdateRequestVO memberUpdateRequestVO,
                                      @AuthenticationPrincipal AuthUserDetail authUserDetail) {
-        MemberUpdateRequestDTO memberUpdateRequestDTO = new MemberUpdateRequestDTO();
-        memberUpdateRequestDTO.setMemberUID(authUserDetail.getUsername());
-        memberUpdateRequestDTO.setBirthDate(memberUpdateRequestVO.getBirthDate());
-        memberUpdateRequestDTO.setEmail(memberUpdateRequestVO.getEmail());
-        memberUpdateRequestDTO.setName(memberUpdateRequestVO.getName());
-        memberUpdateRequestDTO.setNickname(memberUpdateRequestVO.getNickname());
-        memberUpdateRequestDTO.setPhone(memberUpdateRequestVO.getPhone());
-        memberService.update(memberUpdateRequestDTO);
+        memberService.update(MemberUpdateRequestDTO.of(memberUpdateRequestVO, authUserDetail.getUsername()));
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
