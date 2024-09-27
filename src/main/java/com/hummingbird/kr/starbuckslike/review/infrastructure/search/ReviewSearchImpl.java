@@ -164,15 +164,19 @@ public class ReviewSearchImpl implements ReviewSearch{
 
     @Override
     public ReviewSummaryResponseDto findReviewSummaryDtoById(Long productId) {
-        return queryFactory
+        ReviewSummaryResponseDto dto = queryFactory
                 .select(new QReviewSummaryResponseDto(
-                        reviewStar.reviewCount.coalesce(0L),
-                        reviewStar.photoReviewCount.coalesce(0L),
-                        reviewStar.averageStar.coalesce(0.0)
+                        reviewStar.reviewCount,
+                        reviewStar.photoReviewCount,
+                        reviewStar.averageStar.floatValue()
                 ))
                 .from(reviewStar)
                 .where(reviewStar.productId.eq(productId))
-                .fetchOne();
+                .fetchFirst();
+        if (dto == null) {
+            dto = new ReviewSummaryResponseDto(0L, 0L, 0.0f);
+        }
+        return dto;
     }
 
 

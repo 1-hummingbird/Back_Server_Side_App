@@ -190,29 +190,10 @@ public class ProductSearchImpl implements ProductSearch {
         }
         return new SliceImpl<>(fetch, pageable, hasNext);
     }
-
-
-    @Override
-    public ProductInfoResponseDto findProductInfoById(Long productId) {
-        return queryFactory
-                .select(new QProductInfoResponseDto(product.name,
-                        new CaseBuilder() // sql case문
-                                .when(isNewCondition).then(true)
-                                .otherwise(false),
-                        product.shortDescription, product.isDiscounted, product.discountRate
-                ))
-                .from(product)
-                .where(
-                        product.id.eq(productId)
-                        .and(product.isDeleted.eq(false))
-                )
-                .fetchOne();
-    }
-
     @Override
     public ProductInfoResponseDto findProductInfoByIdV2(Long productId, String memberUid) {
         ProductInfoResponseDto productInfoResponseDto = queryFactory
-                .select(new QProductInfoResponseDto(product.name,
+                .select(new QProductInfoResponseDto(product.name, product.price ,
                         new CaseBuilder() // sql case문
                                 .when(isNewCondition).then(true)
                                 .otherwise(false),
@@ -224,19 +205,6 @@ public class ProductSearchImpl implements ProductSearch {
                                 .and(product.isDeleted.eq(false))
                 )
                 .fetchOne();
-        // 해당 상품이 장바구니 담긴 개수
-        Long cartItemQuantity = 0L;
-        if (memberUid != null && !memberUid.isEmpty()) { // 로그인 상태일 경우 쿼리 실행
-            cartItemQuantity = queryFactory.select(cart.count())
-                    .from(cart)
-                    .where(
-                            cart.isDeleted.isFalse()
-                                    .and(cart.memberUID.eq(memberUid))
-                                    .and(cart.productId.eq(productId))
-                    ).fetchOne();
-        }
-        assert productInfoResponseDto != null;
-        productInfoResponseDto.setCartCount(cartItemQuantity);
         // 해당 상품의 좋아요 개수 ,  배치 실행 전이라 집계 안되면 0 return
         Long wishCount = queryFactory.select(wishProduct.wishCount.coalesce(0L))
                 .from(wishProduct)
@@ -307,9 +275,24 @@ public class ProductSearchImpl implements ProductSearch {
                             .and(wish.productId.eq(productId))
                             .and(wish.isWished.isTrue())
                     ).fetchFirst();
-            log.info("res : "+res);
             return new ProductIsWishedResponseDto(res != null);
         }
+    }
+
+    @Override
+    public ProductCartQtyResponseDto findProductCartQtyResponseDto(Long productId, String memberUid) {
+        // 해당 상품이 장바구니 담긴 개수
+        Long cartItemQuantity = 0L;
+        if (memberUid != null && !memberUid.isEmpty()) { // 로그인 상태일 경우 쿼리 실행
+            cartItemQuantity = queryFactory.select(cart.count())
+                    .from(cart)
+                    .where(
+                            cart.isDeleted.isFalse()
+                                    .and(cart.memberUID.eq(memberUid))
+                                    .and(cart.productId.eq(productId))
+                    ).fetchOne();
+        }
+        return new ProductCartQtyResponseDto(cartItemQuantity);
     }
 
     // 관심상품 조회

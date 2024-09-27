@@ -117,6 +117,16 @@ public class ProductController {
                 productService.findProductIsWishedResponseDtoById(productId, memberUid).toVo()
         );
     }
+    @Operation(summary = "상품 디테일 상품 장바구니에 담은 수량", description = "상품 id, 회원 uuid 로 상품 장바구니에 담은 수량 조회",
+            tags = {"상품"})
+    @GetMapping("/detail/cart-quantity/{productId}")
+    public BaseResponse<ProductCartQtyResponseVo> findProductCartQtyResponseDtoV1(
+            @PathVariable("productId") Long productId , @AuthenticationPrincipal AuthUserDetail authUserDetail){
+        String memberUid = (authUserDetail != null) ? authUserDetail.getUuid() : "";
+        return new BaseResponse<>(
+                productService.findProductCartQtyResponseDto(productId, memberUid).toVo()
+        );
+    }
     /**
      * 기획전에 해당하는 상품 리스트
      */

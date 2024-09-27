@@ -23,7 +23,6 @@ import java.util.Arrays;
 @Log4j2
 public class RedisConfig  {
 
-    //@Value("${spring.redis.host}")
     @Value("${spring.data.redis.host}")
     private String host;
 

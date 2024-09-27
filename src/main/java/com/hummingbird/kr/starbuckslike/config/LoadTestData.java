@@ -1,10 +1,17 @@
 package com.hummingbird.kr.starbuckslike.config;
 
 import com.hummingbird.kr.starbuckslike.common.utils.PurchaseCodeGenerator;
+import com.hummingbird.kr.starbuckslike.product.domain.Product;
+import com.hummingbird.kr.starbuckslike.product.domain.ProductOption;
 import com.hummingbird.kr.starbuckslike.product.domain.QProduct;
 import com.hummingbird.kr.starbuckslike.product.domain.Wish;
+import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductOptionRepository;
+import com.hummingbird.kr.starbuckslike.product.infrastructure.ProductRepository;
 import com.hummingbird.kr.starbuckslike.product.infrastructure.WishRepository;
+import com.hummingbird.kr.starbuckslike.purchase.application.PurchaseService;
 import com.hummingbird.kr.starbuckslike.purchase.domain.Purchase;
+import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseItemRequestDto;
+import com.hummingbird.kr.starbuckslike.purchase.dto.in.AddPurchaseRequestDto;
 import com.hummingbird.kr.starbuckslike.purchase.infrastructure.PurchaseRepository;
 import com.hummingbird.kr.starbuckslike.review.domain.Review;
 import com.hummingbird.kr.starbuckslike.review.infrastructure.ReviewRepository;
@@ -18,6 +25,8 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 import java.util.UUID;
 
@@ -44,9 +53,54 @@ public class LoadTestData {
     CommandLineRunner initDatabase(
             WishRepository wishRepository,
             ReviewRepository reviewRepository,
-            PurchaseRepository purchaseRepository
+            PurchaseService purchaseService,
+            ProductRepository productRepository,
+            ProductOptionRepository productOptionRepository
     ) {
+
         return args -> {
+//            for (int i = 0; i < 200; i++) {
+//
+//                Random random = new Random();
+//                Long maxProductId = queryFactory.select(product.id)
+//                        .from(product)
+//                        .orderBy(product.id.desc())
+//                        .fetchFirst();
+//                Long randomProductId = (long) (Math.random() * maxProductId) + 1;
+//
+//                Product product = productRepository.findById(randomProductId).orElseThrow();
+//                ProductOption productOption = productOptionRepository.findById(randomProductId).orElseThrow();
+//                List<AddPurchaseItemRequestDto> itemList = new ArrayList<>();
+//
+//                for(int j = 0; j < random.nextInt(1,3); j++){
+//                    AddPurchaseItemRequestDto itemDto = AddPurchaseItemRequestDto.builder()
+//                            .qty(random.nextInt(3) + 1)
+//                            .price(random.nextLong(40000) + 20000)
+//                            .discountPrice(random.nextLong(3000) + 1000)
+//                            .productId(randomProductId)
+//                            .productName(product.getName())
+//                            .optionId(randomProductId)
+//                            .optionName(productOption.getName())
+//                            .build();
+//                    itemList.add(itemDto);
+//                }
+//                //
+//                AddPurchaseRequestDto purchaseDto = AddPurchaseRequestDto
+//                        .builder()
+//                        .totalPrice(random.nextLong(100000) + 30000)
+//                        .totalDiscount(random.nextLong(20000) + 3000)
+//                        .address("테스트 주소")
+//                        .primaryPhone("01011112222")
+//                        .secondaryPhone("01033334444")
+//                        .userName("김한별")
+//                        .memberUID("afcd81bc-6513-45b6-b8ed-c3583e0a7694")
+//                        .memo("안전하게 와주세요")
+//                        .purchaseProducts(itemList)
+//                        .build();
+//                //
+//                purchaseService.addPurchase(purchaseDto);
+//            }
+
 
 
 //            Long maxProductId = queryFactory.select(product.id)
