@@ -100,7 +100,6 @@ public class ProductSearchImpl implements ProductSearch {
     @Override
     public Slice<Long> searchProductIdsV1(ProductCondition productCondition, Pageable pageable) {
         List<Long> fetch = queryFactory
-                //.select(categoryProductList.id)
                 .select(categoryProductList.product.id)
                 .from(categoryProductList)
                 .join(categoryProductList).on(categoryProductList.product.id.eq(product.id))

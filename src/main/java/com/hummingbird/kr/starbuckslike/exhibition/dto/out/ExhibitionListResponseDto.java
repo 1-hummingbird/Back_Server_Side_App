@@ -18,17 +18,20 @@ public class ExhibitionListResponseDto {
     private Long id; // 기획전 id
 
     private String name; // 기획전 이름
+    private String detail;
 
     public ExhibitionListResponseVo toVo(){
         return ExhibitionListResponseVo.builder()
                 .id(id)
                 .name(name)
+                .detail(detail)
                 .build();
     }
     @QueryProjection
-    public ExhibitionListResponseDto(Long id, String name) {
+    public ExhibitionListResponseDto(Long id, String name, String detail) {
         this.id = id;
         this.name = name;
+        this.detail = detail;
     }
 }
 

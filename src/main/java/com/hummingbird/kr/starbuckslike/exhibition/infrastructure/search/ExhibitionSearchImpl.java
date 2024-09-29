@@ -32,7 +32,7 @@ public class ExhibitionSearchImpl implements ExhibitionSearch {
     @Override
     public List<ExhibitionListResponseDto> findAllExhibitionNames() {
         return queryFactory
-                .select(new QExhibitionListResponseDto(exhibition.id, exhibition.name)) // 전시회 이름 선택
+                .select(new QExhibitionListResponseDto(exhibition.id, exhibition.name,exhibition.fullDescription))
                 .from(exhibition)
                 // 현재 날짜가 시작일과 종료일 사이에 있는지 확인
                 .where(isCurrentDateBetween(exhibition.startDate, exhibition.endDate))
