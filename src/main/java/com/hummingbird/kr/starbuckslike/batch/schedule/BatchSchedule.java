@@ -26,7 +26,7 @@ public class BatchSchedule {
     @Scheduled(cron = "0 0 0 * * *", zone = "Asia/Seoul")
     public void runProductReviewStarJdbcJob() throws Exception {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
         String date = dateFormat.format(new Date());
 
         JobParameters jobParameters = new JobParametersBuilder()
@@ -36,11 +36,12 @@ public class BatchSchedule {
         jobLauncher.run(jobRegistry.getJob("productReviewStarJdbcJob"), jobParameters);
     }
 
-    // 매일 01시 마다 실행
-    @Scheduled(cron = "0 0 1 * * *", zone = "Asia/Seoul")
+    // 매 시간 10분 마다 실행
+    @Scheduled(cron = "0 10 * * * *", zone = "Asia/Seoul")
     public void runProductWishJdbcJob() throws Exception {
 
-        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd");
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm");
+
         String date = dateFormat.format(new Date());
 
         JobParameters jobParameters = new JobParametersBuilder()

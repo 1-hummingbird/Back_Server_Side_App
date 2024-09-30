@@ -165,7 +165,7 @@ public class ProductController {
      *  상품 위시리스트 관련
      */
     @Operation(summary = "상품 위시리스트 활성,비활성", description = "토글방식으로 동작", tags = {"위시리스트"})
-    @PostMapping("/wish")
+    @PutMapping("/wish")
     public BaseResponse<Void> updateWishStatusV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail,
             @RequestParam("productId") Long productId
@@ -207,7 +207,7 @@ public class ProductController {
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
             summary = "최근 검색어 조회", description = "회원의 최근 검색어 조회", tags = {"최근검색어"})
-    @PostMapping("/search/list")
+    @GetMapping("/search/list")
     public BaseResponse<RecentSearchResponseVo> getRecentSearchV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail ){
         log.info(authUserDetail.getLoginId());
@@ -217,7 +217,7 @@ public class ProductController {
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
             summary = "최근 검색어 개별 삭제", description = "회원의 최근 검색어 개별 삭제", tags = {"최근검색어"})
-    @PostMapping("/search/word/delete")
+    @DeleteMapping("/search/word")
     public BaseResponse<Void> deleteSearchWordV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail ,@RequestBody String searchWord ){
         redisService.deleteSearchWord(authUserDetail.getLoginId(), searchWord);
@@ -227,7 +227,7 @@ public class ProductController {
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
             summary = "최근 검색어 전체 삭제", description = "회원의 최근 검색어 전체 삭제", tags = {"최근검색어"})
-    @PostMapping("/search/word/delete-all")
+    @DeleteMapping("/search/word/all")
     public BaseResponse<Void> deleteUserSearchKeyV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail){
         redisService.deleteUserSearchKey(authUserDetail.getLoginId());

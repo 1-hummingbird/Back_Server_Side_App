@@ -34,26 +34,8 @@ public class CartController {
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
     }
 
-//    // 장바구니 아이템 (증가 또는 감소) V1
-//    @Operation(summary = "장바구니 아이템 수량 조정", description = "증가 또는 감소", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-//    @PostMapping("/adjust-quantity")
-//    public BaseResponse<Void> adjustCartItemQuantityV1(
-//            @Parameter(name = "CartAdjustType",
-//                    description = "cartAdjustType : INCREASE(증가), DECREASE(감소)", required = true)
-//            @RequestBody RequestAdjustCartItemVo requestAdjustCartItemVo){
-//
-//        RequestAdjustCartItemDto requestAdjustCartItemDto =
-//                                            RequestAdjustCartItemDto.builder()
-//                                                    .cartId(requestAdjustCartItemVo.getCartId())
-//                                                    .cartAdjustType(requestAdjustCartItemVo.getCartAdjustType())
-//                                                    .build();
-//        cartService.adjustCartItemQuantity(requestAdjustCartItemDto);
-//
-//        return new BaseResponse<>(BaseResponseStatus.SUCCESS);
-//    }
-
     @Operation(summary = "장바구니 아이템 수량 업데이트", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-    @PostMapping("/update-quantity")
+    @PutMapping("/quantity")
     public BaseResponse<Void> updateCartItemQuantityV1(
             @RequestBody RequestCartQtyVo vo , @AuthenticationPrincipal AuthUserDetail authUserDetail){
 
@@ -63,7 +45,7 @@ public class CartController {
 
     // 장바구니 단건 삭제 V1
     @Operation(summary = "장바구니 단건 삭제", description = "장바구니 id로 장바구니 단건 삭제", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-    @PostMapping("/delete")
+    @DeleteMapping("")
         public BaseResponse<Void>removeCartItemV1(@RequestBody RequestRemoveCartItemVo requestRemoveCartItemVo, @AuthenticationPrincipal AuthUserDetail authUserDetail){
         cartService.removeCartItem(RequestRemoveCartItemDto.toDto(requestRemoveCartItemVo, authUserDetail.getUsername()));
 
@@ -73,7 +55,7 @@ public class CartController {
 
     // 장바구니 전체 삭제 V1
     @Operation(summary = "장바구니 전체 삭제", description = "회원 uuid로 장바구니 전체 삭제", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-    @PostMapping("/delete-all")
+    @DeleteMapping("/all")
     public BaseResponse<Void>removeAllCartItemsByUserUidV1(@AuthenticationPrincipal AuthUserDetail authUserDetail) {
         log.info(authUserDetail.getUsername());
         cartService.removeAllCartItemsByMemberUID(authUserDetail.getUsername());
@@ -83,7 +65,7 @@ public class CartController {
 
     // 장바구니 단 건 선택
     @Operation(summary = "장바구니 단건 선택 (토글)", description = "장바구니 id로 장바구니 단건 선택", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-    @PostMapping("/select")
+    @PutMapping("/select")
     public BaseResponse<Void>selectCartItemV1(@RequestBody RequestSelectCartItemVo requestSelectCartItemVo, @AuthenticationPrincipal AuthUserDetail authUserDetail){
         cartService.selectCartItem(RequestSelectCartItemDto.toDto(requestSelectCartItemVo, authUserDetail.getUsername()));
         return new BaseResponse<>(BaseResponseStatus.SUCCESS);
@@ -91,7 +73,7 @@ public class CartController {
 
     // 장바구니 전체 선택(활성,비활성)
     @Operation(summary = "장바구니 전체 선택", description = "장바구니 id 리스로 장바구니 전체 선택", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-    @PostMapping("/select-all")
+    @PutMapping("/select-all")
     public BaseResponse<Void>selectCartItemsV1(
             @RequestBody RequestCartItemSelectAllVo requestCartItemSelectAllVo){
         cartService.selectAllCartItems(RequestCartItemSelectAllDto.toDto(requestCartItemSelectAllVo));
@@ -101,7 +83,7 @@ public class CartController {
 
     // 장바구니 ID 리스트 조회
     @Operation(summary = "장바구니 ID 리스트 조회", description = "", tags = "Cart", security = @SecurityRequirement(name = "Bearer Auth"))
-    @PostMapping("/items/member")
+    @GetMapping("/items/member")
     public BaseResponse<ResponseFindAllCartVo> findAllCartIdByUserUidV1(@AuthenticationPrincipal AuthUserDetail authUserDetail){
         return new BaseResponse<>(
                 cartService.findAllCartIdByMemberUID(authUserDetail.getUsername()).toVo()
