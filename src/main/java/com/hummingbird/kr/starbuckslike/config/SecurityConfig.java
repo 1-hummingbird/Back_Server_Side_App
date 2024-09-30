@@ -35,7 +35,7 @@ public class SecurityConfig {
         config.setAllowCredentials(true);
         config.setAllowedOrigins(Arrays.asList(
                 "http://localhost:3000","http://localhost:8080","https://team-hummingbird.shop","https://www.team-hummingbird.shop"));
-	    config.setAllowedMethods(Arrays.asList("GET","POST"));
+	    config.addAllowedMethod("*");
         config.addAllowedHeader("*");
         config.setExposedHeaders(List.of("Authorization"));
         source.registerCorsConfiguration("/**", config);
@@ -64,10 +64,6 @@ public class SecurityConfig {
                                         "/api/v1/review/info/**",
                                         "/api/v1/review/list/**",
                                         "/api/v1/review/summary/**",
-
-                                        "/api/v1/review/**",
-                                        "/api/v1/purchase/**",
-
                                         "/swagger-ui/**",
                                         "/v3/api-docs/**",
                                         "/error",
