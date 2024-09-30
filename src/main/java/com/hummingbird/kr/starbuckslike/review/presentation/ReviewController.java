@@ -43,7 +43,7 @@ public class ReviewController {
     }
     @Operation( security = @SecurityRequirement(name = "Bearer Auth"),
                 summary = "회원이 쓴 리뷰 리스트 조회 [페이징]", description = "회원 UUID 로 리뷰 리스트 조회 ", tags = {"리뷰"})
-    @PostMapping("/my/list")
+    @GetMapping("/my/list")
     public BaseResponse<Slice<Long>> searchReviewListByMemberUuidV1(
             Pageable pageable, @AuthenticationPrincipal AuthUserDetail authUserDetail
     ){
@@ -96,7 +96,7 @@ public class ReviewController {
     }
 
     @Operation(summary = "리뷰 삭제" , description = "리뷰 삭제 하기(soft delete)", tags = {"리뷰"})
-    @PostMapping("/delete/{reviewId}")
+    @DeleteMapping("/{reviewId}")
     public BaseResponse<Void> deleteReviewV1(@PathVariable("reviewId") Long reviewId, @AuthenticationPrincipal AuthUserDetail authUserDetail) {
         reviewService.deleteReview(reviewId);
         return new BaseResponse<>(

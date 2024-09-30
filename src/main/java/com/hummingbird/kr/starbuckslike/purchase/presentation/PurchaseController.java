@@ -55,7 +55,7 @@ public class PurchaseController {
     }
 
     @Operation(summary = "회원 주문목록 디테일", description = "주문목록 디테일 조회", security = @SecurityRequirement(name = "Bearer Auth"), tags = {"주문"})
-    @PostMapping("/detail")
+    @GetMapping("/detail")
     public BaseResponse<PurchaseDetailResponseVo> findPurchaseDetailByV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail,
             @RequestBody PurchaseDetailRequestVo purchaseDetailRequestVo
@@ -65,7 +65,7 @@ public class PurchaseController {
         );
     }
     @Operation(summary = "주문 삭제", description = "주문 삭제", security = @SecurityRequirement(name = "Bearer Auth"), tags = {"주문"})
-    @PostMapping("/delete/")
+    @DeleteMapping("")
     public BaseResponse<Void> deletePurchaseV1(
             @AuthenticationPrincipal AuthUserDetail authUserDetail,
             @RequestBody DeletePurchaseRequestDto dto) {
