@@ -17,7 +17,6 @@ public interface ProductService {
      * 상품 디테일
      */
     // 상품 디테일 상품 상품명 가격 등 조회
-    ProductInfoResponseDto findProductInfoById(Long productId);
     ProductInfoResponseDto findProductInfoByIdV2(Long productId, String memberUid);
     // 상품 디테일 상세정보(에티터 html) 조회
     ProductDetailResponseDto findProductDetailDtoById(Long productId);
@@ -27,6 +26,8 @@ public interface ProductService {
     List<ProductOptionResponseDto> findProductOptionDtoById(Long productId);
     // 상품 좋아요 여부 조회
     ProductIsWishedResponseDto findProductIsWishedResponseDtoById(Long productId, String memberUid);
+    // 장바구니에 상품을 담은 수량
+    ProductCartQtyResponseDto findProductCartQtyResponseDto(Long productId, String memberUid);
     /**
      *  기획전 상품 리스트
      */

@@ -244,6 +244,7 @@ public class CategoryServiceImpl implements CategoryService{
     public List<MiddleCategoryResponseDto> getMiddleCategories(String topCategoryCode) {
 
         try {
+            log.info("topCategoryCode : {}", topCategoryCode);
 //            TopCategory topCategory = topCategoryRepository.findByCategoryName(topCategoryName)
 //                    .orElseThrow(() -> new BaseException(BaseResponseStatus.NO_EXIST_CATEGORY));
             TopCategory topCategory = topCategoryRepository.findByCategoryCode(topCategoryCode)

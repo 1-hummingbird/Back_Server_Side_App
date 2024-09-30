@@ -26,7 +26,7 @@ import java.util.Map;
 @Configuration
 @RequiredArgsConstructor
 @Log4j2
-// 4만건 기준 523ms
+// 4만건 기준 1260ms , 820ms, 900ms
 public class ProductWishJdbcBatch {
 
     private final JobRepository jobRepository;

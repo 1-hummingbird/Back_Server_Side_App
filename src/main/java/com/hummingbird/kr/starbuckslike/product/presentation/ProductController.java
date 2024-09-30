@@ -22,6 +22,7 @@ import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.concurrent.atomic.AtomicInteger;
 import java.util.stream.Collectors;
 
 @RestController
@@ -30,7 +31,8 @@ import java.util.stream.Collectors;
 @RequestMapping("/api/v1/product")
 public class ProductController {
     private final ProductService productService;
-    private final RedisService redisService; // 최근검색어 캐싱
+    private final RedisService redisService; // 최근검색어 캐싱// 스레드 안전한 호출 횟수 카운터
+
     /**
      * 상품 리스트 단건 조회
      */
@@ -48,6 +50,7 @@ public class ProductController {
     @GetMapping("/list/info/{productId}")
     public BaseResponse<ProductListInfoResponseVo> findProductListInfoResponseDtoByIdV1(
             @PathVariable("productId") Long productId){
+
         return new BaseResponse<>(
                 productService.findProductListInfoResponseDtoById(productId).toVo()
         );
@@ -115,6 +118,18 @@ public class ProductController {
         String memberUid = (authUserDetail != null) ? authUserDetail.getUuid() : "";
         return new BaseResponse<>(
                 productService.findProductIsWishedResponseDtoById(productId, memberUid).toVo()
+        );
+    }
+
+    // 유저uuid , 브랜드코드, 좋아요상태
+    @Operation(summary = "상품 디테일 상품 장바구니에 담은 수량", description = "상품 id, 회원 uuid 로 상품 장바구니에 담은 수량 조회",
+            tags = {"상품"})
+    @GetMapping("/detail/cart-quantity/{productId}")
+    public BaseResponse<ProductCartQtyResponseVo> findProductCartQtyResponseDtoV1(
+            @PathVariable("productId") Long productId , @AuthenticationPrincipal AuthUserDetail authUserDetail){
+        String memberUid = (authUserDetail != null) ? authUserDetail.getUuid() : "";
+        return new BaseResponse<>(
+                productService.findProductCartQtyResponseDto(productId, memberUid).toVo()
         );
     }
     /**

@@ -53,23 +53,23 @@ public class ReviewController {
     }
 
 
-    @Operation(summary = "리뷰 이미지 조회", description = "상품 id 로 리뷰 이미지 조회 ", tags = {"리뷰"})
-    @GetMapping("/image/{productId}")
+    @Operation(summary = "리뷰 이미지 조회", description = "리뷰 id 로 리뷰 이미지 조회 ", tags = {"리뷰"})
+    @GetMapping("/image/{reviewId}")
     public BaseResponse<ReviewListImageResponseVo> findReviewImageByIdV1(
-            @PathVariable("productId") Long productId
+            @PathVariable("reviewId") Long reviewId
     ){
         return new BaseResponse<>(
-                reviewService.findReviewImageById(productId).toVo()
+                reviewService.findReviewImageById(reviewId).toVo()
         );
     }
 
-    @Operation(summary = "리뷰 내용 조회", description = "상품 id 로 리뷰 내용 조회 ", tags = {"리뷰"})
-    @GetMapping("/info/{productId}")
+    @Operation(summary = "리뷰 내용 조회", description = "리뷰 id 로 리뷰 내용 조회 ", tags = {"리뷰"})
+    @GetMapping("/info/{reviewId}")
     public BaseResponse<ReviewListInfoResponseVo> findReviewInfoByIdV1(
-            @PathVariable("productId") Long productId
+            @PathVariable("reviewId") Long reviewId
     ){
         return new BaseResponse<>(
-                reviewService.findReviewInfoById(productId).toVo()
+                reviewService.findReviewInfoById(reviewId).toVo()
         );
     }
     @Operation(summary = "리뷰 통계 조회", description = "상품 id 로 리뷰 통계 조회 ", tags = {"리뷰"})
@@ -109,7 +109,7 @@ public class ReviewController {
             @RequestBody AddReviewCommentRequestVo vo, @AuthenticationPrincipal AuthUserDetail authUserDetail
     ) throws InterruptedException {
         //reviewService.addReviewComment(AddReviewCommentRequestDto.of(vo));
-        reviewLockFacade.addReviewCommentAndIncreaseCount(AddReviewCommentRequestDto.of(vo, authUserDetail.getUsername())); // 동시성 처리 완료
+        reviewLockFacade.addReviewCommentAndIncreaseCount(AddReviewCommentRequestDto.of(vo, authUserDetail.getUuid())); // 동시성 처리 완료
         return new BaseResponse<>(
                 BaseResponseStatus.SUCCESS
         );
@@ -121,7 +121,7 @@ public class ReviewController {
             @RequestBody DeleteReviewCommentRequestVo requestVo, @AuthenticationPrincipal AuthUserDetail authUserDetail
     ) throws InterruptedException {
         //reviewService.deleteReviewComment(DeleteReviewCommentRequestDto.of(requestVo, authUserDetail.getUsername()));
-        reviewLockFacade.deleteReviewAndDecreaseCount(DeleteReviewCommentRequestDto.of(requestVo, authUserDetail.getUsername())); // 동시성 처리 완료
+        reviewLockFacade.deleteReviewAndDecreaseCount(DeleteReviewCommentRequestDto.of(requestVo, authUserDetail.getUuid())); // 동시성 처리 완료
         return new BaseResponse<>(
                 BaseResponseStatus.SUCCESS
         );

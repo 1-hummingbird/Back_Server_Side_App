@@ -13,4 +13,6 @@ public class ExhibitionListResponseVo {
     private Long id; // 기획전 id
 
     private String name; // 기획전 이름
+
+    private String detail;
 }

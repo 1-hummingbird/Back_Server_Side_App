@@ -35,7 +35,6 @@ public interface ReviewSearch {
     List<ReviewCommentResponseDto> findReviewCommentById(Long reviewId);
 
     // 리뷰 댓글 보기 (order by)
-    List<ReviewCommentResponseDto> findReviewCommentByIdTest(Long reviewId);
 
     // 상품 리뷰 통계성 정보
     ReviewSummaryResponseDto findReviewSummaryDtoById(Long productId);

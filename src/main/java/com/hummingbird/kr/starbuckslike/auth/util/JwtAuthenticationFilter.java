@@ -47,7 +47,6 @@ public class JwtAuthenticationFilter extends OncePerRequestFilter {
         jwt = authHeader.substring(7);
         if (redisService.isTokenBlocked(jwt)){
             filterChain.doFilter(request, response);
-            return;
         }
         else {
             uuid = Jwts.parser().verifyWith((SecretKey) jwtTokenProvider.getSignKey())

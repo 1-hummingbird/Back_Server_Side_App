@@ -23,7 +23,6 @@ import java.util.Arrays;
 @Log4j2
 public class RedisConfig  {
 
-    //@Value("${spring.redis.host}")
     @Value("${spring.data.redis.host}")
     private String host;
 
@@ -38,7 +37,11 @@ public class RedisConfig  {
         RedisStandaloneConfiguration redisConfiguration = new RedisStandaloneConfiguration();
         redisConfiguration.setHostName(host);
         redisConfiguration.setPort(port);
+<<<<<<< HEAD
         redisConfiguration.setPassword(password);
+=======
+//        redisConfiguration.setPassword(password);
+>>>>>>> 13332e4438a4e2babcec2eef36ecfd9b6d4adf08
         return new LettuceConnectionFactory(redisConfiguration);
 
     }
