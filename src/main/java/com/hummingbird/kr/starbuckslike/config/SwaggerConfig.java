@@ -35,4 +35,10 @@ public class SwaggerConfig {
                 .pathsToMatch(paths)
                 .build();
     }
+
+    @Bean
+    public SwaggerUiConfigProperties swaggerUiConfigProperties() {
+        SwaggerUiConfigProperties properties = new SwaggerUiConfigProperties();
+        properties.setDisplayRequestDuration(true);
+    }
 }
