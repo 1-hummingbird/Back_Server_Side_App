@@ -5,6 +5,7 @@ import io.swagger.v3.oas.annotations.security.SecurityScheme;
 import org.springdoc.core.models.GroupedOpenApi;
 import org.springdoc.core.properties.SwaggerUiConfigProperties;
 import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Primary;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.Profile;
@@ -38,6 +39,7 @@ public class SwaggerConfig {
     }
 
     @Bean
+    @Primary
     public SwaggerUiConfigProperties swaggerUiConfigProperties() {
         SwaggerUiConfigProperties properties = new SwaggerUiConfigProperties();
         properties.setDisplayRequestDuration(true);
