@@ -39,6 +39,7 @@ public class SwaggerConfig {
     @Bean
     public SwaggerUiConfigProperties swaggerUiConfigProperties() {
         SwaggerUiConfigProperties properties = new SwaggerUiConfigProperties();
+        properties.setDisplayRequestDuration(true);
         return properties;
     }
 }
