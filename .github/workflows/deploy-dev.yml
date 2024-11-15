@@ -7,7 +7,9 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
+  id-token: write
+  security-events: write
 
 jobs:
   build:
@@ -40,6 +42,7 @@ jobs:
         uses: gradle/actions/setup-gradle@af1da67850ed9a4cedd57bfd976089dd991e2582 # v4.0.0
         with:
           gradle-version: '8.9'
+          dependency-graph: generate-and-submit          
 
       ## gradle caching - 빌드 시간 향상
       - name: Gradle Caching
@@ -54,6 +57,9 @@ jobs:
 
       - name: Create .ssh directory
         run: mkdir -p ~/.ssh
+
+      - name: Create knows_hosts
+        run: touch ~/.ssh/known_hosts
 
       - name: Add EC2 host to known_hosts
         run: ssh-keyscan ${{ secrets.EC2_HOST }} >> ~/.ssh/known_hosts
