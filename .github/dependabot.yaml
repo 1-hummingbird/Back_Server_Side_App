@@ -27,7 +27,3 @@ updates:
       include: "scope"
     allow:
       - dependency-type: "direct:production"
-    groups:
-      all-dependencies:
-        patterns:
-          - "*"
