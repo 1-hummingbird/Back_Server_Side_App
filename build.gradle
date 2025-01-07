@@ -59,7 +59,13 @@ dependencies {
 	// swagger
 	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
 
-
+	// request by Dependabot
+	implementation 'com.google.protobuf:protobuf-java:3.25.5'
+	implementation 'io.netty:netty-common:4.1.115'
+	implementation 'org.springframework:spring-context:6.1.14'
+	implementation 'org.springframework:spring-web:6.1.12'
+	implementation 'org.springframework.security:spring-security-core:6.3.2'
+	implementation 'org.apache.commons:commons-compress:1.26.0'
 
 	//test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
