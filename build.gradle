@@ -62,10 +62,10 @@ dependencies {
 	// request by Dependabot
 	implementation 'com.google.protobuf:protobuf-java:3.25.5'
 	implementation 'io.netty:netty-common:4.1.116.Final'
-	implementation 'org.springframework:spring-context:6.1.14'
-	implementation 'org.springframework:spring-web:6.1.12'
-	implementation 'org.springframework.security:spring-security-core:6.3.2'
-	implementation 'org.apache.commons:commons-compress:1.26.0'
+	implementation 'org.springframework:spring-context:6.2.1'
+	implementation 'org.springframework:spring-web:6.2.1'
+	implementation 'org.springframework.security:spring-security-core:6.4.2'
+	implementation 'org.apache.commons:commons-compress:1.27.1'
 
 	//test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
