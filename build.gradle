@@ -1,7 +1,7 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.3.2'
-	id 'io.spring.dependency-management' version '1.1.6'
+	id 'org.springframework.boot' version '3.4.1'
+	id 'io.spring.dependency-management' version '1.1.7'
 }
 
 group = 'com.hummingbird'
@@ -43,24 +43,24 @@ dependencies {
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
 	//Querydsl end
 	
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.9.0'// 쿼리 파라미터 로그
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.10.0'// 쿼리 파라미터 로그
 	// model mapper
-	implementation 'org.modelmapper:modelmapper:2.4.4'
+	implementation 'org.modelmapper:modelmapper:3.2.2'
 
 	//	jwt
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.5'
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.5'
-	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.5'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.6'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-impl', version: '0.12.6'
+	implementation group: 'io.jsonwebtoken', name: 'jjwt-jackson', version: '0.12.6'
 
 	// smtp sender
 	implementation 'com.sun.mail:jakarta.mail:2.0.1'
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	
 	// swagger
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.2'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.1'
 
 	// request by Dependabot
-	implementation 'com.google.protobuf:protobuf-java:3.25.5'
+	implementation 'com.google.protobuf:protobuf-java:4.29.2'
 	implementation 'io.netty:netty-common:4.1.116.Final'
 	implementation 'org.springframework:spring-context:6.2.1'
 	implementation 'org.springframework:spring-web:6.2.1'
