@@ -3,7 +3,7 @@ updates:
   - package-ecosystem: "gradle"
     directory: "/"
     schedule:
-      interval: "weekly"
+      interval: "daily"
     open-pull-requests-limit: 10
     target-branch: "dev"
     rebase-strategy: "auto"
@@ -13,6 +13,6 @@ updates:
     allow:
       - dependency-type: "all"
     groups:
-      all-dependencies:
+      security-dependencies:
         patterns:
           - "*"
