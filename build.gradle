@@ -39,6 +39,7 @@ dependencies {
 	//Querydsl start
 	implementation 'io.github.openfeign.querydsl:querydsl-core:6.10.1'
 	implementation 'io.github.openfeign.querydsl:querydsl-jpa:6.10.1'
+	implementation 'io.github.openfeign.querydsl:querydsl-apt:6.10.1'
 	annotationProcessor 'io.github.openfeign.querydsl:querydsl-apt:6.10.1'
 	annotationProcessor "jakarta.annotation:jakarta.annotation-api"
 	annotationProcessor "jakarta.persistence:jakarta.persistence-api"
