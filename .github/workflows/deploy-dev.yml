@@ -1,9 +1,6 @@
 name: Build and Deploy
 
 on:
-  pull_request:
-    types: [closed]
-    branches: [ "dev" ]
   push:
     branches: [ "dev" ]
   workflow_dispatch:
@@ -15,7 +12,6 @@ permissions:
 
 jobs:
   build:
-    if: github.event_name != 'pull_request' || github.event.pull_request.merged == true
     runs-on: ubuntu-latest
 
     steps:
