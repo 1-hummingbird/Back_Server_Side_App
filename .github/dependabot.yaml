@@ -10,20 +10,9 @@ updates:
     commit-message:
       prefix: "fix(dependencies)"
       include: "scope"
+    allow:
+      - dependency-type: "direct:production"
     groups:
       all-dependencies:
         patterns:
           - "*"
-
-  - package-ecosystem: "gradle"
-    directory: "/"
-    schedule:
-      interval: "daily"
-    open-pull-requests-limit: 10
-    target-branch: "dev"
-    rebase-strategy: "auto"
-    commit-message:
-      prefix: "fix(security)"
-      include: "scope"
-    allow:
-      - dependency-type: "direct:production"
