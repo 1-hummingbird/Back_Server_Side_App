@@ -11,7 +11,7 @@ updates:
       prefix: "fix(dependencies)"
       include: "scope"
     allow:
-      - dependency-type: "direct:production"
+      - dependency-type: "production"
     groups:
       all-dependencies:
         patterns:
