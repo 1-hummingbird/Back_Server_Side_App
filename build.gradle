@@ -68,8 +68,8 @@ dependencies {
 	// request by Dependabot
 	implementation 'com.google.protobuf:protobuf-java:4.29.3'
 	implementation 'io.netty:netty-common:4.1.117.Final'
-	implementation 'org.springframework:spring-context:6.2.1'
-	implementation 'org.springframework:spring-web:6.2.1'
+	implementation 'org.springframework:spring-context:6.2.2'
+	implementation 'org.springframework:spring-web:6.2.2'
 	implementation 'org.springframework.security:spring-security-core:6.4.2'
 	implementation 'org.apache.commons:commons-compress:1.27.1'
 	implementation 'io.lettuce:lettuce-core:6.5.2.RELEASE'
