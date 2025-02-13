@@ -68,6 +68,7 @@ dependencies {
 	// request by Dependabot
 	implementation 'com.google.protobuf:protobuf-java:4.29.3'
 	implementation 'io.netty:netty-common:4.1.118.Final'
+	implementation 'io.netty:netty-handler:4.1.118.Final'
 	implementation 'org.springframework:spring-context:6.2.2'
 	implementation 'org.springframework:spring-web:6.2.2'
 	implementation 'org.springframework.security:spring-security-core:6.4.2'
