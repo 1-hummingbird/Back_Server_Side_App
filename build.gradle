@@ -71,9 +71,9 @@ dependencies {
 	implementation 'io.netty:netty-handler:4.1.118.Final'
 	implementation 'org.springframework:spring-context:6.2.3'
 	implementation 'org.springframework:spring-web:6.2.3'
-	implementation 'org.springframework.security:spring-security-core:6.4.2'
+	implementation 'org.springframework.security:spring-security-core:6.4.3'
 	implementation 'org.apache.commons:commons-compress:1.27.1'
-	implementation 'io.lettuce:lettuce-core:6.5.3.RELEASE'
+	implementation 'io.lettuce:lettuce-core:6.5.4.RELEASE'
 	implementation 'ch.qos.logback:logback-core:1.5.16'
 	implementation 'net.minidev:json-smart:2.5.2'
 
