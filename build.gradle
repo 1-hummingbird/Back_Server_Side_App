@@ -74,7 +74,7 @@ dependencies {
 	implementation 'org.springframework.security:spring-security-core:6.4.3'
 	implementation 'org.apache.commons:commons-compress:1.27.1'
 	implementation 'io.lettuce:lettuce-core:6.5.4.RELEASE'
-	implementation 'ch.qos.logback:logback-core:1.5.16'
+	implementation 'ch.qos.logback:logback-core:1.5.17'
 	implementation 'net.minidev:json-smart:2.5.2'
 
 	//test
