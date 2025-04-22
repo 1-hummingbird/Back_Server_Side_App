@@ -37,7 +37,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	//Querydsl start
-    def querydslVersion = "6.10.1"
+    def querydslVersion = "6.11"
 
     // Querydsl configuration
     implementation "io.github.openfeign.querydsl:querydsl-jpa:${querydslVersion}"
