@@ -72,6 +72,9 @@ dependencies {
 	// 테스트 코드에도 lombok 적용
 	testCompileOnly 'org.projectlombok:lombok'
 	testAnnotationProcessor'org.projectlombok:lombok'
+
+	// dependabot requests.
+	implementation 'org.apache.activemq:artemis-project:2.40.0'
 }
 
 tasks.named('test') {
