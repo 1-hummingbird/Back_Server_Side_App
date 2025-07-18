@@ -74,7 +74,7 @@ dependencies {
 	testAnnotationProcessor'org.projectlombok:lombok'
 
 	// dependabot requests.
-	implementation 'org.apache.activemq:artemis-project:2.41.0'
+	implementation 'org.apache.activemq:artemis-project:2.42.0'
 }
 
 tasks.named('test') {
