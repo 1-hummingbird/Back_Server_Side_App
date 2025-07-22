@@ -1,6 +1,6 @@
 plugins {
 	id 'java'
-	id 'org.springframework.boot' version '3.4.5'
+	id 'org.springframework.boot' version '3.5.3'
 	id 'io.spring.dependency-management' version '1.1.7'
 }
 
@@ -37,7 +37,7 @@ dependencies {
 	annotationProcessor 'org.projectlombok:lombok'
 
 	//Querydsl start
-    def querydslVersion = "6.11"
+    def querydslVersion = "7.0"
 
     // Querydsl configuration
     implementation "io.github.openfeign.querydsl:querydsl-jpa:${querydslVersion}"
@@ -49,9 +49,9 @@ dependencies {
     annotationProcessor 'jakarta.persistence:jakarta.persistence-api'
 	//Querydsl end
 	
-	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.11.0'// 쿼리 파라미터 로그
+	implementation 'com.github.gavlyukovskiy:p6spy-spring-boot-starter:1.12.0'// 쿼리 파라미터 로그
 	// model mapper
-	implementation 'org.modelmapper:modelmapper:3.2.2'
+	implementation 'org.modelmapper:modelmapper:3.2.4'
 
 	//	jwt
 	implementation group: 'io.jsonwebtoken', name: 'jjwt-api', version: '0.12.6'
@@ -63,7 +63,7 @@ dependencies {
 	implementation 'org.springframework.boot:spring-boot-starter-mail'
 	
 	// swagger
-	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.6'
+	implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.8.9'
 
 	//test
 	testImplementation 'org.springframework.boot:spring-boot-starter-test'
@@ -74,7 +74,7 @@ dependencies {
 	testAnnotationProcessor'org.projectlombok:lombok'
 
 	// dependabot requests.
-	implementation 'org.apache.activemq:artemis-project:2.41.0'
+	implementation 'org.apache.activemq:artemis-project:2.42.0'
 }
 
 tasks.named('test') {
